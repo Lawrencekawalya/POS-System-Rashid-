@@ -10,9 +10,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the products.
      */
+    // public function index()
+    // {
+    //     $products = Product::orderBy('name')->get();
+
+    //     return view('products.index', compact('products'));
+    // }
     public function index()
     {
-        $products = Product::orderBy('name')->get();
+        $products = Product::with('stockMovements')
+            ->orderBy('name')
+            ->get();
 
         return view('products.index', compact('products'));
     }

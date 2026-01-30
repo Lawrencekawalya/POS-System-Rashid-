@@ -24,4 +24,20 @@ class Product extends Model
         'selling_price' => 'decimal:2',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * A product has many stock movements.
+     */
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
+    /**
+     * Get the current stock level for the product.
+     */
+    public function currentStock(): int
+    {
+        return (int) $this->stockMovements()->sum('quantity');
+    }
 }

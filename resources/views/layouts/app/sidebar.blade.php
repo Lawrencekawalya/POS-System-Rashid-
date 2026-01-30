@@ -23,6 +23,22 @@
                     :current="request()->routeIs('products.*')" wire:navigate>
                     {{ __('Products') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="cube" :href="route('pos.index')" :current="request()->routeIs('pos.*')"
+                    wire:navigate>
+                    {{ __('Sales') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="document" :href="route('sales.index')" :current="request()->routeIs('sales.*')"
+                    wire:navigate>
+                    {{ __('Sales History') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="chart-bar" :href="route('reports.z')"
+                    :current="request()->routeIs('reports.z')" wire:navigate>
+                    {{ __('Z Report') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="banknotes" :href="route('cash.reconcile.index')"
+                    :current="request()->routeIs('cash.reconcile.index')" wire:navigate>
+                    {{ __('Cash Reconciliation') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
