@@ -7,7 +7,11 @@
       "default",
       {
         "ignore": [
-          "-webkit-text-size-adjust"
+          "-webkit-text-size-adjust",
+          "min-height: auto",
+          "@starting-style",
+          "@starting-style",
+          "@starting-style"
         ]
       }
     ]

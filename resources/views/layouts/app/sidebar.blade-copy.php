@@ -9,75 +9,53 @@
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
-            {{-- <x-app-logo :sidebar="true" href="{{ route('#') }}" wire:navigate /> --}}
-            <x-app-logo :sidebar="true" wire:navigate />
+            <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
             <flux:sidebar.collapse class="lg:hidden" />
         </flux:sidebar.header>
 
         <flux:sidebar.nav>
             <flux:sidebar.group :heading="__('Platform')" class="grid">
-
-                {{-- Sales: visible to everyone --}}
+                <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
+                    wire:navigate>
+                    {{ __('Dashboard') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="cube" :href="route('products.index')"
+                    :current="request()->routeIs('products.*')" wire:navigate>
+                    {{ __('Products') }}
+                </flux:sidebar.item>
                 <flux:sidebar.item icon="cube" :href="route('pos.index')" :current="request()->routeIs('pos.*')"
                     wire:navigate>
                     {{ __('Sales') }}
                 </flux:sidebar.item>
-
-                {{-- Admin-only navigation --}}
-                @if (auth()->user()->isAdmin())
-                    <flux:sidebar.item icon="home" :href="route('dashboard')"
-                        :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="cube" :href="route('products.index')"
-                        :current="request()->routeIs('products.*')" wire:navigate>
-                        {{ __('Products') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="document" :href="route('sales.index')"
-                        :current="request()->routeIs('sales.*')" wire:navigate>
-                        {{ __('Sales History') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="chart-bar" :href="route('reports.z')"
-                        :current="request()->routeIs('reports.z')" wire:navigate>
-                        {{ __('Z Report') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="banknotes" :href="route('cash.reconcile.index')"
-                        :current="request()->routeIs('cash.reconcile.index')" wire:navigate>
-                        {{ __('Cash Reconciliation') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="truck" :href="route('purchases.index')"
-                        :current="request()->routeIs('purchases.*')" wire:navigate>
-                        {{ __('Purchase History') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="cloud" :href="route('reports.inventory')"
-                        :current="request()->routeIs('reports.inventory')" wire:navigate>
-                        {{ __('Inventory Valuation') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="trend" :href="route('reports.profitability')"
-                        :current="request()->routeIs('reports.profitability')" wire:navigate>
-                        {{ __('Profitability') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="refresh-ccw" :href="route('reports.turnover')"
-                        :current="request()->routeIs('reports.turnover')" wire:navigate>
-                        {{ __('Stock Turnover') }}
-                    </flux:sidebar.item>
-
-                    {{-- User management --}}
-                    <flux:sidebar.item icon="users" :href="route('users.index')"
-                        :current="request()->routeIs('users.*')" wire:navigate>
-                        {{ __('Users') }}
-                    </flux:sidebar.item>
-                @endif
+                <flux:sidebar.item icon="document" :href="route('sales.index')" :current="request()->routeIs('sales.*')"
+                    wire:navigate>
+                    {{ __('Sales History') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="chart-bar" :href="route('reports.z')"
+                    :current="request()->routeIs('reports.z')" wire:navigate>
+                    {{ __('Z Report') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="banknotes" :href="route('cash.reconcile.index')"
+                    :current="request()->routeIs('cash.reconcile.index')" wire:navigate>
+                    {{ __('Cash Reconciliation') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="truck" :href="route('purchases.index')"
+                    :current="request()->routeIs('purchases.*')" wire:navigate>
+                    {{ __('Purchase History') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="cloud" :href="route('reports.inventory')"
+                    :current="request()->routeIs('reports.inventory')" wire:navigate>
+                    {{ __('Inventory Valuation') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="trend" :href="route('reports.profitability')"
+                    :current="request()->routeIs('reports.profitability')" wire:navigate>
+                    {{ __('Profitability') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="refresh-ccw" :href="route('reports.turnover')"
+                    :current="request()->routeIs('reports.turnover')" wire:navigate>
+                    {{ __('Stock Turnover') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
-
         </flux:sidebar.nav>
         {{-- 🔔 Low stock alerts --}}
         @include('partials.low-stock-widget')
