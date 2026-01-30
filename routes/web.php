@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\CashReconciliationController;
+use App\Http\Controllers\InventoryReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfitabilityReportController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\TurnoverReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,6 +66,18 @@ Route::middleware(['auth'])->group(function () {
         '/cash-reconciliation/history',
         [CashReconciliationController::class, 'index']
     )->name('cash.reconcile.index');
+    Route::get('/purchases/create', [PurchaseController::class, 'create'])
+        ->name('purchases.create');
+    Route::post('/purchases', [PurchaseController::class, 'store'])
+        ->name('purchases.store');
+    Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
+    Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
+    Route::get('/reports/inventory', [InventoryReportController::class, 'index'])
+        ->name('reports.inventory');
+    Route::get('/reports/profitability', [ProfitabilityReportController::class, 'index'])
+        ->name('reports.profitability');
+    Route::get('/reports/turnover', [TurnoverReportController::class, 'index'])
+        ->name('reports.turnover');
 });
 
 require __DIR__ . '/settings.php';

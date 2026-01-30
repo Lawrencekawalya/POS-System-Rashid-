@@ -39,13 +39,30 @@
                     :current="request()->routeIs('cash.reconcile.index')" wire:navigate>
                     {{ __('Cash Reconciliation') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="truck" :href="route('purchases.index')"
+                    :current="request()->routeIs('purchases.*')" wire:navigate>
+                    {{ __('Purchase History') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="cloud" :href="route('reports.inventory')"
+                    :current="request()->routeIs('reports.inventory')" wire:navigate>
+                    {{ __('Inventory Valuation') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="trend" :href="route('reports.profitability')"
+                    :current="request()->routeIs('reports.profitability')" wire:navigate>
+                    {{ __('Profitability') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="refresh-ccw" :href="route('reports.turnover')"
+                    :current="request()->routeIs('reports.turnover')" wire:navigate>
+                    {{ __('Stock Turnover') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
-
+        {{-- 🔔 Low stock alerts --}}
+        @include('partials.low-stock-widget')
         <flux:spacer />
 
         <flux:sidebar.nav>
-            <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
+            {{-- <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
                 target="_blank">
                 {{ __('Repository') }}
             </flux:sidebar.item>
@@ -53,7 +70,7 @@
             <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire"
                 target="_blank">
                 {{ __('Documentation') }}
-            </flux:sidebar.item>
+            </flux:sidebar.item> --}}
         </flux:sidebar.nav>
 
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
