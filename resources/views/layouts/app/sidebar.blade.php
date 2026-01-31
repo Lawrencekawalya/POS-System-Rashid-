@@ -18,10 +18,12 @@
             <flux:sidebar.group :heading="__('Platform')" class="grid">
 
                 {{-- Sales: visible to everyone --}}
-                <flux:sidebar.item icon="cube" :href="route('pos.index')" :current="request()->routeIs('pos.*')"
-                    wire:navigate>
-                    {{ __('Sales') }}
-                </flux:sidebar.item>
+                @if (auth()->user()->isCashier())
+                    <flux:sidebar.item icon="cube" :href="route('pos.index')" :current="request()->routeIs('pos.*')"
+                        wire:navigate>
+                        {{ __('Sales') }}
+                    </flux:sidebar.item>
+                @endif
 
                 {{-- Admin-only navigation --}}
                 @if (auth()->user()->isAdmin())
