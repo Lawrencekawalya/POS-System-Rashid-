@@ -9,8 +9,24 @@ test('login screen can be rendered', function () {
     $response->assertOk();
 });
 
+// test('users can authenticate using the login screen', function () {
+//     $user = User::factory()->create();
+
+//     $response = $this->post(route('login.store'), [
+//         'email' => $user->email,
+//         'password' => 'password',
+//     ]);
+
+//     $response
+//         ->assertSessionHasNoErrors()
+//         ->assertRedirect(route('dashboard', absolute: false));
+
+//     $this->assertAuthenticated();
+// });
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'role' => 'admin',
+    ]);
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,
@@ -20,6 +36,23 @@ test('users can authenticate using the login screen', function () {
     $response
         ->assertSessionHasNoErrors()
         ->assertRedirect(route('dashboard', absolute: false));
+
+    $this->assertAuthenticated();
+});
+
+test('cashiers are redirected to pos after login', function () {
+    $user = User::factory()->create([
+        'role' => 'cashier',
+    ]);
+
+    $response = $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('pos.index', absolute: false));
 
     $this->assertAuthenticated();
 });
@@ -38,7 +71,7 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users with two factor enabled are redirected to two factor challenge', function () {
-    if (! Features::canManageTwoFactorAuthentication()) {
+    if (!Features::canManageTwoFactorAuthentication()) {
         $this->markTestSkipped('Two-factor authentication is not enabled.');
     }
 
