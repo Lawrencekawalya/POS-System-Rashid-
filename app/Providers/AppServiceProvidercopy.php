@@ -3,43 +3,25 @@
 namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
-use App\Http\Responses\VerifyEmailResponse;
-use Illuminate\Support\ServiceProvider;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-
-// ✅ THESE are the contracts Fortify uses
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
-use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
-
-// ✅ THESE are your implementations
 use App\Http\Responses\LoginResponse as CustomLoginResponse;
 use App\Http\Responses\VerifyEmailResponse as CustomVerifyEmailResponse;
+use App\Http\Responses\VerifyEmailResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    // public function register(): void
-    // {
-    //     // $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
-    //     $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
-    //     $this->app->singleton(VerifyEmailResponse::class, CustomVerifyEmailResponse::class);
-    // }
     public function register(): void
     {
-        $this->app->singleton(
-            LoginResponseContract::class,
-            CustomLoginResponse::class
-        );
-
-        $this->app->singleton(
-            VerifyEmailResponseContract::class,
-            CustomVerifyEmailResponse::class
-        );
+        // $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
+        $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
+        $this->app->singleton(VerifyEmailResponse::class, CustomVerifyEmailResponse::class);
     }
 
     /**
