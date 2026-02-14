@@ -1,44 +1,57 @@
 <x-layouts::auth>
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
+    <div class="flex flex-col gap-6 p-8 rounded-2xl border border-white/10 bg-[#14121c]/75 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+        
+        <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37]/80 to-transparent"></div>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+        <div class="text-center">
+            <h1 class="font-['Cormorant_Garamond'] text-3xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white to-[#d4af37] uppercase">
+                Welcome Back
+            </h1>
+            <p class="text-xs tracking-[3px] text-[#d4af37]/70 uppercase mt-2">The Scent of Elegance</p>
+        </div>
+
+        <x-auth-session-status class="text-center text-sm" :status="session('status')" />
 
         <form method="POST" action="{{ route('login.store') }}" class="flex flex-col gap-6">
             @csrf
 
-            <!-- Email Address -->
-            <flux:input name="email" :label="__('Email address')" :value="old('email')" type="email" required
-                autofocus autocomplete="email" placeholder="email@example.com" />
+            <flux:input 
+                name="email" 
+                :label="__('Email Address')" 
+                :value="old('email')" 
+                type="email" 
+                required
+                autofocus 
+                class="!bg-black/20 !border-white/10 focus:!border-[#d4af37]/50" 
+            />
 
-            <!-- Password -->
             <div class="relative">
-                <flux:input name="password" :label="__('Password')" type="password" required
-                    autocomplete="current-password" :placeholder="__('Password')" viewable />
+                <flux:input 
+                    name="password" 
+                    :label="__('Password')" 
+                    type="password" 
+                    required
+                    viewable 
+                    class="!bg-black/20 !border-white/10 focus:!border-[#d4af37]/50"
+                />
 
                 @if (Route::has('password.request'))
-                    <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
-                        {{ __('Forgot your password?') }}
+                    <flux:link class="absolute top-0 text-xs end-0 text-[#d4af37]/80 hover:text-[#d4af37]" :href="route('password.request')" wire:navigate>
+                        {{ __('Forgot password?') }}
                     </flux:link>
                 @endif
             </div>
 
-            <!-- Remember Me -->
-            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" />
+            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" class="text-zinc-400" />
 
-            <div class="flex items-center justify-end">
-                <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
-                    {{ __('Log in') }}
+            <div class="flex items-center justify-end mt-2">
+                <flux:button 
+                    type="submit" 
+                    class="w-full !bg-[#d4af37] !text-[#0b0c1e] hover:!bg-[#b8962d] transition-transform active:scale-95 font-bold tracking-widest uppercase text-xs h-12"
+                >
+                    {{ __('Sign In') }}
                 </flux:button>
             </div>
         </form>
-
-        {{-- @if (Route::has('register'))
-            <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
-                <span>{{ __('Don\'t have an account?') }}</span>
-                <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
-            </div>
-        @endif --}}
     </div>
 </x-layouts::auth>
