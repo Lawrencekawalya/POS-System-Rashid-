@@ -19,7 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* Luxury Gold Glows */
@@ -48,7 +48,7 @@
         }
     </style>
     
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
     </head>
     <!-- <body class="min-h-screen bg-white antialiased dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900"> -->
     <body class="antialiased">

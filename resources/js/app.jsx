@@ -26,14 +26,14 @@
 // }
 
 import './bootstrap'; 
-import Alpine from 'alpinejs';
+// import Alpine from 'alpinejs';
 import React from "react";
 import { createRoot } from "react-dom/client";
 import AnimatedWave from "./components/AnimatedWave";
 
 // Initialize Alpine
-window.Alpine = Alpine;
-Alpine.start();
+// window.Alpine = Alpine;
+// Alpine.start();
 
 console.log("VITE APP LOADED");
 

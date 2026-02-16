@@ -59,7 +59,7 @@ class PurchaseController extends Controller
         );
 
         return redirect()
-            ->route('purchases.create')
+            ->route('purchases.index')
             ->with('success', 'Purchase recorded successfully.');
     }
 }

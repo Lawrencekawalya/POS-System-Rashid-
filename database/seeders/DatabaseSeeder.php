@@ -13,7 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // For the AdminUserSeeder, we want to ensure that an admin user is created with a known email and password for testing and initial access purposes. This is especially important for development and staging environments where you need to log in as an admin without having to go through a registration process.
+        /**
+         * For the AdminUserSeeder, we want to ensure that an admin user is created with a
+         * known email and password for testing and initial access purposes. This is especially 
+         * important for development and staging environments where you need to log in as an admin 
+         * without having to go through a registration process. 
+        */
          $this->call(AdminUserSeeder::class);
         // User::factory(10)->create();
 

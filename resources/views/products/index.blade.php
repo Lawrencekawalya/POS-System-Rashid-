@@ -120,7 +120,7 @@
 
                             @if ($stock <= 0)
                                 <span class="text-red-600 text-xs italic">Out of stock</span>
-                            @elseif ($stock < 5)
+                            @elseif ($stock < 1)
                                 <span class="text-orange-500">
                                     {{ $stock }} <span class="text-xs">(Low)</span>
                                 </span>

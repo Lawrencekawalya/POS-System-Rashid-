@@ -41,7 +41,8 @@ class Product extends Model
         return (int) $this->stockMovements()->sum('quantity');
     }
 
-    public function isLowStock(int $threshold = 5): bool
+    // Check if the product is low in stock based on a given threshold.
+    public function isLowStock(int $threshold = 1): bool
     {
         return $this->currentStock() <= $threshold;
     }
