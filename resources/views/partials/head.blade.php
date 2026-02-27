@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:title" content="{{ $title ?? config('app.name') }}">
-<meta property="og:description" content="Palace Hotel POS System">
+<meta property="og:description" content="AR Scents POS System">
 <meta property="og:image" content="{{ asset('images/og-share.png') }}"> 
 
 <link rel="icon" href="/favicon.ico" sizes="any">

@@ -45,10 +45,15 @@
                         wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-
+                    
                     <flux:sidebar.item icon="cube" :href="route('products.index')"
                         :current="request()->routeIs('products.*')" wire:navigate>
                         {{ __('Products') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="truck" :href="route('purchases.index')"
+                        :current="request()->routeIs('purchases.*')" wire:navigate>
+                        {{ __('Purchase History') }}
                     </flux:sidebar.item>
 
                     <flux:sidebar.item icon="document" :href="route('sales.index')" :current="request()->routeIs('sales.*')"
@@ -56,9 +61,9 @@
                         {{ __('Sales History') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="chart-bar" :href="route('reports.z')"
-                        :current="request()->routeIs('reports.z')" wire:navigate>
-                        {{ __('Z Report') }}
+                    <flux:sidebar.item icon="document-text" :href="route('expenses.index')"
+                        :current="request()->routeIs('expenses.index')" wire:navigate>
+                        {{ __('All Expenses') }}
                     </flux:sidebar.item>
 
                     <flux:sidebar.item icon="banknotes" :href="route('cash.reconcile.index')"
@@ -66,23 +71,9 @@
                         {{ __('Cash Reconciliation') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="document-text" :href="route('expenses.index')" :current="request()->routeIs('expenses.index')" wire:navigate>
-        {{ __('All Expenses') }}
-    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="truck" :href="route('purchases.index')"
-                        :current="request()->routeIs('purchases.*')" wire:navigate>
-                        {{ __('Purchase History') }}
-                    </flux:sidebar.item>
-
                     <flux:sidebar.item icon="cloud" :href="route('reports.inventory')"
                         :current="request()->routeIs('reports.inventory')" wire:navigate>
                         {{ __('Inventory Valuation') }}
-                    </flux:sidebar.item>
-
-                    <flux:sidebar.item icon="trend" :href="route('reports.profitability')"
-                        :current="request()->routeIs('reports.profitability')" wire:navigate>
-                        {{ __('Profitability') }}
                     </flux:sidebar.item>
 
                     <flux:sidebar.item icon="refresh-ccw" :href="route('reports.turnover')"
@@ -90,11 +81,21 @@
                         {{ __('Stock Turnover') }}
                     </flux:sidebar.item>
 
+                    <flux:sidebar.item icon="trend" :href="route('reports.profitability')"
+                        :current="request()->routeIs('reports.profitability')" wire:navigate>
+                        {{ __('Profitability') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="chart-bar" :href="route('reports.z')"
+                        :current="request()->routeIs('reports.z')" wire:navigate>
+                        {{ __('Z Report') }}
+                    </flux:sidebar.item>
+
                     {{-- User management --}}
                     <flux:sidebar.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.*')"
                         wire:navigate>
                         {{ __('Users') }}
-                    </flux:sidebar.item>
+                    </flux:sidebar.item>  
                 @endif
             </flux:sidebar.group>
 
