@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExpenseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
@@ -45,6 +46,7 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     Route::post('/pos/remove/{productId}', [POSController::class, 'remove'])->name('pos.remove');
     Route::post('/pos/increase/{productId}', [POSController::class, 'increase'])->name('pos.increase');
     Route::post('/pos/decrease/{productId}', [POSController::class, 'decrease'])->name('pos.decrease');
+    Route::post('/pos/update/{product}', [PosController::class, 'updateQuantity'])->name('pos.updateQuantity');
 
 
     /*
@@ -72,6 +74,10 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
 
     Route::get('/sales/{sale}/refunds/{refund}', [SaleController::class, 'refundReceipt'])
         ->name('sales.refund-receipt');
+
+    // --- Expense Routes ---
+    // This one line handles index, create, store, edit, update, and destroy
+    Route::resource('expenses', ExpenseController::class);
 });
 
 
@@ -129,14 +135,28 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/cash-reconciliation', [CashReconciliationController::class, 'create'])
-        ->name('cash.reconcile');
+    // Route::get('/cash-reconciliation', [CashReconciliationController::class, 'create'])
+    //     ->name('cash.reconcile');
 
-    Route::post('/cash-reconciliation', [CashReconciliationController::class, 'store'])
-        ->name('cash.reconcile.store');
+    // Route::post('/cash-reconciliation', [CashReconciliationController::class, 'store'])
+    //     ->name('cash.reconcile.store');
 
-    Route::get('/cash-reconciliation/history', [CashReconciliationController::class, 'index'])
-        ->name('cash.reconcile.index');
+    // Route::get('/cash-reconciliation/history', [CashReconciliationController::class, 'index'])
+    //     ->name('cash.reconcile.index');
+    // --- Cash Reconciliation Routes ---
+    Route::prefix('cash-reconciliation')->group(function () {
+        // The main list of past reconciliations
+        Route::get('/', [CashReconciliationController::class, 'index'])
+            ->name('cash.reconcile.index');
+
+        // The screen where Admin verifies expenses and counts cash
+        Route::get('/create', [CashReconciliationController::class, 'create'])
+            ->name('cash.reconcile.create');
+
+        // Saving the reconciliation and confirming expenses
+        Route::post('/store', [CashReconciliationController::class, 'store'])
+            ->name('cash.reconcile.store');
+    });
 
 
     /*
@@ -145,17 +165,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/purchases', [PurchaseController::class, 'index'])
-        ->name('purchases.index');
-
-    Route::get('/purchases/create', [PurchaseController::class, 'create'])
-        ->name('purchases.create');
-
-    Route::post('/purchases', [PurchaseController::class, 'store'])
-        ->name('purchases.store');
-
-    Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])
-        ->name('purchases.show');
+    Route::resource('purchases', PurchaseController::class);
 
 
     /*

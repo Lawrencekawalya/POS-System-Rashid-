@@ -9,8 +9,9 @@
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
-            {{-- <x-app-logo :sidebar="true" href="{{ route('#') }}" wire:navigate /> --}}
-            <x-app-logo :sidebar="true" wire:navigate />
+            <div class="pointer-events-none">
+                <x-app-logo :sidebar="true" wire:navigate />
+            </div>
             <flux:sidebar.collapse class="lg:hidden" />
         </flux:sidebar.header>
 
@@ -23,12 +24,25 @@
                         wire:navigate>
                         {{ __('Sales') }}
                     </flux:sidebar.item>
+                    {{-- Expenses: added for cashier --}}
+                    <flux:sidebar.group label="{{ __('Expenses') }}" class="mt-4">
+                        <flux:sidebar.item icon="plus-circle" :href="route('expenses.create')"
+                            :current="request()->routeIs('expenses.create')" wire:navigate>
+                            {{ __('New Expense') }}
+                        </flux:sidebar.item>
+
+                        <flux:sidebar.item icon="document-text" :href="route('expenses.index')"
+                            :current="request()->routeIs('expenses.index') && !request()->routeIs('expenses.create')"
+                            wire:navigate>
+                            {{ __('Expense Log') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
                 @endif
 
                 {{-- Admin-only navigation --}}
                 @if (auth()->user()->isAdmin())
-                    <flux:sidebar.item icon="home" :href="route('dashboard')"
-                        :current="request()->routeIs('dashboard')" wire:navigate>
+                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
+                        wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
 
@@ -37,8 +51,8 @@
                         {{ __('Products') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="document" :href="route('sales.index')"
-                        :current="request()->routeIs('sales.*')" wire:navigate>
+                    <flux:sidebar.item icon="document" :href="route('sales.index')" :current="request()->routeIs('sales.*')"
+                        wire:navigate>
                         {{ __('Sales History') }}
                     </flux:sidebar.item>
 
@@ -51,6 +65,10 @@
                         :current="request()->routeIs('cash.reconcile.index')" wire:navigate>
                         {{ __('Cash Reconciliation') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="document-text" :href="route('expenses.index')" :current="request()->routeIs('expenses.index')" wire:navigate>
+        {{ __('All Expenses') }}
+    </flux:sidebar.item>
 
                     <flux:sidebar.item icon="truck" :href="route('purchases.index')"
                         :current="request()->routeIs('purchases.*')" wire:navigate>
@@ -73,8 +91,8 @@
                     </flux:sidebar.item>
 
                     {{-- User management --}}
-                    <flux:sidebar.item icon="users" :href="route('users.index')"
-                        :current="request()->routeIs('users.*')" wire:navigate>
+                    <flux:sidebar.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.*')"
+                        wire:navigate>
                         {{ __('Users') }}
                     </flux:sidebar.item>
                 @endif

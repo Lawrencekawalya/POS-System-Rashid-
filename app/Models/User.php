@@ -75,4 +75,9 @@ class User extends Authenticatable
     {
         return $this->role === 'cashier';
     }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
 }

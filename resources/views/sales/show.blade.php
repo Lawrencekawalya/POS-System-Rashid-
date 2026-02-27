@@ -1,6 +1,6 @@
 <x-layouts::app title="Receipt">
 
-    {{-- Top action bar --}}
+    {{-- Top action bar
     <div class="flex justify-between mb-4 print:hidden">
         <a href="{{ route('pos.index') }}" class="px-4 py-2 bg-gray-200 rounded">
             ← Back to POS
@@ -9,7 +9,27 @@
         <button onclick="window.print()" class="px-4 py-2 bg-black text-white rounded">
             Print Receipt
         </button>
+    </div>--}}
+    <div class="flex justify-between mb-4 print:hidden">
+        {{-- Only show Back to POS if the user is NOT an admin --}}
+        @if(!auth()->user()->isAdmin()) 
+            <a href="{{ route('pos.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to POS
+            </a>
+        @else
+            {{-- Optional: Show a different link for Admins, like Back to Salse --}}
+            <a href="{{ route('sales.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors">
+                Back to Sales 
+            </a>
+        @endif
+
+        <button onclick="window.print()" class="inline-flex items-center px-5 py-2 bg-gray-900 hover:bg-black text-white font-bold rounded-lg shadow-sm transition-all transform active:scale-95">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            Print Receipt
+        </button>
     </div>
+    
 
     {{-- Refund section --}}
     @if (!$sale->isRefunded())
@@ -79,7 +99,8 @@
     <div class="thermal-receipt mx-auto">
 
         <div class="text-center mb-2">
-            <h1 class="font-bold text-base">YOUR SHOP NAME</h1>
+            <h1 class="font-bold text-base">Palace Hotel</h1>
+            <p class="text-xs">Mbarara, Uganda</p>
             <p class="text-xs">Receipt #{{ $sale->id }}</p>
             <p class="text-xs">
                 {{ $sale->created_at->format('Y-m-d H:i') }}
@@ -139,7 +160,8 @@
         <hr class="my-2">
 
         <p class="text-center text-xs">
-            Thank you for shopping
+            Thank you for shopping<br>
+            Please come again!
         </p>
     </div>
 
@@ -147,25 +169,42 @@
     <style>
         .thermal-receipt {
             width: 80mm;
-            padding: 4mm;
-            background: white;
-            color: black;
+            margin: 0 auto;
             font-family: monospace;
+            font-size: 12px;
+            color: black;
+            background: white;
         }
 
         @media print {
+
+            @page {
+                size: 80mm auto;
+                /* THIS IS THE IMPORTANT PART */
+                margin: 0;
+            }
+
+            html,
             body {
-                background: white !important;
-            }
-
-            .print\:hidden {
-                display: none !important;
-            }
-
-            .thermal-receipt {
                 width: 80mm;
                 margin: 0;
                 padding: 0;
+                background: white;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .thermal-receipt,
+            .thermal-receipt * {
+                visibility: visible;
+            }
+
+            .thermal-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
             }
         }
     </style>

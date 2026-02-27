@@ -2,794 +2,2105 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Scent of Elegance | Luxury Perfumes</title>
+	<title>{{ $title ?? config('app.name') }}</title>
 
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	<meta name="description" content="Palace Hotel POS - Efficient Sales and Inventory Management">
+
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{{ url()->current() }}">
+	<meta property="og:title" content="{{ $title ?? config('app.name') }}">
+	<meta property="og:description" content="Palace Hotel POS System">
+	<meta property="og:image" content="{{ asset('images/og-share.png') }}"> 
+	<meta property="fb:app_id" content="4402626620054118" />
+
+	<link rel="icon" href="/favicon.ico" sizes="any">
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:400,500,600,700|montserrat:300,400,500,600" rel="stylesheet" />
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
+    <!-- Styles -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /*! tailwindcss v4.0.14 | MIT License | https://tailwindcss.com */
+        @layer theme {
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(145deg, #0b0c1e 0%, #1a1b2f 100%);
-            overflow-x: hidden;
-            color: white;
-        }
-
-        /* Animated background particles */
-        .bg-particles {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(212, 175, 55, 0.2);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-            animation: float-particle 15s infinite linear;
-        }
-
-        @keyframes float-particle {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Luxury gradient overlays */
-        .bg-gradient-orb {
-            position: absolute;
-            width: 80vw;
-            height: 80vw;
-            max-width: 800px;
-            max-height: 800px;
-            background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.15), transparent 70%);
-            border-radius: 50%;
-            filter: blur(60px);
-            pointer-events: none;
-        }
-
-        .orb-1 {
-            top: -20%;
-            right: -10%;
-        }
-
-        .orb-2 {
-            bottom: -20%;
-            left: -10%;
-            background: radial-gradient(circle at 70% 70%, rgba(156, 126, 88, 0.15), transparent 70%);
-        }
-
-        /* Header navigation */
-        .nav-container {
-            width: 100%;
-            max-width: 1280px;
-            margin-top: 2rem;
-            margin-bottom: 0rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            padding: 0.5rem 1.25rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            background: rgba(10, 10, 20, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-link:hover {
-            border-color: rgba(212, 175, 55, 0.8);
-            color: white;
-            background: rgba(212, 175, 55, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Main container */
-        .main-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            flex-grow: 1;
-            padding: 2rem 1rem; /* Added padding for mobile breathing room */
-            z-index: 10;
-        }
-
-        .card-container {
-            display: flex;
-            flex-direction: column-reverse; /* Logo on top for mobile */
-            width: 100%;
-            max-width: 1100px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-            border-radius: 20px;
-            overflow: hidden; /* Ensures the sharp corners of children don't poke out */
-        }
-
-        @media (min-width: 1024px) {
-            .card-container {
-                flex-direction: row; /* Side by side for desktop */
-                height: 800px; /* Fixed height for a consistent luxury look */
-            }
-            
-            .contact-card, .logo-card {
-                flex: 1; /* Equal width */
-                height: 100%;
+            :root,
+            :host {
+                --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+                --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                --color-green-600: oklch(.627 .194 149.214);
+                --color-gray-900: oklch(.21 .034 264.665);
+                --color-zinc-50: oklch(.985 0 0);
+                --color-zinc-200: oklch(.92 .004 286.32);
+                --color-zinc-400: oklch(.705 .015 286.067);
+                --color-zinc-500: oklch(.552 .016 285.938);
+                --color-zinc-600: oklch(.442 .017 285.786);
+                --color-zinc-700: oklch(.37 .013 285.805);
+                --color-zinc-800: oklch(.274 .006 286.033);
+                --color-zinc-900: oklch(.21 .006 285.885);
+                --color-neutral-100: oklch(.97 0 0);
+                --color-neutral-200: oklch(.922 0 0);
+                --color-neutral-700: oklch(.371 0 0);
+                --color-neutral-800: oklch(.269 0 0);
+                --color-neutral-900: oklch(.205 0 0);
+                --color-neutral-950: oklch(.145 0 0);
+                --color-stone-800: oklch(.268 .007 34.298);
+                --color-stone-950: oklch(.147 .004 49.25);
+                --color-black: #000;
+                --color-white: #fff;
+                --spacing: .25rem;
+                --container-sm: 24rem;
+                --container-md: 28rem;
+                --container-lg: 32rem;
+                --container-4xl: 56rem;
+                --text-xs: .75rem;
+                --text-xs--line-height: calc(1/.75);
+                --text-sm: .875rem;
+                --text-sm--line-height: calc(1.25/.875);
+                --text-lg: 1.125rem;
+                --text-lg--line-height: calc(1.75/1.125);
+                --font-weight-normal: 400;
+                --font-weight-medium: 500;
+                --font-weight-semibold: 600;
+                --leading-tight: 1.25;
+                --leading-normal: 1.5;
+                --radius-sm: .25rem;
+                --radius-md: .375rem;
+                --radius-lg: .5rem;
+                --radius-xl: .75rem;
+                --aspect-video: 16/9;
+                --default-transition-duration: .15s;
+                --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+                --default-font-family: var(--font-sans);
+                --default-font-feature-settings: var(--font-sans--font-feature-settings);
+                --default-font-variation-settings: var(--font-sans--font-variation-settings);
+                --default-mono-font-family: var(--font-mono);
+                --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+                --default-mono-font-variation-settings: var(--font-mono--font-variation-settings)
             }
         }
 
-        /* LEFT CARD - Contact Information (Luxury Redesign) */
-        .contact-card {
-            flex: 1;
-            padding: 3rem;
-            background: rgba(20, 18, 28, 0.75);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 0 0 20px 20px;
-            box-shadow: 
-                0 30px 50px -30px rgba(0, 0, 0, 0.8),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            color: #fff;
-            position: relative;
-            overflow: hidden;
-        }
+        @layer base {
 
-        @media (min-width: 1024px) {
-            .contact-card {
-                border-radius: 20px 0 0 20px;
+            *,
+            :after,
+            :before,
+            ::backdrop {
+                box-sizing: border-box;
+                border: 0 solid;
+                margin: 0;
+                padding: 0
+            }
+
+            ::file-selector-button {
+                box-sizing: border-box;
+                border: 0 solid;
+                margin: 0;
+                padding: 0
+            }
+
+            html,
+            :host {
+                -webkit-text-size-adjust: 100%;
+                tab-size: 4;
+                line-height: 1.5;
+                font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+                font-feature-settings: var(--default-font-feature-settings, normal);
+                font-variation-settings: var(--default-font-variation-settings, normal);
+                -webkit-tap-highlight-color: transparent
+            }
+
+            body {
+                line-height: inherit
+            }
+
+            hr {
+                height: 0;
+                color: inherit;
+                border-top-width: 1px
+            }
+
+            abbr:where([title]) {
+                -webkit-text-decoration: underline dotted;
+                text-decoration: underline dotted
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-size: inherit;
+                font-weight: inherit
+            }
+
+            a {
+                color: inherit;
+                -webkit-text-decoration: inherit;
+                -webkit-text-decoration: inherit;
+                -webkit-text-decoration: inherit;
+                text-decoration: inherit
+            }
+
+            b,
+            strong {
+                font-weight: bolder
+            }
+
+            code,
+            kbd,
+            samp,
+            pre {
+                font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+                font-feature-settings: var(--default-mono-font-feature-settings, normal);
+                font-variation-settings: var(--default-mono-font-variation-settings, normal);
+                font-size: 1em
+            }
+
+            small {
+                font-size: 80%
+            }
+
+            sub,
+            sup {
+                vertical-align: baseline;
+                font-size: 75%;
+                line-height: 0;
+                position: relative
+            }
+
+            sub {
+                bottom: -.25em
+            }
+
+            sup {
+                top: -.5em
+            }
+
+            table {
+                text-indent: 0;
+                border-color: inherit;
+                border-collapse: collapse
+            }
+
+            :-moz-focusring {
+                outline: auto
+            }
+
+            progress {
+                vertical-align: baseline
+            }
+
+            summary {
+                display: list-item
+            }
+
+            ol,
+            ul,
+            menu {
+                list-style: none
+            }
+
+            img,
+            svg,
+            video,
+            canvas,
+            audio,
+            iframe,
+            embed,
+            object {
+                vertical-align: middle;
+                display: block
+            }
+
+            img,
+            video {
+                max-width: 100%;
+                height: auto
+            }
+
+            button,
+            input,
+            select,
+            optgroup,
+            textarea {
+                font: inherit;
+                font-feature-settings: inherit;
+                font-variation-settings: inherit;
+                letter-spacing: inherit;
+                color: inherit;
+                opacity: 1;
+                background-color: #0000;
+                border-radius: 0
+            }
+
+            ::file-selector-button {
+                font: inherit;
+                font-feature-settings: inherit;
+                font-variation-settings: inherit;
+                letter-spacing: inherit;
+                color: inherit;
+                opacity: 1;
+                background-color: #0000;
+                border-radius: 0
+            }
+
+            :where(select:is([multiple], [size])) optgroup {
+                font-weight: bolder
+            }
+
+            :where(select:is([multiple], [size])) optgroup option {
+                padding-inline-start: 20px
+            }
+
+            ::file-selector-button {
+                margin-inline-end: 4px
+            }
+
+            ::placeholder {
+                opacity: 1;
+                color: color-mix(in oklab, currentColor 50%, transparent)
+            }
+
+            textarea {
+                resize: vertical
+            }
+
+            ::-webkit-search-decoration {
+                -webkit-appearance: none
+            }
+
+            ::-webkit-date-and-time-value {
+                min-height: 1lh;
+                text-align: inherit
+            }
+
+            ::-webkit-datetime-edit {
+                display: inline-flex
+            }
+
+            ::-webkit-datetime-edit-fields-wrapper {
+                padding: 0
+            }
+
+            ::-webkit-datetime-edit {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-year-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-month-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-day-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-hour-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-minute-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-second-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-millisecond-field {
+                padding-block: 0
+            }
+
+            ::-webkit-datetime-edit-meridiem-field {
+                padding-block: 0
+            }
+
+            :-moz-ui-invalid {
+                box-shadow: none
+            }
+
+            button,
+            input:where([type=button], [type=reset], [type=submit]) {
+                appearance: button
+            }
+
+            ::file-selector-button {
+                appearance: button
+            }
+
+            ::-webkit-inner-spin-button {
+                height: auto
+            }
+
+            ::-webkit-outer-spin-button {
+                height: auto
+            }
+
+            [hidden]:where(:not([hidden=until-found])) {
+                display: none !important
             }
         }
 
-        .contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.8), transparent);
-        }
+        @layer components;
 
-        .card-glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent);
-            border-radius: 50%;
-            filter: blur(40px);
-            pointer-events: none;
-        }
+        @layer utilities {
+            .sr-only {
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border-width: 0;
+                width: 1px;
+                height: 1px;
+                margin: -1px;
+                padding: 0;
+                position: absolute;
+                overflow: hidden
+            }
 
-        .glow-1 {
-            top: -50px;
-            right: -50px;
-        }
+            .absolute {
+                position: absolute
+            }
 
-        .glow-2 {
-            bottom: -50px;
-            left: -50px;
-        }
+            .relative {
+                position: relative
+            }
 
-        /* Shop name styling */
-        .shop-name {
-            margin-bottom: 2.5rem;
-            position: relative;
-        }
+            .static {
+                position: static
+            }
 
-        .shop-name h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.7rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #fff 0%, #d4af37 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            line-height: 1.1;
-            text-transform: uppercase;
-        }
+            .sticky {
+                position: sticky
+            }
 
-        .shop-tagline {
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-            color: rgba(212, 175, 55, 0.7);
-            text-transform: uppercase;
-            font-weight: 300;
-            position: relative;
-            padding-left: 2rem;
-            text-transform: capitalize; /* Changed from uppercase */
-            font-style: italic; /* Optional: adds a touch of class */
-        }
+            .inset-0 {
+                inset: calc(var(--spacing)*0)
+            }
 
-        .shop-tagline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 1.5rem;
-            height: 1px;
-            background: rgba(212, 175, 55, 0.4);
-        }
+            .inset-y-\[3px\] {
+                inset-block: 3px
+            }
 
-        /* Section titles */
-        .section-title {
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: rgba(212, 175, 55, 0.8);
-            margin-bottom: 1.25rem;
-            font-weight: 500;
-        }
+            .start-0 {
+                inset-inline-start: calc(var(--spacing)*0)
+            }
 
-        /* Contact items */
-        .contact-items {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+            .end-0 {
+                inset-inline-end: calc(var(--spacing)*0)
+            }
 
-        .contact-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
+            .top-0 {
+                top: calc(var(--spacing)*0)
+            }
 
-        .contact-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #d4af37;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
+            .z-20 {
+                z-index: 20
+            }
 
-        .contact-item:hover .contact-icon {
-            background: rgba(212, 175, 55, 0.2);
-            border-color: #d4af37;
-            transform: scale(1.05);
-        }
+            .container {
+                width: 100%
+            }
 
-        .contact-details {
-            flex: 1;
-        }
+            @media (width>=40rem) {
+                .container {
+                    max-width: 40rem
+                }
+            }
 
-        .contact-label {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            margin-bottom: 0.25rem;
-        }
+            @media (width>=48rem) {
+                .container {
+                    max-width: 48rem
+                }
+            }
 
-        .contact-value {
-            font-size: 1rem;
-            color: white;
-            font-weight: 400;
-            margin-bottom: 0.15rem;
-        }
+            @media (width>=64rem) {
+                .container {
+                    max-width: 64rem
+                }
+            }
 
-        .contact-sub {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
+            @media (width>=80rem) {
+                .container {
+                    max-width: 80rem
+                }
+            }
 
-        /* Phone numbers grid */
-        .phone-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
+            @media (width>=96rem) {
+                .container {
+                    max-width: 96rem
+                }
+            }
 
-        .phone-item {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
+            .mx-auto {
+                margin-inline: auto
+            }
 
-        .phone-item:hover {
-            border-color: rgba(212, 175, 55, 0.4);
-            background: rgba(212, 175, 55, 0.05);
-            transform: translateY(-2px);
-        }
+            .my-6 {
+                margin-block: calc(var(--spacing)*6)
+            }
 
-        .phone-number {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: white;
-            margin-bottom: 0.25rem;
-        }
+            .-ms-8 {
+                margin-inline-start: calc(var(--spacing)*-8)
+            }
 
-        .phone-type {
-            font-size: 0.7rem;
-            color: rgba(212, 175, 55, 0.7);
-            letter-spacing: 1px;
-        }
+            .ms-1 {
+                margin-inline-start: calc(var(--spacing)*1)
+            }
 
-        /* Email styling */
-        .email-group {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 12px;
-            padding: 1rem;
-        }
+            .ms-2 {
+                margin-inline-start: calc(var(--spacing)*2)
+            }
 
-        .email-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-        }
+            .ms-4 {
+                margin-inline-start: calc(var(--spacing)*4)
+            }
 
-        .email-row:not(:last-child) {
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-        }
+            .me-1\.5 {
+                margin-inline-end: calc(var(--spacing)*1.5)
+            }
 
-        .email-address {
-            color: white;
-            font-size: 0.95rem;
-        }
+            .me-2 {
+                margin-inline-end: calc(var(--spacing)*2)
+            }
 
-        .email-badge {
-            font-size: 0.65rem;
-            padding: 0.2rem 0.5rem;
-            background: rgba(212, 175, 55, 0.15);
-            border-radius: 20px;
-            color: #d4af37;
-            letter-spacing: 0.5px;
-        }
+            .me-3 {
+                margin-inline-end: calc(var(--spacing)*3)
+            }
 
-        /* Address styling */
-        .address-block {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 12px;
-            padding: 1rem;
-        }
+            .me-5 {
+                margin-inline-end: calc(var(--spacing)*5)
+            }
 
-        .address-line {
-            color: white;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
+            .me-10 {
+                margin-inline-end: calc(var(--spacing)*10)
+            }
 
-        .address-city {
-            color: rgba(212, 175, 55, 0.7);
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-        }
+            .-mt-\[4\.9rem\] {
+                margin-top: -4.9rem
+            }
 
-        /* Social media icons */
-        .social-section {
-            margin-top: 2rem;
-        }
+            .mt-2 {
+                margin-top: calc(var(--spacing)*2)
+            }
 
-        .social-grid {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
+            .mt-4 {
+                margin-top: calc(var(--spacing)*4)
+            }
 
-        .social-icon {
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #d4af37;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
+            .mt-5 {
+                margin-top: calc(var(--spacing)*5)
+            }
 
-        .social-icon:hover {
-            background: #d4af37;
-            color: #0b0c1e;
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
-        }
+            .mt-6 {
+                margin-top: calc(var(--spacing)*6)
+            }
 
-        /* Business hours */
-        .hours-container {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-        }
+            .mt-10 {
+                margin-top: calc(var(--spacing)*10)
+            }
 
-        .hours-item {
-            text-align: center;
-        }
+            .mt-auto {
+                margin-top: auto
+            }
 
-        .hours-days {
-            color: rgba(212, 175, 55, 0.7);
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
+            .-mb-px {
+                margin-bottom: -1px
+            }
 
-        .hours-time {
-            color: white;
-        }
+            .mb-0\.5 {
+                margin-bottom: calc(var(--spacing)*.5)
+            }
 
-        /* RIGHT CARD - Logo Card (Luxury Redesign) */
-        .logo-card {
-            position: relative;
-            width: 100%;
-            min-height: 450px;
-            background: linear-gradient(145deg, #1a1b2f, #0f1120);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 20px 20px 0 0;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-        }
+            .mb-1 {
+                margin-bottom: calc(var(--spacing)*1)
+            }
 
-        @media (min-width: 1024px) {
-            .logo-card {
-                border-radius: 0 20px 20px 0;
+            .mb-2 {
+                margin-bottom: calc(var(--spacing)*2)
+            }
+
+            .mb-4 {
+                margin-bottom: calc(var(--spacing)*4)
+            }
+
+            .mb-5 {
+                margin-bottom: calc(var(--spacing)*5)
+            }
+
+            .mb-6 {
+                margin-bottom: calc(var(--spacing)*6)
+            }
+
+            .mb-\[2px\] {
+                margin-bottom: 2px
+            }
+
+            .block {
+                display: block
+            }
+
+            .contents {
+                display: contents
+            }
+
+            .flex {
+                display: flex
+            }
+
+            .grid {
+                display: grid
+            }
+
+            .hidden {
+                display: none
+            }
+
+            .inline-block {
+                display: inline-block
+            }
+
+            .inline-flex {
+                display: inline-flex
+            }
+
+            .table {
+                display: table
+            }
+
+            .aspect-\[335\/376\] {
+                aspect-ratio: 335/376
+            }
+
+            .aspect-square {
+                aspect-ratio: 1
+            }
+
+            .aspect-video {
+                aspect-ratio: var(--aspect-video)
+            }
+
+            .size-3\! {
+                width: calc(var(--spacing)*3) !important;
+                height: calc(var(--spacing)*3) !important
+            }
+
+            .size-5 {
+                width: calc(var(--spacing)*5);
+                height: calc(var(--spacing)*5)
+            }
+
+            .size-8 {
+                width: calc(var(--spacing)*8);
+                height: calc(var(--spacing)*8)
+            }
+
+            .size-9 {
+                width: calc(var(--spacing)*9);
+                height: calc(var(--spacing)*9)
+            }
+
+            .size-full {
+                width: 100%;
+                height: 100%
+            }
+
+            .\!h-10 {
+                height: calc(var(--spacing)*10) !important
+            }
+
+            .h-1\.5 {
+                height: calc(var(--spacing)*1.5)
+            }
+
+            .h-2\.5 {
+                height: calc(var(--spacing)*2.5)
+            }
+
+            .h-3\.5 {
+                height: calc(var(--spacing)*3.5)
+            }
+
+            .h-7 {
+                height: calc(var(--spacing)*7)
+            }
+
+            .h-8 {
+                height: calc(var(--spacing)*8)
+            }
+
+            .h-9 {
+                height: calc(var(--spacing)*9)
+            }
+
+            .h-10 {
+                height: calc(var(--spacing)*10)
+            }
+
+            .h-14\.5 {
+                height: calc(var(--spacing)*14.5)
+            }
+
+            .h-dvh {
+                height: 100dvh
+            }
+
+            .h-full {
+                height: 100%
+            }
+
+            .min-h-screen {
+                min-height: 100vh
+            }
+
+            .min-h-svh {
+                min-height: 100svh
+            }
+
+            .w-1\.5 {
+                width: calc(var(--spacing)*1.5)
+            }
+
+            .w-2\.5 {
+                width: calc(var(--spacing)*2.5)
+            }
+
+            .w-3\.5 {
+                width: calc(var(--spacing)*3.5)
+            }
+
+            .w-8 {
+                width: calc(var(--spacing)*8)
+            }
+
+            .w-9 {
+                width: calc(var(--spacing)*9)
+            }
+
+            .w-10 {
+                width: calc(var(--spacing)*10)
+            }
+
+            .w-\[220px\] {
+                width: 220px
+            }
+
+            .w-\[448px\] {
+                width: 448px
+            }
+
+            .w-full {
+                width: 100%
+            }
+
+            .w-px {
+                width: 1px
+            }
+
+            .max-w-\[335px\] {
+                max-width: 335px
+            }
+
+            .max-w-lg {
+                max-width: var(--container-lg)
+            }
+
+            .max-w-md {
+                max-width: var(--container-md)
+            }
+
+            .max-w-none {
+                max-width: none
+            }
+
+            .max-w-sm {
+                max-width: var(--container-sm)
+            }
+
+            .flex-1 {
+                flex: 1
+            }
+
+            .shrink-0 {
+                flex-shrink: 0
+            }
+
+            .translate-y-0 {
+                --tw-translate-y: calc(var(--spacing)*0);
+                translate: var(--tw-translate-x)var(--tw-translate-y)
+            }
+
+            .cursor-pointer {
+                cursor: pointer
+            }
+
+            .auto-rows-min {
+                grid-auto-rows: min-content
+            }
+
+            .flex-col {
+                flex-direction: column
+            }
+
+            .flex-col-reverse {
+                flex-direction: column-reverse
+            }
+
+            .items-center {
+                align-items: center
+            }
+
+            .items-start {
+                align-items: flex-start
+            }
+
+            .justify-between {
+                justify-content: space-between
+            }
+
+            .justify-center {
+                justify-content: center
+            }
+
+            .justify-end {
+                justify-content: flex-end
+            }
+
+            .gap-2 {
+                gap: calc(var(--spacing)*2)
+            }
+
+            .gap-3 {
+                gap: calc(var(--spacing)*3)
+            }
+
+            .gap-4 {
+                gap: calc(var(--spacing)*4)
+            }
+
+            .gap-6 {
+                gap: calc(var(--spacing)*6)
+            }
+
+            :where(.space-y-2>:not(:last-child)) {
+                --tw-space-y-reverse: 0;
+                margin-block-start: calc(calc(var(--spacing)*2)*var(--tw-space-y-reverse));
+                margin-block-end: calc(calc(var(--spacing)*2)*calc(1 - var(--tw-space-y-reverse)))
+            }
+
+            :where(.space-y-3>:not(:last-child)) {
+                --tw-space-y-reverse: 0;
+                margin-block-start: calc(calc(var(--spacing)*3)*var(--tw-space-y-reverse));
+                margin-block-end: calc(calc(var(--spacing)*3)*calc(1 - var(--tw-space-y-reverse)))
+            }
+
+            :where(.space-y-6>:not(:last-child)) {
+                --tw-space-y-reverse: 0;
+                margin-block-start: calc(calc(var(--spacing)*6)*var(--tw-space-y-reverse));
+                margin-block-end: calc(calc(var(--spacing)*6)*calc(1 - var(--tw-space-y-reverse)))
+            }
+
+            :where(.space-y-\[2px\]>:not(:last-child)) {
+                --tw-space-y-reverse: 0;
+                margin-block-start: calc(2px*var(--tw-space-y-reverse));
+                margin-block-end: calc(2px*calc(1 - var(--tw-space-y-reverse)))
+            }
+
+            :where(.space-x-0\.5>:not(:last-child)) {
+                --tw-space-x-reverse: 0;
+                margin-inline-start: calc(calc(var(--spacing)*.5)*var(--tw-space-x-reverse));
+                margin-inline-end: calc(calc(var(--spacing)*.5)*calc(1 - var(--tw-space-x-reverse)))
+            }
+
+            :where(.space-x-1>:not(:last-child)) {
+                --tw-space-x-reverse: 0;
+                margin-inline-start: calc(calc(var(--spacing)*1)*var(--tw-space-x-reverse));
+                margin-inline-end: calc(calc(var(--spacing)*1)*calc(1 - var(--tw-space-x-reverse)))
+            }
+
+            :where(.space-x-2>:not(:last-child)) {
+                --tw-space-x-reverse: 0;
+                margin-inline-start: calc(calc(var(--spacing)*2)*var(--tw-space-x-reverse));
+                margin-inline-end: calc(calc(var(--spacing)*2)*calc(1 - var(--tw-space-x-reverse)))
+            }
+
+            .self-stretch {
+                align-self: stretch
+            }
+
+            .truncate {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden
+            }
+
+            .overflow-hidden {
+                overflow: hidden
+            }
+
+            .rounded-full {
+                border-radius: 3.40282e38px
+            }
+
+            .rounded-lg {
+                border-radius: var(--radius-lg)
+            }
+
+            .rounded-md {
+                border-radius: var(--radius-md)
+            }
+
+            .rounded-sm {
+                border-radius: var(--radius-sm)
+            }
+
+            .rounded-xl {
+                border-radius: var(--radius-xl)
+            }
+
+            .rounded-ee-lg {
+                border-end-end-radius: var(--radius-lg)
+            }
+
+            .rounded-es-lg {
+                border-end-start-radius: var(--radius-lg)
+            }
+
+            .rounded-t-lg {
+                border-top-left-radius: var(--radius-lg);
+                border-top-right-radius: var(--radius-lg)
+            }
+
+            .border {
+                border-style: var(--tw-border-style);
+                border-width: 1px
+            }
+
+            .border-r {
+                border-right-style: var(--tw-border-style);
+                border-right-width: 1px
+            }
+
+            .border-b {
+                border-bottom-style: var(--tw-border-style);
+                border-bottom-width: 1px
+            }
+
+            .border-\[\#19140035\] {
+                border-color: #19140035
+            }
+
+            .border-\[\#e3e3e0\] {
+                border-color: #e3e3e0
+            }
+
+            .border-black {
+                border-color: var(--color-black)
+            }
+
+            .border-neutral-200 {
+                border-color: var(--color-neutral-200)
+            }
+
+            .border-transparent {
+                border-color: #0000
+            }
+
+            .border-zinc-200 {
+                border-color: var(--color-zinc-200)
+            }
+
+            .bg-\[\#1b1b18\] {
+                background-color: #1b1b18
+            }
+
+            .bg-\[\#FDFDFC\] {
+                background-color: #fdfdfc
+            }
+
+            .bg-\[\#dbdbd7\] {
+                background-color: #dbdbd7
+            }
+
+            .bg-\[\#fff2f2\] {
+                background-color: #fff2f2
+            }
+
+            .bg-neutral-100 {
+                background-color: var(--color-neutral-100)
+            }
+
+            .bg-neutral-200 {
+                background-color: var(--color-neutral-200)
+            }
+
+            .bg-neutral-900 {
+                background-color: var(--color-neutral-900)
+            }
+
+            .bg-white {
+                background-color: var(--color-white)
+            }
+
+            .bg-zinc-50 {
+                background-color: var(--color-zinc-50)
+            }
+
+            .bg-zinc-200 {
+                background-color: var(--color-zinc-200)
+            }
+
+            .fill-current {
+                fill: currentColor
+            }
+
+            .stroke-gray-900\/20 {
+                stroke: color-mix(in oklab, var(--color-gray-900)20%, transparent)
+            }
+
+            .p-0 {
+                padding: calc(var(--spacing)*0)
+            }
+
+            .p-6 {
+                padding: calc(var(--spacing)*6)
+            }
+
+            .p-10 {
+                padding: calc(var(--spacing)*10)
+            }
+
+            .px-1 {
+                padding-inline: calc(var(--spacing)*1)
+            }
+
+            .px-5 {
+                padding-inline: calc(var(--spacing)*5)
+            }
+
+            .px-8 {
+                padding-inline: calc(var(--spacing)*8)
+            }
+
+            .px-10 {
+                padding-inline: calc(var(--spacing)*10)
+            }
+
+            .py-0\! {
+                padding-block: calc(var(--spacing)*0) !important
+            }
+
+            .py-1 {
+                padding-block: calc(var(--spacing)*1)
+            }
+
+            .py-1\.5 {
+                padding-block: calc(var(--spacing)*1.5)
+            }
+
+            .py-2 {
+                padding-block: calc(var(--spacing)*2)
+            }
+
+            .py-8 {
+                padding-block: calc(var(--spacing)*8)
+            }
+
+            .ps-3 {
+                padding-inline-start: calc(var(--spacing)*3)
+            }
+
+            .ps-7 {
+                padding-inline-start: calc(var(--spacing)*7)
+            }
+
+            .pe-4 {
+                padding-inline-end: calc(var(--spacing)*4)
+            }
+
+            .pb-4 {
+                padding-bottom: calc(var(--spacing)*4)
+            }
+
+            .pb-12 {
+                padding-bottom: calc(var(--spacing)*12)
+            }
+
+            .text-center {
+                text-align: center
+            }
+
+            .text-start {
+                text-align: start
+            }
+
+            .text-lg {
+                font-size: var(--text-lg);
+                line-height: var(--tw-leading, var(--text-lg--line-height))
+            }
+
+            .text-sm {
+                font-size: var(--text-sm);
+                line-height: var(--tw-leading, var(--text-sm--line-height))
+            }
+
+            .text-xs {
+                font-size: var(--text-xs);
+                line-height: var(--tw-leading, var(--text-xs--line-height))
+            }
+
+            .text-\[13px\] {
+                font-size: 13px
+            }
+
+            .leading-\[20px\] {
+                --tw-leading: 20px;
+                line-height: 20px
+            }
+
+            .leading-none {
+                --tw-leading: 1;
+                line-height: 1
+            }
+
+            .leading-normal {
+                --tw-leading: var(--leading-normal);
+                line-height: var(--leading-normal)
+            }
+
+            .leading-tight {
+                --tw-leading: var(--leading-tight);
+                line-height: var(--leading-tight)
+            }
+
+            .font-medium {
+                --tw-font-weight: var(--font-weight-medium);
+                font-weight: var(--font-weight-medium)
+            }
+
+            .font-normal {
+                --tw-font-weight: var(--font-weight-normal);
+                font-weight: var(--font-weight-normal)
+            }
+
+            .font-semibold {
+                --tw-font-weight: var(--font-weight-semibold);
+                font-weight: var(--font-weight-semibold)
+            }
+
+            .\!text-green-600 {
+                color: var(--color-green-600) !important
+            }
+
+            .text-\[\#1b1b18\] {
+                color: #1b1b18
+            }
+
+            .text-\[\#706f6c\] {
+                color: #706f6c
+            }
+
+            .text-\[\#F53003\],
+            .text-\[\#f53003\] {
+                color: #f53003
+            }
+
+            .text-black {
+                color: var(--color-black)
+            }
+
+            .text-green-600 {
+                color: var(--color-green-600)
+            }
+
+            .text-stone-800 {
+                color: var(--color-stone-800)
+            }
+
+            .text-white {
+                color: var(--color-white)
+            }
+
+            .text-zinc-400 {
+                color: var(--color-zinc-400)
+            }
+
+            .text-zinc-500 {
+                color: var(--color-zinc-500)
+            }
+
+            .text-zinc-600 {
+                color: var(--color-zinc-600)
+            }
+
+            .lowercase {
+                text-transform: lowercase
+            }
+
+            .underline {
+                text-decoration-line: underline
+            }
+
+            .underline-offset-4 {
+                text-underline-offset: 4px
+            }
+
+            .antialiased {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale
+            }
+
+            .opacity-100 {
+                opacity: 1
+            }
+
+            .shadow-\[0px_0px_1px_0px_rgba\(0\,0\,0\,0\.03\)\,0px_1px_2px_0px_rgba\(0\,0\,0\,0\.06\)\] {
+                --tw-shadow: 0px 0px 1px 0px var(--tw-shadow-color, #00000008), 0px 1px 2px 0px var(--tw-shadow-color, #0000000f);
+                box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)
+            }
+
+            .shadow-\[inset_0px_0px_0px_1px_rgba\(26\,26\,0\,0\.16\)\] {
+                --tw-shadow: inset 0px 0px 0px 1px var(--tw-shadow-color, #1a1a0029);
+                box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)
+            }
+
+            .shadow-xs {
+                --tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, #0000000d);
+                box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)
+            }
+
+            .outline {
+                outline-style: var(--tw-outline-style);
+                outline-width: 1px
+            }
+
+            .transition-all {
+                transition-property: all;
+                transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+                transition-duration: var(--tw-duration, var(--default-transition-duration))
+            }
+
+            .transition-opacity {
+                transition-property: opacity;
+                transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+                transition-duration: var(--tw-duration, var(--default-transition-duration))
+            }
+
+            .delay-300 {
+                transition-delay: .3s
+            }
+
+            .duration-750 {
+                --tw-duration: .75s;
+                transition-duration: .75s
+            }
+
+            .not-has-\[nav\]\:hidden:not(:has(:is(nav))) {
+                display: none
+            }
+
+            .group-data-open\/disclosure-button\:block:is(:where(.group\/disclosure-button)[data-open] *) {
+                display: block
+            }
+
+            .group-data-open\/disclosure-button\:hidden:is(:where(.group\/disclosure-button)[data-open] *) {
+                display: none
+            }
+
+            .before\:absolute:before {
+                content: var(--tw-content);
+                position: absolute
+            }
+
+            .before\:start-\[0\.4rem\]:before {
+                content: var(--tw-content);
+                inset-inline-start: .4rem
+            }
+
+            .before\:top-0:before {
+                content: var(--tw-content);
+                top: calc(var(--spacing)*0)
+            }
+
+            .before\:top-1\/2:before {
+                content: var(--tw-content);
+                top: 50%
+            }
+
+            .before\:bottom-0:before {
+                content: var(--tw-content);
+                bottom: calc(var(--spacing)*0)
+            }
+
+            .before\:bottom-1\/2:before {
+                content: var(--tw-content);
+                bottom: 50%
+            }
+
+            .before\:left-\[0\.4rem\]:before {
+                content: var(--tw-content);
+                left: .4rem
+            }
+
+            .before\:border-l:before {
+                content: var(--tw-content);
+                border-left-style: var(--tw-border-style);
+                border-left-width: 1px
+            }
+
+            .before\:border-\[\#e3e3e0\]:before {
+                content: var(--tw-content);
+                border-color: #e3e3e0
+            }
+
+            @media (hover:hover) {
+                .hover\:border-\[\#1915014a\]:hover {
+                    border-color: #1915014a
+                }
+
+                .hover\:border-\[\#19140035\]:hover {
+                    border-color: #19140035
+                }
+
+                .hover\:border-black:hover {
+                    border-color: var(--color-black)
+                }
+
+                .hover\:bg-black:hover {
+                    background-color: var(--color-black)
+                }
+
+                .hover\:bg-zinc-800\/5:hover {
+                    background-color: color-mix(in oklab, var(--color-zinc-800)5%, transparent)
+                }
+
+                .hover\:text-zinc-800:hover {
+                    color: var(--color-zinc-800)
+                }
+            }
+
+            .data-open\:block[data-open] {
+                display: block
+            }
+
+            @media (width<64rem) {
+                .max-lg\:hidden {
+                    display: none
+                }
+            }
+
+            @media (width<48rem) {
+                .max-md\:flex-col {
+                    flex-direction: column
+                }
+
+                .max-md\:pt-6 {
+                    padding-top: calc(var(--spacing)*6)
+                }
+            }
+
+            @media (width>=40rem) {
+                .sm\:w-\[350px\] {
+                    width: 350px
+                }
+
+                .sm\:px-0 {
+                    padding-inline: calc(var(--spacing)*0)
+                }
+            }
+
+            @media (width>=48rem) {
+                .md\:hidden {
+                    display: none
+                }
+
+                .md\:w-\[220px\] {
+                    width: 220px
+                }
+
+                .md\:grid-cols-3 {
+                    grid-template-columns: repeat(3, minmax(0, 1fr))
+                }
+
+                .md\:p-10 {
+                    padding: calc(var(--spacing)*10)
+                }
+            }
+
+            @media (width>=64rem) {
+                .lg\:-ms-px {
+                    margin-inline-start: -1px
+                }
+
+                .lg\:ms-0 {
+                    margin-inline-start: calc(var(--spacing)*0)
+                }
+
+                .lg\:-mt-\[6\.6rem\] {
+                    margin-top: -6.6rem
+                }
+
+                .lg\:mb-0 {
+                    margin-bottom: calc(var(--spacing)*0)
+                }
+
+                .lg\:mb-6 {
+                    margin-bottom: calc(var(--spacing)*6)
+                }
+
+                .lg\:block {
+                    display: block
+                }
+
+                .lg\:flex {
+                    display: flex
+                }
+
+                .lg\:hidden {
+                    display: none
+                }
+
+                .lg\:aspect-auto {
+                    aspect-ratio: auto
+                }
+
+                .lg\:h-8 {
+                    height: calc(var(--spacing)*8)
+                }
+
+                .lg\:w-\[438px\] {
+                    width: 438px
+                }
+
+                .lg\:max-w-4xl {
+                    max-width: var(--container-4xl)
+                }
+
+                .lg\:max-w-none {
+                    max-width: none
+                }
+
+                .lg\:grow {
+                    flex-grow: 1
+                }
+
+                .lg\:grid-cols-2 {
+                    grid-template-columns: repeat(2, minmax(0, 1fr))
+                }
+
+                .lg\:flex-row {
+                    flex-direction: row
+                }
+
+                .lg\:justify-center {
+                    justify-content: center
+                }
+
+                .lg\:rounded-ss-lg {
+                    border-start-start-radius: var(--radius-lg)
+                }
+
+                .lg\:rounded-e-lg {
+                    border-start-end-radius: var(--radius-lg);
+                    border-end-end-radius: var(--radius-lg)
+                }
+
+                .lg\:rounded-e-lg\! {
+                    border-start-end-radius: var(--radius-lg) !important;
+                    border-end-end-radius: var(--radius-lg) !important
+                }
+
+                .lg\:rounded-ee-none {
+                    border-end-end-radius: 0
+                }
+
+                .lg\:rounded-t-none {
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0
+                }
+
+                .lg\:p-8 {
+                    padding: calc(var(--spacing)*8)
+                }
+
+                .lg\:p-20 {
+                    padding: calc(var(--spacing)*20)
+                }
+
+                .lg\:px-0 {
+                    padding-inline: calc(var(--spacing)*0)
+                }
+            }
+
+            :where(.rtl\:space-x-reverse:where(:dir(rtl), [dir=rtl], [dir=rtl] *)>:not(:last-child)) {
+                --tw-space-x-reverse: 1
+            }
+
+            @media (prefers-color-scheme:dark) {
+                .dark\:block {
+                    display: block
+                }
+
+                .dark\:hidden {
+                    display: none
+                }
+
+                .dark\:border-r {
+                    border-right-style: var(--tw-border-style);
+                    border-right-width: 1px
+                }
+
+                .dark\:border-\[\#3E3E3A\] {
+                    border-color: #3e3e3a
+                }
+
+                .dark\:border-\[\#eeeeec\] {
+                    border-color: #eeeeec
+                }
+
+                .dark\:border-neutral-700 {
+                    border-color: var(--color-neutral-700)
+                }
+
+                .dark\:border-neutral-800 {
+                    border-color: var(--color-neutral-800)
+                }
+
+                .dark\:border-stone-800 {
+                    border-color: var(--color-stone-800)
+                }
+
+                .dark\:border-zinc-700 {
+                    border-color: var(--color-zinc-700)
+                }
+
+                .dark\:bg-\[\#0a0a0a\] {
+                    background-color: #0a0a0a
+                }
+
+                .dark\:bg-\[\#1D0002\] {
+                    background-color: #1d0002
+                }
+
+                .dark\:bg-\[\#3E3E3A\] {
+                    background-color: #3e3e3a
+                }
+
+                .dark\:bg-\[\#161615\] {
+                    background-color: #161615
+                }
+
+                .dark\:bg-\[\#eeeeec\] {
+                    background-color: #eeeeec
+                }
+
+                .dark\:bg-neutral-700 {
+                    background-color: var(--color-neutral-700)
+                }
+
+                .dark\:bg-stone-950 {
+                    background-color: var(--color-stone-950)
+                }
+
+                .dark\:bg-white\/30 {
+                    background-color: color-mix(in oklab, var(--color-white)30%, transparent)
+                }
+
+                .dark\:bg-zinc-800 {
+                    background-color: var(--color-zinc-800)
+                }
+
+                .dark\:bg-zinc-900 {
+                    background-color: var(--color-zinc-900)
+                }
+
+                .dark\:bg-linear-to-b {
+                    --tw-gradient-position: to bottom in oklab;
+                    background-image: linear-gradient(var(--tw-gradient-stops))
+                }
+
+                .dark\:from-neutral-950 {
+                    --tw-gradient-from: var(--color-neutral-950);
+                    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from)var(--tw-gradient-from-position), var(--tw-gradient-to)var(--tw-gradient-to-position))
+                }
+
+                .dark\:to-neutral-900 {
+                    --tw-gradient-to: var(--color-neutral-900);
+                    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from)var(--tw-gradient-from-position), var(--tw-gradient-to)var(--tw-gradient-to-position))
+                }
+
+                .dark\:stroke-neutral-100\/20 {
+                    stroke: color-mix(in oklab, var(--color-neutral-100)20%, transparent)
+                }
+
+                .dark\:text-\[\#1C1C1A\] {
+                    color: #1c1c1a
+                }
+
+                .dark\:text-\[\#A1A09A\] {
+                    color: #a1a09a
+                }
+
+                .dark\:text-\[\#EDEDEC\] {
+                    color: #ededec
+                }
+
+                .dark\:text-\[\#F61500\] {
+                    color: #f61500
+                }
+
+                .dark\:text-\[\#FF4433\] {
+                    color: #f43
+                }
+
+                .dark\:text-black {
+                    color: var(--color-black)
+                }
+
+                .dark\:text-white {
+                    color: var(--color-white)
+                }
+
+                .dark\:text-white\/80 {
+                    color: color-mix(in oklab, var(--color-white)80%, transparent)
+                }
+
+                .dark\:text-zinc-400 {
+                    color: var(--color-zinc-400)
+                }
+
+                .dark\:shadow-\[inset_0px_0px_0px_1px_\#fffaed2d\] {
+                    --tw-shadow: inset 0px 0px 0px 1px var(--tw-shadow-color, #fffaed2d);
+                    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)
+                }
+
+                .dark\:before\:border-\[\#3E3E3A\]:before {
+                    content: var(--tw-content);
+                    border-color: #3e3e3a
+                }
+
+                @media (hover:hover) {
+                    .dark\:hover\:border-\[\#3E3E3A\]:hover {
+                        border-color: #3e3e3a
+                    }
+
+                    .dark\:hover\:border-\[\#62605b\]:hover {
+                        border-color: #62605b
+                    }
+
+                    .dark\:hover\:border-white:hover {
+                        border-color: var(--color-white)
+                    }
+
+                    .dark\:hover\:bg-white:hover {
+                        background-color: var(--color-white)
+                    }
+
+                    .dark\:hover\:bg-white\/\[7\%\]:hover {
+                        background-color: color-mix(in oklab, var(--color-white)7%, transparent)
+                    }
+
+                    .dark\:hover\:text-white:hover {
+                        color: var(--color-white)
+                    }
+                }
+            }
+
+            @starting-style {
+                .starting\:translate-y-4 {
+                    --tw-translate-y: calc(var(--spacing)*4);
+                    translate: var(--tw-translate-x)var(--tw-translate-y)
+                }
+            }
+
+            @starting-style {
+                .starting\:translate-y-6 {
+                    --tw-translate-y: calc(var(--spacing)*6);
+                    translate: var(--tw-translate-x)var(--tw-translate-y)
+                }
+            }
+
+            @starting-style {
+                .starting\:opacity-0 {
+                    opacity: 0
+                }
+            }
+
+            .\[\&\>div\>svg\]\:size-5>div>svg {
+                width: calc(var(--spacing)*5);
+                height: calc(var(--spacing)*5)
+            }
+
+            :where(.\[\:where\(\&\)\]\:size-4) {
+                width: calc(var(--spacing)*4);
+                height: calc(var(--spacing)*4)
+            }
+
+            :where(.\[\:where\(\&\)\]\:size-5) {
+                width: calc(var(--spacing)*5);
+                height: calc(var(--spacing)*5)
+            }
+
+            :where(.\[\:where\(\&\)\]\:size-6) {
+                width: calc(var(--spacing)*6);
+                height: calc(var(--spacing)*6)
             }
         }
 
-        /* Animated background for logo card */
-        .logo-bg-animation {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.15), transparent 70%);
-            animation: pulse-glow 4s ease-in-out infinite;
+        @property --tw-translate-x {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
+        @property --tw-translate-y {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0
         }
 
-        .floating-particles {
-            position: absolute;
-            inset: 0;
+        @property --tw-translate-z {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0
         }
 
-        .float-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #d4af37;
-            border-radius: 50%;
-            filter: blur(2px);
-            opacity: 0.3;
+        @property --tw-space-y-reverse {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0
         }
 
-        .float-particle:nth-child(1) { top: 20%; left: 30%; animation: float 8s infinite; }
-        .float-particle:nth-child(2) { top: 60%; right: 25%; animation: float 10s infinite; }
-        .float-particle:nth-child(3) { bottom: 30%; left: 40%; animation: float 12s infinite; }
-        .float-particle:nth-child(4) { top: 40%; right: 40%; animation: float 9s infinite; }
-        .float-particle:nth-child(5) { bottom: 20%; right: 30%; animation: float 11s infinite; }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-20px, -20px); }
+        @property --tw-space-x-reverse {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0
         }
 
-        /* Logo container */
-        .logo-container {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
+        @property --tw-border-style {
+            syntax: "*";
+            inherits: false;
+            initial-value: solid
         }
 
-        .logo-image-wrapper {
-            width: 400px;
-            height: 400px;
-            margin: 0 auto 2rem;
-            position: relative;
+        @property --tw-leading {
+            syntax: "*";
+            inherits: false
         }
 
-        .logo-ring {
-            position: absolute;
-            inset: -10px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-radius: 50%;
-            animation: spin 12s linear infinite;
+        @property --tw-font-weight {
+            syntax: "*";
+            inherits: false
         }
 
-        .logo-ring::before {
-            content: '';
-            position: absolute;
-            inset: -5px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 50%;
-            border-top-color: #d4af37;
-            animation: spin 8s linear infinite reverse;
+        @property --tw-shadow {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0 0 #0000
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @property --tw-shadow-color {
+            syntax: "*";
+            inherits: false
         }
 
-        .logo-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 
-                0 0 30px rgba(212, 175, 55, 0.3),
-                inset 0 0 20px rgba(212, 175, 55, 0.2);
-            transition: transform 0.5s ease;
+        @property --tw-inset-shadow {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0 0 #0000
         }
 
-        .logo-image:hover {
-            transform: scale(1.05);
+        @property --tw-inset-shadow-color {
+            syntax: "*";
+            inherits: false
         }
 
-        .brand-initials {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff 0%, #d4af37 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 6px;
-            margin-bottom: 0.5rem;
+        @property --tw-ring-color {
+            syntax: "*";
+            inherits: false
         }
 
-        .brand-year {
-            font-size: 0.8rem;
-            letter-spacing: 8px;
-            color: rgba(212, 175, 55, 0.5);
-            text-transform: uppercase;
+        @property --tw-ring-shadow {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0 0 #0000
         }
 
-        /* Decorative lines */
-        .decor-line {
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #d4af37, transparent);
-            margin: 1rem auto;
+        @property --tw-inset-ring-color {
+            syntax: "*";
+            inherits: false
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .logo-card {
-                min-height: 300px; /* Reduces the height for mobile so it's tighter */
-            }
-            .contact-card {
-                padding: 2rem;
-            }
-            
-            .phone-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .shop-name h1 {
-                font-size: 2.2rem;
-            }
-            
-            .logo-image-wrapper {
-                width: 150px;
-                height: 150px;
-            }
+        @property --tw-inset-ring-shadow {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0 0 #0000
+        }
+
+        @property --tw-ring-inset {
+            syntax: "*";
+            inherits: false
+        }
+
+        @property --tw-ring-offset-width {
+            syntax: "<length>";
+            inherits: false;
+            initial-value: 0
+        }
+
+        @property --tw-ring-offset-color {
+            syntax: "*";
+            inherits: false;
+            initial-value: #fff
+        }
+
+        @property --tw-ring-offset-shadow {
+            syntax: "*";
+            inherits: false;
+            initial-value: 0 0 #0000
+        }
+
+        @property --tw-outline-style {
+            syntax: "*";
+            inherits: false;
+            initial-value: solid
+        }
+
+        @property --tw-duration {
+            syntax: "*";
+            inherits: false
+        }
+
+        @property --tw-content {
+            syntax: "*";
+            inherits: false;
+            initial-value: ""
+        }
+
+        @property --tw-gradient-position {
+            syntax: "*";
+            inherits: false
+        }
+
+        @property --tw-gradient-from {
+            syntax: "<color>";
+            inherits: false;
+            initial-value: #0000
+        }
+
+        @property --tw-gradient-via {
+            syntax: "<color>";
+            inherits: false;
+            initial-value: #0000
+        }
+
+        @property --tw-gradient-to {
+            syntax: "<color>";
+            inherits: false;
+            initial-value: #0000
+        }
+
+        @property --tw-gradient-stops {
+            syntax: "*";
+            inherits: false
+        }
+
+        @property --tw-gradient-via-stops {
+            syntax: "*";
+            inherits: false
+        }
+
+        @property --tw-gradient-from-position {
+            syntax: "<length-percentage>";
+            inherits: false;
+            initial-value: 0%
+        }
+
+        @property --tw-gradient-via-position {
+            syntax: "<length-percentage>";
+            inherits: false;
+            initial-value: 50%
+        }
+
+        @property --tw-gradient-to-position {
+            syntax: "<length-percentage>";
+            inherits: false;
+            initial-value: 100%
         }
     </style>
 </head>
 
-<body>
-    <!-- Animated Background -->
-    <div class="bg-particles">
-        <div class="particle" style="left: 10%; width: 1px; height: 1px; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 30%; width: 3px; height: 3px; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 50%; width: 2px; height: 2px; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 70%; width: 4px; height: 4px; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 90%; width: 6px; height: 4px; animation-delay: 8s;"></div>
-    </div>
-    
-    <div class="bg-gradient-orb orb-1"></div>
-    <div class="bg-gradient-orb orb-2"></div>
-
-    <!-- Navigation -->
-    <div class="nav-container">
-        <nav class="nav-links">
-            @auth
-                @if (auth()->user()->role === 'admin')
-                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+<body
+    class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
+    <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
+        @if (Route::has('login'))
+            <nav class="flex items-center justify-end gap-4">
+                @auth
+                    @if (auth()->user()->role === 'admin')
+                        <a href="{{ route('dashboard') }}"
+                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">Dashboard</a>
+                    @else
+                        <a href="{{ route('pos.index') }}"
+                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">POS</a>
+                    @endif
                 @else
-                    <a href="{{ route('pos.index') }}" class="nav-link">POS</a>
-                @endif
-            @else
-                <a href="{{ route('login') }}" class="nav-link">Log in</a>
-            @endauth
-        </nav>
-    </div>
+                    <a href="{{ route('login') }}"
+                        class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">Log
+                        in</a>
+                @endauth
+            </nav>
+        @endif
+    </header>
+    <div
+        class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
+        <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
+            {{--<div
+                class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-es-lg rounded-ee-lg lg:rounded-ss-lg lg:rounded-ee-none">
+                <h1 class="mb-1 font-medium">Let's get started</h1>
+                <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">Laravel has an incredibly rich ecosystem. <br>We
+                    suggest starting with the following.</p>
+                <ul class="flex flex-col mb-4 lg:mb-6">
+                    <li
+                        class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
+                        <span class="relative py-1 bg-white dark:bg-[#161615]">
+                            <span
+                                class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
+                                <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
+                            </span>
+                        </span>
+                        <span>
+                            Read the
+                            <a href="https://laravel.com/docs" target="_blank"
+                                class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
+                                <span>Documentation</span>
+                                <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5">
+                                    <path d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001" stroke="currentColor"
+                                        stroke-linecap="square" />
+                                </svg>
+                            </a>
+                        </span>
+                    </li>
+                    <li
+                        class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:start-[0.4rem] before:absolute">
+                        <span class="relative py-1 bg-white dark:bg-[#161615]">
+                            <span
+                                class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
+                                <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
+                            </span>
+                        </span>
+                        <span>
+                            Watch video tutorials at
+                            <a href="https://laracasts.com" target="_blank"
+                                class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
+                                <span>Laracasts</span>
+                                <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5">
+                                    <path d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001" stroke="currentColor"
+                                        stroke-linecap="square" />
+                                </svg>
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+                <ul class="flex gap-3 text-sm leading-normal">
+                    <li>
+                        <a href="https://cloud.laravel.com" target="_blank"
+                            class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
+                            Deploy now
+                        </a>
+                    </li>
+                </ul>
+            </div>--}}
+            <div
+                class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-es-lg rounded-ee-lg lg:rounded-ss-lg lg:rounded-ee-none">
 
-    <!-- Main Content -->
-    <div class="main-wrapper">
-        <div class="card-container">
-            
-            <!-- LEFT CARD: Contact Information (Luxury Edition) -->
-            <div class="contact-card">
-                <div class="card-glow glow-1"></div>
-                <div class="card-glow glow-2"></div>
-                
-                <!-- Shop Name -->
-                <div class="shop-name">
-                    <h1>SCENT OF ELEGANCE</h1>
-                    <div class="shop-tagline">Blume to confidence</div>
+                <h1 class="mb-2 font-medium text-2xl lg:text-3xl">APPLIED SYNTAX LIMITED</h1>
+
+                <p>
+                We develop custom systems that streamline operations, enhance productivity, and bring your digital visions to life.
+                </p>
+
+               {{-- <p class="mb-6 text-[#706f6c] dark:text-[#A1A09A]">
+                    We specialize in developing custom systems that streamline your business operations,
+                    enhance productivity, and drive growth. From enterprise solutions to innovative web applications,
+                    we transform your ideas into powerful digital realities.
+                </p> --}}
+
+                <div class="border-t border-[#e3e3e0] dark:border-[#3E3E3A] my-6 lg:my-8"></div>
+
+                <div class="space-y-2 text-sm">
+                    <p class="flex items-center gap-2">
+                        <span class="font-medium text-[#1b1b18] dark:text-[#EDEDEC]">Inquiries:</span>
+                        <a href="mailto:appliedsyntax@gmail.com?subject=Website%20Inquiry&body=I%27m%20interested%20in%20your%20services"
+                            class="text-[#f53003] dark:text-[#FF4433] hover:underline">
+                            inquiries@appliedsyntax.com
+                        </a>
+                    </p>
                 </div>
+                <br>
 
-                <!-- Contact Details -->
-                <div class="contact-items">
-                    <!-- Phone Numbers Section -->
-                    <div>
-                        <div class="section-title">CONNECT WITH US</div>
-                        <div class="phone-grid">
-                            <div class="phone-item">
-                                <i class="fas fa-phone-alt" style="color: #d4af37; margin-bottom: 0.5rem;"></i>
-                                <div class="phone-number">+1 (555) 123-4567</div>
-                                <div class="phone-type">MAIN & ORDERS</div>
-                            </div>
-                            <div class="phone-item">
-                                <i class="fab fa-whatsapp" style="color: #d4af37; margin-bottom: 0.5rem;"></i>
-                                <div class="phone-number">+1 (555) 987-6543</div>
-                                <div class="phone-type">WHATSAPP / SUPPORT</div>
-                            </div>
-                        </div>
-                    </div>
+                <ul class="flex gap-3 text-sm leading-normal mt-8">
+                    <li>
+                        <a href="https://wa.me/256778864614?text=Hello%20Applied%20Syntax%20Team%2C%20I%27m%20interested%20in%20your%20services."
+                            target="_blank"
+                            class="flex items-center gap-2 px-6 py-2 bg-[#25D366] hover:bg-[#128C7E] rounded-sm text-white text-sm leading-normal transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M19.077 4.928C17.191 3.041 14.683 2 12.006 2 6.798 2 2.548 6.193 2.54 11.393c-.003 1.747.456 3.458 1.328 4.985L2.25 21.75l5.4-1.594c1.477.821 3.146 1.256 4.857 1.258h.004c5.199 0 9.459-4.195 9.467-9.396.004-2.51-.972-4.874-2.861-6.762zM12.02 20.166h-.003c-1.507-.001-2.986-.406-4.277-1.171l-.307-.183-3.206.947.957-3.126-.199-.318c-.827-1.323-1.264-2.85-1.262-4.416.007-4.326 3.528-7.842 7.869-7.842 2.098 0 4.073.819 5.557 2.305 1.485 1.486 2.303 3.46 2.299 5.558-.006 4.327-3.527 7.842-7.858 7.842zm4.303-5.868c-.236-.118-1.395-.688-1.611-.767-.216-.078-.373-.118-.53.118-.157.236-.61.767-.748.924-.138.157-.276.177-.512.059-.945-.443-1.562-.79-2.2-1.334-.165-.14-.312-.292-.448-.454.236-.157.425-.346.595-.548.1-.12.183-.251.25-.392.022-.042.038-.086.046-.131.008-.045.008-.091 0-.137-.017-.09-.306-1.405-.416-1.92-.055-.255-.162-.15-.357-.153h-.482c-.179 0-.435.062-.663.31-.197.22-.61.596-.61 1.454 0 .858.625 1.687.712 1.804.087.117 1.211 1.851 2.934 2.596.41.177.73.283.979.362.411.131.785.113 1.081.069.33-.05 1.016-.415 1.159-.816.144-.401.144-.745.101-.816-.043-.07-.157-.118-.332-.194z" />
+                            </svg>
+                            <span>WhatsApp Us</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {{--<div
+                class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ms-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-e-lg! aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
 
-                    <!-- Email Section -->
-                    <div>
-                        <div class="section-title">EMAIL</div>
-                        <div class="email-group">
-                            <div class="email-row">
-                                <span class="email-address">hello@scentofelegance.com</span>
-                                <span class="email-badge">PRIMARY</span>
-                            </div>
-                            <div class="email-row">
-                                <span class="email-address">support@scentofelegance.com</span>
-                                <span class="email-badge">SUPPORT</span>
-                            </div>
-                        </div>
-                    </div>
+                <svg viewBox="0 0 500 440" preserveAspectRatio="xMidYMid meet" class="w-full h-full"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect width="500" height="440" fill="white" class="dark:fill-[#1D0002]" />
 
-                    <!-- Address Section -->
-                    <div>
-                        <div class="section-title">BOUTIQUE</div>
-                        <div class="address-block">
-                            <div class="address-line"><i class="fas fa-map-marker-alt" style="color: #d4af37; margin-right: 0.5rem;"></i> 123 Luxury Lane</div>
-                            <div class="address-city">Beverly Hills, CA 90210</div>
-                        </div>
-                    </div>
+                    <defs>
+                        <linearGradient id="crownGold" x1="250" y1="80" x2="250" y2="180"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#E5C167" />
+                            <stop offset="30%" stop-color="#F9E076" />
+                            <stop offset="60%" stop-color="#D4AF37" />
+                            <stop offset="100%" stop-color="#8A6D3B" />
+                        </linearGradient>
+                        <linearGradient id="baseGold" x1="250" y1="150" x2="250" y2="185"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#F9E076" />
+                            <stop offset="100%" stop-color="#8A6D3B" />
+                        </linearGradient>
+                    </defs>
+
+                    <g transform="translate(0, 10)">
+                        <path d="M210 130 L225 100 L240 135 L260 100 L275 135 L290 100 L305 135" stroke="#B8860B"
+                            stroke-width="1" fill="none" opacity="0.3" />
+
+                        <path
+                            d="M185 155 C185 155 200 175 250 175 C300 175 315 155 315 155 L345 105 L295 140 L250 85 L205 140 L155 105 Z"
+                            fill="url(#crownGold)" stroke="#A67C00" stroke-width="0.5" />
+
+                        <path
+                            d="M185 155 C185 155 200 178 250 178 C300 178 315 155 315 155 L315 182 C315 182 300 195 250 195 C200 195 185 182 185 182 Z"
+                            fill="url(#baseGold)" stroke="#8A6D3B" stroke-width="0.5" />
+
+                        <circle cx="155" cy="105" r="7" fill="#E5C167" stroke="#8A6D3B" />
+                        <circle cx="205" cy="140" r="5" fill="#E5C167" stroke="#8A6D3B" />
+                        <circle cx="250" cy="85" r="8" fill="#F9E076" stroke="#8A6D3B" />
+                        <circle cx="295" cy="140" r="5" fill="#E5C167" stroke="#8A6D3B" />
+                        <circle cx="345" cy="105" r="7" fill="#E5C167" stroke="#8A6D3B" />
+                    </g>
+
+                    <text x="250" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="44"
+                        font-weight="bold" fill="#C62828" letter-spacing="1" class="dark:fill-white">PALACE HOTEL</text>
+                    <rect x="65" y="268" width="370" height="1.5" fill="#C62828" opacity="0.6"
+                        class="dark:fill-white dark:opacity-30" />
+
+                    <g font-family="Arial, sans-serif" text-anchor="middle">
+                        <text x="250" y="315" font-size="28" font-weight="bold" fill="#634806"
+                            class="dark:fill-[#E5C167]">Booma Grounds - Mbarara</text>
+                        <text x="250" y="348" font-size="19" font-weight="bold" fill="#634806"
+                            class="dark:fill-[#E5C167]">Tel: 0701408561 / 0774105855.</text>
+                        <text x="250" y="378" font-size="19" font-weight="bold" fill="#634806"
+                            class="dark:fill-[#E5C167]">Email: <tspan font-weight="normal" class="dark:fill-white">
+                                davis48ru@gmail.com</tspan></text>
+                        <text x="250" y="410" font-size="15" fill="#634806" class="dark:fill-[#D4AF37]">Accommodation
+                            for Extreme Comfort</text>
+                    </g>
+
+                    <rect x="50" y="290" width="400" height="0.5" fill="#634806" opacity="0.3"
+                        class="dark:fill-[#E5C167] dark:opacity-20" />
+                </svg>
+
+                <div
+                    class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-e-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
                 </div>
+            </div>--}}
+            <div
+                class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ms-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-e-lg! aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
 
-                <!-- Social Media Icons -->
-                <div class="social-section">
-                    <div class="section-title">FOLLOW THE JOURNEY</div>
-                    <div class="social-grid">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-x"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
+                <svg viewBox="0 0 500 440" preserveAspectRatio="xMidYMid meet" class="w-full h-full"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect width="500" height="440" fill="white" class="dark:fill-[#1D0002]" />
 
-                <!-- Business Hours -->
-                <div class="hours-container">
-                    <div class="hours-item">
-                        <div class="hours-days">MON - FRI</div>
-                        <div class="hours-time">9:00 - 20:00</div>
-                    </div>
-                    <div class="hours-item">
-                        <div class="hours-days">SAT - SUN</div>
-                        <div class="hours-time">10:00 - 18:00</div>
-                    </div>
+                    <defs>
+                        <linearGradient id="crownGold" x1="250" y1="80" x2="250" y2="180"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#E5C167" />
+                            <stop offset="30%" stop-color="#F9E076" />
+                            <stop offset="60%" stop-color="#D4AF37" />
+                            <stop offset="100%" stop-color="#8A6D3B" />
+                        </linearGradient>
+                        <linearGradient id="baseGold" x1="250" y1="150" x2="250" y2="185"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#F9E076" />
+                            <stop offset="100%" stop-color="#8A6D3B" />
+                        </linearGradient>
+                    </defs>
+
+                    <g transform="translate(0, 10)">
+                        <path d="M210 130 L225 100 L240 135 L260 100 L275 135 L290 100 L305 135" stroke="#B8860B"
+                            stroke-width="1" fill="none" opacity="0.3" class="dark:opacity-20" />
+
+                        <path
+                            d="M185 155 C185 155 200 175 250 175 C300 175 315 155 315 155 L345 105 L295 140 L250 85 L205 140 L155 105 Z"
+                            fill="url(#crownGold)" stroke="#A67C00" stroke-width="0.5" class="dark:stroke-[#E5C167]" />
+
+                        <path
+                            d="M185 155 C185 155 200 178 250 178 C300 178 315 155 315 155 L315 182 C315 182 300 195 250 195 C200 195 185 182 185 182 Z"
+                            fill="url(#baseGold)" stroke="#8A6D3B" stroke-width="0.5" class="dark:stroke-[#E5C167]" />
+
+                        <circle cx="155" cy="105" r="7" fill="#E5C167" stroke="#8A6D3B" class="dark:stroke-[#F9E076]" />
+                        <circle cx="205" cy="140" r="5" fill="#E5C167" stroke="#8A6D3B" class="dark:stroke-[#F9E076]" />
+                        <circle cx="250" cy="85" r="8" fill="#F9E076" stroke="#8A6D3B" class="dark:stroke-[#F9E076]" />
+                        <circle cx="295" cy="140" r="5" fill="#E5C167" stroke="#8A6D3B" class="dark:stroke-[#F9E076]" />
+                        <circle cx="345" cy="105" r="7" fill="#E5C167" stroke="#8A6D3B" class="dark:stroke-[#F9E076]" />
+                    </g>
+
+                    <text x="250" y="255" text-anchor="middle" font-family="Georgia, serif" font-size="44"
+                        font-weight="bold" fill="#C62828" letter-spacing="1" class="dark:fill-white">PALACE HOTEL</text>
+                    <rect x="65" y="268" width="370" height="1.5" fill="#C62828" opacity="0.6"
+                        class="dark:fill-white dark:opacity-30" />
+
+                    <g font-family="Arial, sans-serif" text-anchor="middle">
+                        <text x="250" y="315" font-size="28" font-weight="bold" fill="#634806"
+                            class="dark:fill-[#E5C167]">Booma Grounds - Mbarara</text>
+                        <text x="250" y="348" font-size="19" font-weight="bold" fill="#634806"
+                            class="dark:fill-[#E5C167]">Tel: 0701408561 / 0774105855.</text>
+                        <text x="250" y="378" font-size="19" font-weight="bold" fill="#634806"
+                            class="dark:fill-[#E5C167]">Email: <tspan font-weight="normal" fill="#634806"
+                                class="dark:fill-white">davis48ru@gmail.com</tspan></text>
+                        <text x="250" y="410" font-size="15" fill="#634806" class="dark:fill-[#D4AF37]">Accommodation
+                            for Extreme Comfort</text>
+                    </g>
+
+                    <rect x="50" y="290" width="400" height="0.5" fill="#634806" opacity="0.3"
+                        class="dark:fill-[#E5C167] dark:opacity-20" />
+                </svg>
+
+                <div
+                    class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-e-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">
                 </div>
             </div>
-
-            <!-- RIGHT CARD: Logo Only (Luxury Edition) -->
-            <div class="logo-card">
-                <div class="logo-bg-animation"></div>
-                
-                <!-- Floating particles -->
-                <div class="floating-particles">
-                    <div class="particle" style="left: 10%; width: 1px; height: 1px; animation-delay: 0s;"></div>
-                    <div class="particle" style="left: 30%; width: 3px; height: 3px; animation-delay: 2s;"></div>
-                    <div class="particle" style="left: 50%; width: 2px; height: 2px; animation-delay: 4s;"></div>
-                    <div class="particle" style="left: 70%; width: 4px; height: 4px; animation-delay: 6s;"></div>
-                    <div class="particle" style="left: 90%; width: 6px; height: 4px; animation-delay: 8s;"></div>
-                </div>
-
-                <!-- Logo Container -->
-                <div class="logo-container">
-                    <div class="logo-image-wrapper">
-                        <div class="logo-ring"></div>
-                        <img src="{{ asset('images/logo-1.jpeg') }}" alt="Scent of Elegance" class="logo-image">
-                    </div>
-                    
-                    <div class="decor-line"></div>
-                    <div class="brand-initials">AR</div>
-                    <div class="brand-year">EST. 2026</div>
-                    <div class="decor-line"></div>
-                    
-                    <div style="margin-top: 1.5rem; font-size: 0.8rem; color: rgba(212,175,55,0.4); letter-spacing: 2px;">
-                        LUXURY SCENTS FOR THE DISCERNING NOSE
-                    </div>
-                </div>
-
-                <!-- Decorative overlay -->
-                <div class="pointer-events-none absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-e-lg bg-gradient-to-br from-white/5 via-transparent to-transparent"></div>
-            </div>
-        </div>
+        </main>
     </div>
 
     @if (Route::has('login'))
-        <div style="height: 3rem;"></div>
+        <div class="h-14.5 hidden lg:block"></div>
     @endif
 </body>
 

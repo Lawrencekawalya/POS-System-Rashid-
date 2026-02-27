@@ -105,4 +105,59 @@ class PurchaseService
             return $purchase;
         });
     }
+
+    public function updatePurchase(
+        Purchase $purchase,
+        array $items,
+        ?string $supplierName = null,
+        ?string $referenceNo = null
+    ): Purchase {
+
+        return DB::transaction(function () use ($purchase, $items, $supplierName, $referenceNo) {
+
+            // 1️⃣ Reverse old stock movements
+            StockMovement::where('reference_type', 'purchase')
+                ->where('reference_id', $purchase->id)
+                ->delete();
+
+            // 2️⃣ Delete old items
+            $purchase->items()->delete();
+
+            $totalCost = 0;
+
+            // 3️⃣ Recalculate total
+            foreach ($items as $item) {
+                $totalCost += $item['quantity'] * $item['unit_cost'];
+            }
+
+            // 4️⃣ Update purchase header
+            $purchase->update([
+                'supplier_name' => $supplierName,
+                'reference_no' => $referenceNo,
+                'total_cost' => $totalCost,
+            ]);
+
+            // 5️⃣ Recreate items + stock movements
+            foreach ($items as $item) {
+
+                $purchase->items()->create([
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'unit_cost' => $item['unit_cost'],
+                    'subtotal' => $item['quantity'] * $item['unit_cost'],
+                ]);
+
+                StockMovement::create([
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'type' => 'purchase',
+                    'reference_type' => 'purchase',
+                    'reference_id' => $purchase->id,
+                    'remarks' => 'Updated Purchase #' . $purchase->id,
+                ]);
+            }
+
+            return $purchase;
+        });
+    }
 }

@@ -36,6 +36,53 @@ class ReportController extends Controller
     //         'refunds'
     //     ));
     // }
+    // public function zReport(Request $request)
+    // {
+    //     $startDate = $request->start_date ?? now()->toDateString();
+    //     $endDate = $request->end_date ?? now()->toDateString();
+
+    //     $from = Carbon::parse($startDate)->startOfDay();
+    //     $to = Carbon::parse($endDate)->endOfDay();
+
+    //     // Sales in period
+    //     $sales = Sale::whereBetween('created_at', [$from, $to])->get();
+
+    //     // Gross sales (what was sold)
+    //     $grossSales = $sales->sum('total_amount');
+
+    //     // Refund amount (derived from refund events)
+    //     $refundTotal = DB::table('stock_movements')
+    //         ->join('sale_items', function ($join) {
+    //             $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
+    //                 ->on('sale_items.product_id', '=', 'stock_movements.product_id');
+    //         })
+    //         ->where('stock_movements.type', 'refund')
+    //         ->whereBetween('stock_movements.created_at', [$from, $to])
+    //         ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
+
+    //     // Net sales (real revenue)
+    //     $netSales = $grossSales - $refundTotal;
+
+    //     // Cash received (actual money collected)
+    //     // $cashReceived = $sales->sum('paid_amount');
+    //     $cashReceived = $sales->sum(function ($sale) {
+    //         return $sale->paid_amount - $sale->change_amount;
+    //     });
+
+    //     // Cash expected in drawer
+    //     $cashExpected = $cashReceived - $refundTotal;
+
+    //     return view('reports.z-report', compact(
+    //         'startDate',
+    //         'endDate',
+    //         'grossSales',
+    //         'refundTotal',
+    //         'netSales',
+    //         'cashExpected',
+    //         'cashReceived',
+    //         'sales'
+    //     ));
+    // }
     public function zReport(Request $request)
     {
         $startDate = $request->start_date ?? now()->toDateString();
@@ -44,13 +91,11 @@ class ReportController extends Controller
         $from = Carbon::parse($startDate)->startOfDay();
         $to = Carbon::parse($endDate)->endOfDay();
 
-        // Sales in period
+        // 1. Sales in period
         $sales = Sale::whereBetween('created_at', [$from, $to])->get();
-
-        // Gross sales (what was sold)
         $grossSales = $sales->sum('total_amount');
 
-        // Refund amount (derived from refund events)
+        // 2. Refund calculation
         $refundTotal = DB::table('stock_movements')
             ->join('sale_items', function ($join) {
                 $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
@@ -60,27 +105,38 @@ class ReportController extends Controller
             ->whereBetween('stock_movements.created_at', [$from, $to])
             ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
 
-        // Net sales (real revenue)
+        // 3. UPDATED: Only fetch CONFIRMED expenses
+        // We ignore 'pending' because they haven't been verified by Admin yet
+        // We ignore 'rejected' because that money should still be in the drawer
+        $expenses = \App\Models\Expense::with('user')
+            ->whereBetween('expense_date', [$from, $to])
+            ->where('status', 'confirmed')
+            ->get();
+
+        $totalExpenses = $expenses->sum('amount');
+
+        // 4. Final Calculations
         $netSales = $grossSales - $refundTotal;
 
-        // Cash received (actual money collected)
-        // $cashReceived = $sales->sum('paid_amount');
+        // Actual cash collected (Total Paid - Change Given)
         $cashReceived = $sales->sum(function ($sale) {
             return $sale->paid_amount - $sale->change_amount;
         });
 
-        // Cash expected in drawer
-        $cashExpected = $cashReceived - $refundTotal;
+        // The drawer balance logic
+        $cashExpected = $cashReceived - $refundTotal - $totalExpenses;
 
         return view('reports.z-report', compact(
             'startDate',
             'endDate',
             'grossSales',
             'refundTotal',
+            'totalExpenses',
             'netSales',
             'cashExpected',
             'cashReceived',
-            'sales'
+            'sales',
+            'expenses'
         ));
     }
     // public function zReport(Request $request)

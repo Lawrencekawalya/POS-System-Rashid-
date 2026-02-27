@@ -20,7 +20,8 @@ class ProductController extends Controller
     {
         $products = Product::with('stockMovements')
             ->orderBy('name')
-            ->get();
+            ->paginate(15);
+            // ->get();
 
         return view('products.index', compact('products'));
     }

@@ -17,6 +17,10 @@ class CashReconciliation extends Model
         'status',
         'notes',
     ];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'business_date' => 'date',
+    ];
 
     public function user()
     {
