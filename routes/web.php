@@ -156,6 +156,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         // Saving the reconciliation and confirming expenses
         Route::post('/store', [CashReconciliationController::class, 'store'])
             ->name('cash.reconcile.store');
+        // Edit
+        Route::get('/{reconciliation}/edit', [CashReconciliationController::class, 'edit'])
+            ->name('cash.reconcile.edit');
+
+        // Update
+        Route::put('/{reconciliation}', [CashReconciliationController::class, 'update'])
+            ->name('cash.reconcile.update');
+
+        Route::patch(
+            '/cash-reconciliation/{reconciliation}/cancel',
+            [CashReconciliationController::class, 'cancel']
+        )->name('cash.reconcile.cancel');
     });
 
 

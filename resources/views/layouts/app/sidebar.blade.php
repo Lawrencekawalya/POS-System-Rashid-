@@ -45,7 +45,7 @@
                         wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    
+
                     <flux:sidebar.item icon="cube" :href="route('products.index')"
                         :current="request()->routeIs('products.*')" wire:navigate>
                         {{ __('Products') }}
@@ -95,13 +95,19 @@
                     <flux:sidebar.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.*')"
                         wire:navigate>
                         {{ __('Users') }}
-                    </flux:sidebar.item>  
+                    </flux:sidebar.item>
                 @endif
             </flux:sidebar.group>
 
         </flux:sidebar.nav>
-        {{-- 🔔 Low stock alerts --}}
-        @include('partials.low-stock-widget')
+        {{-- 🔔 Stock Section (Role Based) --}}
+        @if(auth()->user()->isAdmin())
+            @include('partials.current-stock-widget', [
+                'products' => \App\Models\Product::all()
+            ])
+        @elseif(auth()->user()->isCashier())
+            @include('partials.low-stock-widget')
+        @endif
         <flux:spacer />
 
         <flux:sidebar.nav>

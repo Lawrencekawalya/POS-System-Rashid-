@@ -3,9 +3,9 @@
     <h1 class="text-xl font-semibold mb-4">Cash Reconciliation</h1>
     <div class="flex items-center justify-between mb-4">
         @if ($errors->any())
-            <div class="mb-4 text-red-600">
-                {{ $errors->first() }}
-            </div>
+        <div class="mb-4 text-red-600">
+            {{ $errors->first() }}
+        </div>
         @endif
     </div>
     <form method="POST" action="{{ route('cash.reconcile.store') }}">
@@ -96,9 +96,9 @@
                             @forelse($pendingExpenses as $expense)
                                 <tr>
                                     <td class="p-3">
-                                        <input type="checkbox" name="expense_ids[]" value="{{ $expense->id }}" 
-                                               data-amount="{{ $expense->amount }}" 
-                                               class="expense-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <input type="checkbox" name="expense_ids[]" value="{{ $expense->id }}"
+                                            data-amount="{{ $expense->amount }}"
+                                            class="expense-checkbox w-4 h-4 rounded text-indigo-600">
                                     </td>
                                     <td class="p-3">
                                         <div class="font-medium">{{ $expense->category }}</div>
@@ -110,7 +110,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="p-4 text-center text-gray-400 italic">No pending expenses found.</td>
+                                    <td colspan="3" class="p-4 text-center text-gray-400 italic">No pending expenses found.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -121,24 +122,27 @@
             <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Actual Cash Counted</label>
-                    <input name="cash_counted" id="cash_counted" type="number" step="0.01" required 
-                           class="w-full border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold"
-                           placeholder="Enter total money in drawer">
+                    <input name="cash_counted" id="cash_counted" type="number" step="0.01"
+                        class="w-full border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold"
+                        placeholder="Enter total money in drawer">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Notes / Discrepancy Reason</label>
-                    <textarea name="notes" rows="2" class="w-full border-gray-300 rounded-lg text-sm" placeholder="e.g. Forgot to record a small expense..."></textarea>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Notes / Discrepancy
+                        Reason</label>
+                    <textarea name="notes" rows="2" class="w-full border-gray-300 rounded-lg text-sm"
+                        placeholder="e.g. Forgot to record a small expense..."></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition shadow-md">
+                <button type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition shadow-md">
                     Verify & Close Business Day
                 </button>
             </div>
         </form>
     </div>
 
-    <script>
+    <!-- <script>
         const checkboxes = document.querySelectorAll('.expense-checkbox');
         const displayExpected = document.getElementById('display_cash_expected');
         const hiddenExpected = document.getElementById('hidden_cash_expected');
@@ -162,6 +166,52 @@
             
             // Update Hidden Input for Controller
             hiddenExpected.value = finalExpected;
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', calculate);
+        });
+    </script> -->
+    <script>
+        const checkboxes = document.querySelectorAll('.expense-checkbox');
+        const displayExpected = document.getElementById('display_cash_expected');
+        const hiddenExpected = document.getElementById('hidden_cash_expected');
+        const expenseSubtotal = document.getElementById('expense_subtotal');
+        const cashCountedInput = document.getElementById('cash_counted');
+
+        const initialExpected = {{ $cashExpected }};
+        let userModifiedCounted = false;
+
+        // 1️ Fill counted by default on page load
+        cashCountedInput.value = initialExpected;
+
+        // 2️ Detect if user manually changes counted
+        cashCountedInput.addEventListener('input', () => {
+            userModifiedCounted = true;
+        });
+
+        function calculate() {
+            let totalExpenses = 0;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    totalExpenses += parseFloat(cb.dataset.amount);
+                }
+            });
+
+            const finalExpected = initialExpected - totalExpenses;
+
+            // Update UI
+            expenseSubtotal.innerText = totalExpenses.toLocaleString();
+            displayExpected.innerText = 'UGX ' + finalExpected.toLocaleString();
+
+            // Update hidden field
+            hiddenExpected.value = finalExpected;
+
+            // 3️ Auto-update counted ONLY if user hasn’t modified it
+            if (!userModifiedCounted) {
+                cashCountedInput.value = finalExpected;
+            }
         }
 
         checkboxes.forEach(cb => {

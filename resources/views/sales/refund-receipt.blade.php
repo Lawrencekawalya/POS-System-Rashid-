@@ -15,7 +15,8 @@
     <div class="thermal-receipt mx-auto">
 
         <div class="text-center mb-2">
-            <h1 class="font-bold text-base">Palace Hotel</h1>
+            <img src="{{ asset('images/og-share.png') }}" alt="AR Scents" class="mx-auto">
+            <h1 class="font-bold text-base">AR Scents</h1>
             <p class="text-xs">Mbarara, Uganda</p>
             <p class="text-xs font-semibold">REFUND RECEIPT</p>
             <p class="text-xs">Refund #{{ $refund->id }}</p>

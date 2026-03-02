@@ -9,8 +9,9 @@
         </div>
 
         <x-dashboard.kpi-card label="Net Sales Today" :value="number_format($netSales, 0)" :subtext="'Gross: ' . number_format($grossSales, 0)" />
-        <x-dashboard.kpi-card label="Cash Expected" :value="number_format($cashExpected, 0)" :subtext="$cashExpected >= 0 ? 'Balanced' : 'Short'" />
         <x-dashboard.kpi-card label="Refunds Today" :value="number_format($refundTotal, 0)" :subtext="$refundCount . ' refunds'" />
+        <x-dashboard.kpi-card label=" " :value="' '" subtext=" " />
+        <!-- <x-dashboard.kpi-card label="Cash Expected" :value="number_format($cashExpected, 0)" :subtext="$cashExpected >= 0 ? 'Balanced' : 'Short'" /> -->
     </div>
 
     {{-- 2. Insights Row (Top Sellers & Low Stock side-by-side) --}}

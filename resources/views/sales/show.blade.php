@@ -99,6 +99,7 @@
     <div class="thermal-receipt mx-auto">
 
         <div class="text-center mb-2">
+            <img src="{{ asset('images/og-share.png') }}" alt="Palace Hotel Logo" class="mx-auto">
             <h1 class="font-bold text-base">Palace Hotel</h1>
             <p class="text-xs">Mbarara, Uganda</p>
             <p class="text-xs">Receipt #{{ $sale->id }}</p>
