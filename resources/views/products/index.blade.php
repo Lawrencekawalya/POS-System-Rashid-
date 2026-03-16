@@ -36,6 +36,16 @@
             </div>
         @endif
 
+        <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-4 mb-6">
+            <form method="GET" action="{{ route('products.index') }}" class="flex gap-4">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by product name..."
+                    class="w-full px-4 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                    Search
+                </button>
+            </form>
+        </div>
+
         <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
             @if ($products->count())
                 <div class="overflow-x-auto">
@@ -64,17 +74,20 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($products as $product)
-                                <tr class="hover:bg-gray-50 transition-colors">
+                                <tr class=" hover:bg-gray-50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-semibold text-gray-900">{{ $product->name }}</div>
+                                        <div class="text-sm font-semibold text-gray-900">{{ $product->name }}
+                                        </div>
                                         <div class="text-xs text-gray-500">{{ $product->brand ?? 'No Brand' }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900 font-mono">{{ $product->barcode }}</div>
-                                        <div class="text-xs text-gray-400 capitalize">{{ $product->unit_type }}</div>
+                                        <div class="text-xs text-gray-400 capitalize">{{ $product->unit_type }}
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">S: UGX {{ number_format($product->selling_price, 2) }}
+                                        <div class="text-sm text-gray-900">S: UGX
+                                            {{ number_format($product->selling_price, 2) }}
                                         </div>
                                         <div class="text-xs text-gray-500 italic">C:
                                             UGX {{ number_format($product->cost_price, 2) }}</div>
@@ -86,13 +99,10 @@
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                 Out of Stock
                                             </span>
-                                        @elseif ($stock < 5)
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                {{ $stock }} Low Stock
-                                            </span>
-                                        @else
-                                            <span class="text-sm font-semibold text-gray-700">{{ $stock }}</span>
+                                        @elseif ($stock < 5) <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            {{ $stock }} Low Stock
+                                        </span> @else <span class="text-sm font-semibold text-gray-700">{{ $stock }}</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -114,6 +124,7 @@
                                                 Delete
                                             </button>
                                         </form>
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -132,7 +143,8 @@
             @endif
         </div>
         <div class="mt-4">
-            {{ $products->links() }}
+            {{-- {{ $products->links() }} --}}
+            {{ $products->appends(request()->query())->links() }}
         </div>
     </div>
 </x-layouts::app>

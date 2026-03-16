@@ -12,7 +12,7 @@
             </a>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -29,14 +29,43 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                 {{ $expense->expense_date->format('M d, Y') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            {{-- <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-bold text-gray-900">{{ $expense->category }}</div>
                                 <div class="flex items-center gap-1 text-xs text-gray-500">
                                     <flux:icon.user variant="micro" class="size-3" />
-                                    {{-- Displays the name of the user who recorded it --}}
+                                    {{-- Displays the name of the user who recorded it --
                                     <span class="font-medium text-indigo-600">{{ $expense->user->name ?? 'System' }}</span>
                                     <span class="text-gray-300 mx-1">|</span>
                                     <span>{{ $expense->payment_method }}</span>
+                                </div>
+                            </td> --}}
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-3"> {{-- Increased gap for breathing room --}}
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-gray-900">{{ $expense->category }}</span>
+
+                                            {{-- Move the icon here --}}
+                                            <flux:tooltip position="top" align="center">
+                                                <x-slot name="content">
+                                                    <div class="max-w-94 whitespace-normal">
+                                                        {{ $expense->notes }}
+                                                    </div>
+                                                </x-slot>
+
+                                                <flux:icon.information-circle
+                                                    class="size-4.5 mb-0.5 text-gray-400 hover:text-indigo-600 cursor-pointer" />
+                                            </flux:tooltip>
+                                        </div>
+
+                                        <div class="flex items-center gap-1 text-xs text-gray-500">
+                                            <flux:icon.user variant="micro" class="size-3" />
+                                            <span
+                                                class="font-medium text-indigo-600">{{ $expense->user->name ?? 'System' }}</span>
+                                            <span class="text-gray-300 mx-1">|</span>
+                                            <span>{{ $expense->payment_method }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-black text-gray-900">
