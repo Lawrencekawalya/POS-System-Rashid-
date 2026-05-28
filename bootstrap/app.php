@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        if (isset($_SERVER['PHPUNIT_COMPOSER_INSTALL']) || isset($_SERVER['__PEST_RUNNING__']) || (env('APP_ENV') === 'testing')) {
+            $middleware->validateCsrfTokens(except: ['*']);
+        }
         $middleware->trustProxies(
             at: '*',
             headers: Request::HEADER_X_FORWARDED_FOR |
