@@ -137,14 +137,14 @@
 //     //         ->get();
 
 //     //     return view('dashboard', compact(
-//     //         'cumulativeRevenue', 
+//     //         'cumulativeRevenue',
 //     //         'grossSales',
 //     //         'refundTotal',
 //     //         'netSales',
 //     //         'cashExpected',
 //     //         'refundCount',
 //     //         'recentSales',
-//     //         'lowStockProducts', 
+//     //         'lowStockProducts',
 //     //         'topProducts'
 //     //     ));
 //     // }
@@ -240,10 +240,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use App\Models\Product; // Import the Expense model
 use App\Models\Sale;
-use App\Models\Expense; // Import the Expense model
-use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -253,7 +252,7 @@ class DashboardController extends Controller
         $today = now()->toDateString();
 
         // 1. STATS & REVENUE LOGIC
-        
+
         // Cumulative Revenue = All Sales - All CONFIRMED Expenses
         $totalSalesAllTime = Sale::sum('total_amount');
         $totalConfirmedExpenses = Expense::where('status', 'confirmed')->sum('amount');
@@ -273,9 +272,9 @@ class DashboardController extends Controller
             ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
 
         $netSales = $grossSales - $refundTotal;
-        
+
         // Cash Received today (Total paid - change)
-        $cashReceivedToday = $salesToday->sum(fn($sale) => $sale->paid_amount - $sale->change_amount);
+        $cashReceivedToday = $salesToday->sum(fn ($sale) => $sale->paid_amount - $sale->change_amount);
 
         // 2. CASH EXPECTED LOGIC
         // Today's Cash Expected = (Cash Sales) - (Refunds) - (Expenses recorded today)
@@ -300,7 +299,7 @@ class DashboardController extends Controller
                     'stock' => $product->currentStock(),
                 ];
             })
-            ->filter(fn($p) => $p['stock'] <= 5)
+            ->filter(fn ($p) => $p['stock'] <= 5)
             ->take(5)
             ->values();
 

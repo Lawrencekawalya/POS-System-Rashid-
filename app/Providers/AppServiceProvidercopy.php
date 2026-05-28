@@ -3,14 +3,14 @@
 namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
+use App\Http\Responses\LoginResponse as CustomLoginResponse;
+use App\Http\Responses\VerifyEmailResponse;
+use App\Http\Responses\VerifyEmailResponse as CustomVerifyEmailResponse;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use App\Http\Responses\LoginResponse as CustomLoginResponse;
-use App\Http\Responses\VerifyEmailResponse as CustomVerifyEmailResponse;
-use App\Http\Responses\VerifyEmailResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Password::defaults(
-            fn(): ?Password => app()->isProduction()
+            fn (): ?Password => app()->isProduction()
             ? Password::min(12)
                 ->mixedCase()
                 ->letters()

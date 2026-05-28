@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class KpiCard extends Component
 {
     public string $label;
+
     public string $value;
+
     public ?string $subtext;
 
     public function __construct(string $label, string $value, ?string $subtext = null)

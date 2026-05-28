@@ -13,8 +13,8 @@ class VerifyEmailResponse implements VerifyEmailResponseContract
 
         return redirect()->to(
             $user->role === 'admin'
-            ? route('dashboard', absolute: false) . '?verified=1'
-            : route('pos.index', absolute: false) . '?verified=1'
+            ? route('dashboard', absolute: false).'?verified=1'
+            : route('pos.index', absolute: false).'?verified=1'
         );
     }
 }

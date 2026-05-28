@@ -16,7 +16,6 @@ class ProductController extends Controller
     //         ->orderBy('name')
     //         ->paginate(15);
 
-
     //     return view('products.index', compact('products'));
     // }
     public function index(Request $request)
@@ -25,7 +24,7 @@ class ProductController extends Controller
             ->orderBy('name');
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         $products = $query->paginate(15);
@@ -80,7 +79,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'brand' => 'nullable|string|max:255',
-            'barcode' => 'required|string|max:255|unique:products,barcode,' . $product->id,
+            'barcode' => 'required|string|max:255|unique:products,barcode,'.$product->id,
             'unit_type' => 'required|string|max:50',
             'cost_price' => 'required|numeric|min:0.01',
             'selling_price' => 'required|numeric|min:0.01',

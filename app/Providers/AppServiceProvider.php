@@ -3,20 +3,18 @@
 namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
+use App\Http\Responses\LoginResponse as CustomLoginResponse;
 use App\Http\Responses\VerifyEmailResponse;
-use Illuminate\Support\ServiceProvider;
+use App\Http\Responses\VerifyEmailResponse as CustomVerifyEmailResponse;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules\Password;
-
 // ✅ THESE are the contracts Fortify uses
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
+// ✅ THESE are your implementations
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
-
-// ✅ THESE are your implementations
-use App\Http\Responses\LoginResponse as CustomLoginResponse;
-use App\Http\Responses\VerifyEmailResponse as CustomVerifyEmailResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -59,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Password::defaults(
-            fn(): ?Password => app()->isProduction()
+            fn (): ?Password => app()->isProduction()
             ? Password::min(12)
                 ->mixedCase()
                 ->letters()

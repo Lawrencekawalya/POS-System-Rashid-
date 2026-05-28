@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
     protected $categories = ['Rent', 'Utilities', 'Transport', 'Salaries', 'Supplies', 'Marketing', 'Repair', 'Others'];
+
     protected $methods = ['Cash', 'Mobile Money', 'Bank Transfer', 'Cheque'];
 
     public function index(Request $request)
@@ -32,7 +33,7 @@ class ExpenseController extends Controller
             'expenses' => $expenses,
             'totalThisMonth' => $totalThisMonth,
             'categories' => $this->categories,
-            'methods' => $this->methods
+            'methods' => $this->methods,
         ]);
     }
 
@@ -40,7 +41,7 @@ class ExpenseController extends Controller
     {
         return view('expenses.create', [
             'categories' => $this->categories,
-            'methods' => $this->methods
+            'methods' => $this->methods,
         ]);
     }
 
@@ -52,7 +53,7 @@ class ExpenseController extends Controller
             'payment_method' => 'required|string',
             'expense_date' => 'required|date',
             'reference_no' => 'nullable|string|max:50',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
         $request->user()->expenses()->create($data);
@@ -70,7 +71,7 @@ class ExpenseController extends Controller
         return view('expenses.edit', [
             'expense' => $expense,
             'categories' => $this->categories,
-            'methods' => $this->methods
+            'methods' => $this->methods,
         ]);
     }
 
@@ -83,7 +84,7 @@ class ExpenseController extends Controller
         $data = $request->validate([
             'category' => 'required|string',
             'amount' => 'required|numeric|min:0',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
         $expense->update($data);
@@ -94,6 +95,7 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense)
     {
         $expense->delete();
+
         return redirect()->back()->with('success', 'Expense record removed.');
     }
 }

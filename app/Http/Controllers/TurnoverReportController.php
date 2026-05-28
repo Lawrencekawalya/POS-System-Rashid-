@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class TurnoverReportController extends Controller
 {
@@ -48,10 +48,10 @@ class TurnoverReportController extends Controller
             $turnover = $avgStock > 0 ? $qtySold / $avgStock : 0;
 
             return [
-                'product'   => $product,
-                'qty_sold'  => (int) $qtySold,
+                'product' => $product,
+                'qty_sold' => (int) $qtySold,
                 'avg_stock' => round($avgStock, 2),
-                'turnover'  => (float) round($turnover, 2),
+                'turnover' => (float) round($turnover, 2),
             ];
         });
 
@@ -61,18 +61,18 @@ class TurnoverReportController extends Controller
         // 4. MANUAL PAGINATION (50 items per page)
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 50;
-        
+
         // Slice the collection to get only the items for the current page
         $currentPageItems = $sortedData->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
         $products = new LengthAwarePaginator(
-            $currentPageItems, 
-            $sortedData->count(), 
-            $perPage, 
-            $currentPage, 
+            $currentPageItems,
+            $sortedData->count(),
+            $perPage,
+            $currentPage,
             [
                 'path' => $request->url(),
-                'query' => $request->query()
+                'query' => $request->query(),
             ]
         );
 

@@ -17,12 +17,12 @@ class Expense extends Model
         'reference_no',
         'expense_date',
         'notes',
-        'user_id'
+        'user_id',
     ];
 
     protected $casts = [
         'expense_date' => 'date',
-        'amount' => 'float'
+        'amount' => 'float',
     ];
 
     public function user(): BelongsTo

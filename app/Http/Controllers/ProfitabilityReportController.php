@@ -69,7 +69,7 @@ class ProfitabilityReportController extends Controller
             $salesData = DB::table('sale_items')
                 ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
                 ->where('sale_items.product_id', $product->id)
-                ->whereBetween('sales.created_at', [$start . ' 00:00:00', $end . ' 23:59:59'])
+                ->whereBetween('sales.created_at', [$start.' 00:00:00', $end.' 23:59:59'])
                 ->selectRaw('
                     SUM(quantity) as qty_sold,
                     SUM(subtotal) as revenue
@@ -99,8 +99,8 @@ class ProfitabilityReportController extends Controller
                 'margin' => $margin,
             ];
         })
-        ->filter(fn($p) => $p['qty_sold'] > 0) // Only show products that actually sold
-        ->sortByDesc('profit'); // Show biggest earners first!
+            ->filter(fn ($p) => $p['qty_sold'] > 0) // Only show products that actually sold
+            ->sortByDesc('profit'); // Show biggest earners first!
 
         return view('reports.profitability', compact('products'));
     }

@@ -17,6 +17,7 @@ class CashReconciliation extends Model
         'status',
         'notes',
     ];
+
     protected $casts = [
         'created_at' => 'datetime',
         'business_date' => 'date',
@@ -27,4 +28,3 @@ class CashReconciliation extends Model
         return $this->belongsTo(User::class);
     }
 }
-

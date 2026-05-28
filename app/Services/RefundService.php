@@ -38,7 +38,7 @@ class RefundService
                     'type' => 'refund',
                     'reference_type' => 'sale',
                     'reference_id' => $sale->id,
-                    'remarks' => 'Refund of sale #' . $sale->id,
+                    'remarks' => 'Refund of sale #'.$sale->id,
                 ]);
             }
 

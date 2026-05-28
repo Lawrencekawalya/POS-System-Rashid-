@@ -35,8 +35,7 @@ class PurchaseService
     /**
      * Record a full purchase (header + items + stock movements).
      *
-     * @param int   $userId
-     * @param array $items [ ['product_id' => int, 'quantity' => int, 'unit_cost' => float] ]
+     * @param  array  $items  [ ['product_id' => int, 'quantity' => int, 'unit_cost' => float] ]
      */
     public function recordPurchase(
         int $userId,
@@ -98,7 +97,7 @@ class PurchaseService
                     'type' => 'purchase',
                     'reference_type' => 'purchase',
                     'reference_id' => $purchase->id,
-                    'remarks' => $remarks ?? 'Purchase #' . $purchase->id,
+                    'remarks' => $remarks ?? 'Purchase #'.$purchase->id,
                 ]);
             }
 
@@ -153,7 +152,7 @@ class PurchaseService
                     'type' => 'purchase',
                     'reference_type' => 'purchase',
                     'reference_id' => $purchase->id,
-                    'remarks' => 'Updated Purchase #' . $purchase->id,
+                    'remarks' => 'Updated Purchase #'.$purchase->id,
                 ]);
             }
 

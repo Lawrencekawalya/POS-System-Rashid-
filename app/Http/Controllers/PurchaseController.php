@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Services\PurchaseService;
 use App\Models\Purchase;
+use App\Services\PurchaseService;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -50,6 +50,7 @@ class PurchaseController extends Controller
 
         return view('purchases.show', compact('purchase'));
     }
+
     public function create()
     {
         $products = Product::orderBy('name')->get();
@@ -86,7 +87,7 @@ class PurchaseController extends Controller
         $products = Product::orderBy('name')->get();
 
         // Map the items to a simple array structure for the frontend
-        $existingItems = old('items') ?? $purchase->items->map(fn($item) => [
+        $existingItems = old('items') ?? $purchase->items->map(fn ($item) => [
             'product_id' => $item->product_id,
             'quantity' => $item->quantity,
             'unit_cost' => $item->unit_cost,
@@ -117,5 +118,4 @@ class PurchaseController extends Controller
             ->route('purchases.index')
             ->with('success', 'Purchase updated successfully.');
     }
-
 }

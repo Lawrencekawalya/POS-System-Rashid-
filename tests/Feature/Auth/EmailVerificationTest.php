@@ -33,7 +33,7 @@ test('email can be verified', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
 
     $response->assertRedirect(
-        route('dashboard', absolute: false) . '?verified=1'
+        route('dashboard', absolute: false).'?verified=1'
     );
 });
 
@@ -67,7 +67,7 @@ test('already verified user visiting verification link is redirected without fir
 
     $this->actingAs($user)->get($verificationUrl)
         ->assertRedirect(
-            route('dashboard', absolute: false) . '?verified=1'
+            route('dashboard', absolute: false).'?verified=1'
         );
 
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();

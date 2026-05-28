@@ -13,7 +13,7 @@ class ViewServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
 
             $lowStockProducts = Product::all()
-                ->filter(fn($product) => $product->isLowStock())
+                ->filter(fn ($product) => $product->isLowStock())
                 ->map(function ($product) {
                     return [
                         'id' => $product->id,

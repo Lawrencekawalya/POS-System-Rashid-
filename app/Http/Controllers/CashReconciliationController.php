@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\CashReconciliation;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Expense;
 use App\Models\Sale;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CashReconciliationController extends Controller
 {
@@ -88,7 +88,7 @@ class CashReconciliationController extends Controller
 
         if ($realExpected < 0) {
             return back()->withErrors([
-                'reconciliation' => 'Selected expenses exceed available cumulative revenue.'
+                'reconciliation' => 'Selected expenses exceed available cumulative revenue.',
             ]);
         }
 
@@ -110,12 +110,12 @@ class CashReconciliationController extends Controller
         ]);
 
         // Confirm selected expenses only
-        if (!empty($selectedExpenseIds)) {
+        if (! empty($selectedExpenseIds)) {
             Expense::whereIn('id', $selectedExpenseIds)
                 ->where('status', 'pending')
                 ->update([
                     'status' => 'confirmed',
-                    'cash_reconciliation_id' => $reconciliation->id
+                    'cash_reconciliation_id' => $reconciliation->id,
                 ]);
         }
 
@@ -147,8 +147,8 @@ class CashReconciliationController extends Controller
 
         // Permission check
         if (
-            !$user->isAdmin() &&
-            !($user->isCashier() && $reconciliation->status === 'pending')
+            ! $user->isAdmin() &&
+            ! ($user->isCashier() && $reconciliation->status === 'pending')
         ) {
             abort(403);
         }
@@ -182,13 +182,13 @@ class CashReconciliationController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user->isAdmin()) {
+        if (! $user->isAdmin()) {
             abort(403);
         }
 
         if ($reconciliation->status === 'cancelled') {
             return back()->withErrors([
-                'reconciliation' => 'This reconciliation is already cancelled.'
+                'reconciliation' => 'This reconciliation is already cancelled.',
             ]);
         }
 
@@ -196,18 +196,16 @@ class CashReconciliationController extends Controller
         Expense::where('cash_reconciliation_id', $reconciliation->id)
             ->update([
                 'status' => 'pending',
-                'cash_reconciliation_id' => null
+                'cash_reconciliation_id' => null,
             ]);
 
         // Mark reconciliation as cancelled
         $reconciliation->update([
-            'status' => 'cancelled'
+            'status' => 'cancelled',
         ]);
 
         return redirect()
             ->route('cash.reconcile.index')
             ->with('success', 'Reconciliation cancelled successfully.');
     }
-
 }
-
