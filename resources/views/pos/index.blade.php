@@ -63,7 +63,7 @@
             <!-- ROOM SELECTOR -->
             @if($mode == 'room')
                 <div class="flex gap-2 mb-4">
-                    <form method="GET" class="flex-grow">
+                    <form method="GET" class="grow">
                         <input type="hidden" name="mode" value="room">
                         <select name="room_id" onchange="this.form.submit()" class="border-2 px-4 py-3 w-full rounded-lg bg-white">
                             <option value="">Select Room</option>
@@ -94,7 +94,7 @@
                     <input type="hidden" name="room_id" value="{{ request('room_id') }}">
 
                     <div class="flex flex-col md:flex-row gap-2">
-                        <div class="relative flex-grow">
+                        <div class="relative grow">
                             <input list="product-list" name="barcode" autofocus placeholder="Search product or scan barcode..."
                                 class="border-2 px-4 py-3 w-full rounded-lg text-lg">
 
@@ -144,7 +144,7 @@
                                         <input type="checkbox" name="save_to_menu" value="1" id="save_menu" class="mr-2">
                                         <label for="save_menu" class="text-xs font-medium text-gray-600 cursor-pointer">Add to Menu?</label>
                                     </div>
-                                    <button type="submit" class="bg-blue-600 text-white px-4 h-10 rounded-lg font-bold hover:bg-blue-700 flex-grow">
+                                    <button type="submit" class="bg-blue-600 text-white px-4 h-10 rounded-lg font-bold hover:bg-blue-700 grow">
                                         ADD
                                     </button>
                                 </div>
