@@ -253,42 +253,30 @@ class DashboardController extends Controller
 
         // 1. STATS & REVENUE LOGIC
 
-        // Cumulative Revenue = All Sales - All CONFIRMED Expenses
-        $totalSalesAllTime = Sale::sum('total_amount');
+        // Cumulative Revenue = All Payments - All Refunds - All CONFIRMED Expenses
+        $totalPaymentsAllTime = \App\Models\Payment::sum('amount');
+        $totalRefundsAllTime = \App\Models\SaleRefund::sum('amount');
         $totalConfirmedExpenses = Expense::where('status', 'confirmed')->sum('amount');
-        $cumulativeRevenue = $totalSalesAllTime - $totalConfirmedExpenses;
+        $cumulativeRevenue = $totalPaymentsAllTime - $totalRefundsAllTime - $totalConfirmedExpenses;
 
         $salesToday = Sale::whereDate('created_at', $today)->get();
-        $grossSales = $salesToday->sum('total_amount');
+        $grossSalesToday = $salesToday->sum('total_amount');
 
-        // Refund total (value-based)
-        $refundTotal = DB::table('stock_movements')
-            ->join('sale_items', function ($join) {
-                $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
-                    ->on('sale_items.product_id', '=', 'stock_movements.product_id');
-            })
-            ->where('stock_movements.type', 'refund')
-            ->whereDate('stock_movements.created_at', $today)
-            ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
+        // Refund total today
+        $refundTotalToday = \App\Models\SaleRefund::whereDate('created_at', $today)->sum('amount');
 
-        $netSales = $grossSales - $refundTotal;
-
-        // Cash Received today (Total paid - change)
-        $cashReceivedToday = $salesToday->sum(fn ($sale) => $sale->paid_amount - $sale->change_amount);
+        // Actual cash collected today (direct POS + room settlements)
+        $cashReceivedToday = \App\Models\Payment::whereDate('created_at', $today)->sum('amount');
 
         // 2. CASH EXPECTED LOGIC
-        // Today's Cash Expected = (Cash Sales) - (Refunds) - (Expenses recorded today)
-        // This helps the admin see what SHOULD be in the drawer right now.
+        // Today's Cash Expected = (Cash Received Today) - (Refunds Today) - (Confirmed Expenses recorded today)
         $expensesToday = Expense::whereDate('expense_date', $today)
-            ->where('payment_method', 'Cash')
+            ->where('status', 'confirmed')
             ->sum('amount');
 
-        $cashExpected = $cashReceivedToday - $refundTotal - $expensesToday;
+        $cashExpected = $cashReceivedToday - $refundTotalToday - $expensesToday;
 
-        $refundCount = DB::table('stock_movements')
-            ->where('type', 'refund')
-            ->whereDate('created_at', $today)
-            ->count();
+        $refundCount = \App\Models\SaleRefund::whereDate('created_at', $today)->count();
 
         // 3. LOW STOCK LOGIC
         $lowStockProducts = Product::where('is_active', true)
@@ -323,11 +311,13 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $netSalesToday = $grossSalesToday - $refundTotalToday;
+
         return view('dashboard', compact(
             'cumulativeRevenue',
-            'grossSales',
-            'refundTotal',
-            'netSales',
+            'grossSalesToday',
+            'refundTotalToday',
+            'netSalesToday',
             'cashExpected',
             'refundCount',
             'recentSales',

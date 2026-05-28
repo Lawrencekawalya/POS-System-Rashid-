@@ -15,11 +15,25 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = Sale::with('user')
+        $sales = Sale::with(['user', 'room'])
             ->orderByDesc('created_at')
             ->paginate(20);
 
         return view('sales.index', compact('sales'));
+    }
+
+    /**
+     * Show only unpaid or partially paid room sales.
+     */
+    public function unpaidRoomCharges()
+    {
+        $sales = Sale::with(['user', 'room'])
+            ->whereNotNull('room_id')
+            ->whereIn('payment_status', ['unpaid', 'partial'])
+            ->orderByDesc('created_at')
+            ->paginate(20);
+
+        return view('sales.unpaid-room-charges', compact('sales'));
     }
 
     /**

@@ -56,6 +56,7 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     */
 
     Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+    Route::get('/sales/unpaid-room-charges', [SaleController::class, 'unpaidRoomCharges'])->name('sales.unpaid-room-charges');
     Route::get('/sales/{sale}', [SaleController::class, 'show'])->name('sales.show');
 
     /*
@@ -99,6 +100,13 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     */
     Route::get('/rooms/{room}/folio', [\App\Http\Controllers\RoomFolioController::class, 'show'])->name('rooms.folio');
     Route::post('/rooms/{room}/settle', [\App\Http\Controllers\RoomFolioController::class, 'settle'])->name('rooms.settle');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Menu Management (Shared)
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('menu-items', \App\Http\Controllers\MenuItemController::class);
 });
 
 /*

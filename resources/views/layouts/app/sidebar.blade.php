@@ -37,6 +37,11 @@
                             {{ __('Expense Log') }}
                         </flux:sidebar.item>
                     </flux:sidebar.group>
+
+                    <flux:sidebar.item icon="book-open" :href="route('menu-items.index')"
+                        :current="request()->routeIs('menu-items.*')" wire:navigate>
+                        {{ __('Kitchen Menu') }}
+                    </flux:sidebar.item>
                 @endif
 
                 {{-- Admin-only navigation --}}
@@ -51,6 +56,11 @@
                         {{ __('Products') }}
                     </flux:sidebar.item>
 
+                    <flux:sidebar.item icon="book-open" :href="route('menu-items.index')"
+                        :current="request()->routeIs('menu-items.*')" wire:navigate>
+                        {{ __('Kitchen Menu') }}
+                    </flux:sidebar.item>
+
                     <flux:sidebar.item icon="key" :href="route('rooms.index')"
                         :current="request()->routeIs('rooms.*')" wire:navigate>
                         {{ __('Rooms') }}
@@ -61,9 +71,14 @@
                         {{ __('Purchase History') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="document" :href="route('sales.index')" :current="request()->routeIs('sales.*')"
+                    <flux:sidebar.item icon="document" :href="route('sales.index')" :current="request()->routeIs('sales.index')"
                         wire:navigate>
                         {{ __('Sales History') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="clock" :href="route('sales.unpaid-room-charges')" :current="request()->routeIs('sales.unpaid-room-charges')"
+                        wire:navigate>
+                        {{ __('Unpaid Room Charges') }}
                     </flux:sidebar.item>
 
                     <flux:sidebar.item icon="document-text" :href="route('expenses.index')"
