@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\Sale;
 use App\Models\SaleRefund;
-use Illuminate\Http\Request;
-use App\Models\SaleItem;
-use App\Models\StockMovement;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -96,19 +95,12 @@ class ReportController extends Controller
         $grossSales = $sales->sum('total_amount');
 
         // 2. Refund calculation
-        $refundTotal = DB::table('stock_movements')
-            ->join('sale_items', function ($join) {
-                $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
-                    ->on('sale_items.product_id', '=', 'stock_movements.product_id');
-            })
-            ->where('stock_movements.type', 'refund')
-            ->whereBetween('stock_movements.created_at', [$from, $to])
-            ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
+        $refundTotal = \App\Models\SaleRefund::whereBetween('created_at', [$from, $to])->sum('amount');
 
         // 3. UPDATED: Only fetch CONFIRMED expenses
         // We ignore 'pending' because they haven't been verified by Admin yet
         // We ignore 'rejected' because that money should still be in the drawer
-        $expenses = \App\Models\Expense::with('user')
+        $expenses = Expense::with('user')
             ->whereBetween('expense_date', [$from, $to])
             ->where('status', 'confirmed')
             ->get();
@@ -118,10 +110,8 @@ class ReportController extends Controller
         // 4. Final Calculations
         $netSales = $grossSales - $refundTotal;
 
-        // Actual cash collected (Total Paid - Change Given)
-        $cashReceived = $sales->sum(function ($sale) {
-            return $sale->paid_amount - $sale->change_amount;
-        });
+        // Actual money collected in this period (Includes direct POS payments + Room settlements)
+        $cashReceived = \App\Models\Payment::whereBetween('created_at', [$from, $to])->sum('amount');
 
         // The drawer balance logic
         $cashExpected = $cashReceived - $refundTotal - $totalExpenses;

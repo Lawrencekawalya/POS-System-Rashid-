@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use App\Models\MenuItem;
 use App\Models\Product;
+use App\Models\Room;
+use App\Models\Sale;
+use App\Models\SaleItem;
 use App\Services\SaleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Sale;
-use App\Models\SaleItem;
-use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 
 class POSController extends Controller
 {
-    // public function index()
-    // {
-    //     $cart = session('cart', []);
-    //     $total = collect($cart)->sum(fn($item) => $item['subtotal']);
-
-    //     return view('pos.index', compact('cart', 'total'));
-    // }
+    /**
+     * Display the POS interface.
+     */
     public function index()
     {
         $cart = session('cart', []);
@@ -28,22 +26,26 @@ class POSController extends Controller
         $today = now()->toDateString();
         $userId = Auth::id();
 
+        // Detect mode
+        $mode = request('mode', 'pos');
+        $roomId = request('room_id');
+
+        // Rooms (only load when needed)
+        $rooms = $mode === 'room'
+            ? Room::orderBy('name')->get()
+            : collect();
+
         /**
-         * 1. Stock Container Logic
-         * Fetch all active products and sum their 'quantity' from the 'stockMovements' table.
-         * This creates a dynamic attribute: $product->stock_movements_sum_quantity
+         * Products & MenuItems
          */
-        // $products = Product::where('is_active', true)
-        //     ->withSum('stockMovements', 'quantity')
-        //     ->orderBy('name')
-        //     ->get();
-        // Just fetch the products. The Model handles the stock calculation.
         $products = Product::where('is_active', true)
             ->orderBy('name')
             ->get();
 
+        $menuItems = MenuItem::orderBy('name')->get();
+
         /**
-         * 2. Today's Sales Logic
+         * Sales
          */
         $salesToday = Sale::with('items')
             ->where('user_id', $userId)
@@ -54,7 +56,7 @@ class POSController extends Controller
         $totalSales = $salesToday->sum('total_amount');
 
         /**
-         * 3. Refunds Logic
+         * Refunds Logic
          */
         $totalRefunds = DB::table('stock_movements')
             ->join('sale_items', function ($join) {
@@ -62,7 +64,7 @@ class POSController extends Controller
                     ->on('sale_items.product_id', '=', 'stock_movements.product_id');
             })
             ->where('stock_movements.type', 'refund')
-            ->whereDate('stock_movements.created_at', $today)
+            ->whereDate('stock_movements.created_at', now()->toDateString())
             ->whereIn('stock_movements.reference_id', function ($q) use ($userId) {
                 $q->select('id')
                     ->from('sales')
@@ -72,10 +74,9 @@ class POSController extends Controller
 
         $netTotal = $totalSales - $totalRefunds;
 
-        // Calculate cumulative revenue (All time, all cashiers)
-        // $cumulativeRevenue = Sale::sum('total_amount');
-        $cumulativeRevenue = Sale::sum('total_amount') - \App\Models\Expense::where('status', 'confirmed')->sum('amount');
-
+        $cumulativeRevenue = \App\Models\Payment::sum('amount')
+            - \App\Models\SaleRefund::sum('amount')
+            - Expense::where('status', 'confirmed')->sum('amount');
 
         return view('pos.index', compact(
             'cart',
@@ -84,174 +85,116 @@ class POSController extends Controller
             'totalSales',
             'totalRefunds',
             'netTotal',
-            'products', // Passed to support your new container
-            'cumulativeRevenue' // Passed to summary container
+            'products',
+            'menuItems',
+            'cumulativeRevenue',
+            'rooms',
+            'mode',
+            'roomId'
         ));
     }
-    // public function index()
-    // {
-    //     $cart = session('cart', []);
-    //     $total = collect($cart)->sum(fn($item) => $item['subtotal']);
 
-    //     $today = now()->toDateString();
-    //     $userId = Auth::id();
-
-    //     // Sales made today by this cashier
-    //     $salesToday = Sale::with('items')
-    //         ->where('user_id', $userId)
-    //         ->whereDate('created_at', $today)
-    //         ->get();
-
-    //     // Total sales value
-    //     $totalSales = $salesToday->sum('total_amount');
-
-    //     // Refunds DONE today by this cashier (derived from refund events)
-    //     // $totalRefunds = SaleItem::whereIn('sale_id', function ($q) use ($userId, $today) {
-    //     //     $q->select('reference_id')
-    //     //         ->from('stock_movements')
-    //     //         ->where('type', 'refund')
-    //     //         ->whereDate('created_at', $today);
-    //     // })
-    //     //     ->sum('subtotal');
-    //     $totalRefunds = DB::table('stock_movements')
-    //         ->join('sale_items', function ($join) {
-    //             $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
-    //                 ->on('sale_items.product_id', '=', 'stock_movements.product_id');
-    //         })
-    //         ->where('stock_movements.type', 'refund')
-    //         ->whereDate('stock_movements.created_at', $today)
-    //         ->whereIn('stock_movements.reference_id', function ($q) use ($userId) {
-    //             $q->select('id')
-    //                 ->from('sales')
-    //                 ->where('user_id', $userId);
-    //         })
-    //         ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
-
-    //     // Net result
-    //     $netTotal = $totalSales - $totalRefunds;
-
-    //     return view('pos.index', compact(
-    //         'cart',
-    //         'total',
-    //         'salesToday',
-    //         'totalSales',
-    //         'totalRefunds',
-    //         'netTotal'
-    //     ));
-    // }
-    // public function index()
-    // {
-    //     $cart = session('cart', []);
-    //     $total = collect($cart)->sum(fn($item) => $item['subtotal']);
-
-    //     $today = now()->toDateString();
-    //     // $userId = auth()->id();
-    //     $userId = Auth::id();
-
-    //     $salesToday = Sale::with('items')
-    //         ->where('user_id', $userId)
-    //         ->whereDate('created_at', $today)
-    //         ->get();
-
-    //     $refundsToday = Sale::where('user_id', $userId)
-    //         ->whereDate('refunded_at', $today)
-    //         ->get();
-
-    //     $totalSales = $salesToday->sum('total_amount');
-    //     $totalRefunds = $refundsToday->sum('total_amount');
-    //     $netTotal = $totalSales - $totalRefunds;
-
-    //     return view('pos.index', compact(
-    //         'cart',
-    //         'total',
-    //         'salesToday',
-    //         'totalSales',
-    //         'totalRefunds',
-    //         'netTotal'
-    //     ));
-    // }
+    /**
+     * Add an item to the cart (Unified for Products and MenuItems).
+     */
     public function add(Request $request)
     {
         $request->validate([
-            'barcode' => 'required|string',
+            'barcode' => 'nullable|string',
+            'custom_name' => 'nullable|string',
+            'custom_price' => 'nullable|numeric|min:0',
+            'save_to_menu' => 'nullable|boolean'
         ]);
-
-        // 1. Change from firstOrFail() to first()
-        $product = Product::where('barcode', $request->barcode)->first();
-
-        // 2. Add a safeguard check
-        if (!$product) {
-            return back()->withErrors([
-                'barcode' => "The barcode '{$request->barcode}' does not exist in the system."
-            ]);
-        }
 
         $cart = session('cart', []);
 
-        // 3. Existing stock logic (This part is already good)
-        if (isset($cart[$product->id])) {
-            if ($cart[$product->id]['quantity'] + 1 > $product->currentStock()) {
-                return back()->withErrors(['barcode' => 'Insufficient stock for ' . $product->name]);
+        // 1. Handle Custom Item First
+        if ($request->filled('custom_name') && $request->filled('custom_price')) {
+            $name = $request->custom_name;
+            $price = $request->custom_price;
+
+            $menuItem = MenuItem::firstOrCreate(
+                ['name' => $name],
+                ['price' => $price, 'category' => $request->boolean('save_to_menu') ? 'Custom' : 'Ad-hoc']
+            );
+
+            // If we want to update the price of an existing menu item when 'save_to_menu' is checked
+            if ($request->boolean('save_to_menu')) {
+                $menuItem->update(['price' => $price]);
             }
 
-            $cart[$product->id]['quantity']++;
+            $key = 'menu_' . $menuItem->id;
+            if (isset($cart[$key])) {
+                $cart[$key]['quantity']++;
+            } else {
+                $cart[$key] = [
+                    'item_type' => 'menu',
+                    'menu_item_id' => $menuItem->id,
+                    'name' => $menuItem->name,
+                    'quantity' => 1,
+                    'unit_price' => $price,
+                ];
+            }
+            $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
+        } 
+        // 2. Handle Barcode/Search Input
+        elseif ($request->filled('barcode')) {
+            $input = $request->barcode;
+
+            // Try Product
+            $product = Product::where('barcode', $input)->first();
+            if ($product) {
+                $key = 'product_' . $product->id;
+                if (isset($cart[$key])) {
+                    if ($cart[$key]['quantity'] + 1 > $product->currentStock()) {
+                        return back()->withErrors(['barcode' => 'Insufficient stock for ' . $product->name]);
+                    }
+                    $cart[$key]['quantity']++;
+                } else {
+                    if ($product->currentStock() < 1) {
+                        return back()->withErrors(['barcode' => $product->name . ' is currently out of stock']);
+                    }
+                    $cart[$key] = [
+                        'item_type' => 'product',
+                        'product_id' => $product->id,
+                        'name' => $product->name,
+                        'quantity' => 1,
+                        'unit_price' => $product->selling_price,
+                    ];
+                }
+                $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
+            } else {
+                // Try Menu Item
+                $menuItem = MenuItem::where('name', $input)->first();
+                if ($menuItem) {
+                    $key = 'menu_' . $menuItem->id;
+                    if (isset($cart[$key])) {
+                        $cart[$key]['quantity']++;
+                    } else {
+                        $cart[$key] = [
+                            'item_type' => 'menu',
+                            'menu_item_id' => $menuItem->id,
+                            'name' => $menuItem->name,
+                            'quantity' => 1,
+                            'unit_price' => $menuItem->price,
+                        ];
+                    }
+                    $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
+                } else {
+                    return back()->withErrors(['barcode' => "Item '{$input}' not found."]);
+                }
+            }
         } else {
-            if ($product->currentStock() < 1) {
-                return back()->withErrors(['barcode' => $product->name . ' is currently out of stock']);
-            }
-
-            $cart[$product->id] = [
-                'product_id' => $product->id,
-                'name' => $product->name,
-                'quantity' => 1,
-                'unit_price' => $product->selling_price,
-            ];
+            return back()->withErrors(['barcode' => "Please enter an item or barcode."]);
         }
 
-        $cart[$product->id]['subtotal'] =
-            $cart[$product->id]['quantity'] * $cart[$product->id]['unit_price'];
-
         session(['cart' => $cart]);
-
-        return redirect()->route('pos.index');
+        return redirect()->route('pos.index', ['mode' => $request->mode, 'room_id' => $request->room_id]);
     }
-    // public function add(Request $request)
-    // {
-    //     $request->validate([
-    //         'barcode' => 'required|string',
-    //     ]);
 
-    //     $product = Product::where('barcode', $request->barcode)->firstOrFail();
-
-    //     $cart = session('cart', []);
-
-    //     if (isset($cart[$product->id])) {
-    //         if ($cart[$product->id]['quantity'] + 1 > $product->currentStock()) {
-    //             return back()->withErrors(['barcode' => 'Insufficient stock']);
-    //         }
-
-    //         $cart[$product->id]['quantity']++;
-    //     } else {
-    //         if ($product->currentStock() < 1) {
-    //             return back()->withErrors(['barcode' => 'Out of stock']);
-    //         }
-
-    //         $cart[$product->id] = [
-    //             'product_id' => $product->id,
-    //             'name' => $product->name,
-    //             'quantity' => 1,
-    //             'unit_price' => $product->selling_price,
-    //         ];
-    //     }
-
-    //     $cart[$product->id]['subtotal'] =
-    //         $cart[$product->id]['quantity'] * $cart[$product->id]['unit_price'];
-
-    //     session(['cart' => $cart]);
-
-    //     return redirect()->route('pos.index');
-    // }
-
+    /**
+     * Process checkout and create a Sale.
+     */
     public function checkout(Request $request, SaleService $saleService)
     {
         $cart = session('cart', []);
@@ -262,123 +205,102 @@ class POSController extends Controller
 
         $request->validate([
             'paid_amount' => 'required|numeric|min:0',
+            'room_id' => 'nullable|integer',
+            'payment_method' => 'required|string|in:cash,bank,card,room',
         ]);
 
-        $items = collect($cart)->map(fn($item) => [
-            'product_id' => $item['product_id'],
-            'quantity' => $item['quantity'],
-        ])->values()->toArray();
+        $items = collect($cart)->values()->toArray();
 
         $sale = $saleService->createSale(
             $request->user()->id,
             $items,
-            $request->paid_amount
+            $request->paid_amount,
+            $request->room_id,
+            $request->payment_method
         );
 
         session()->forget('cart');
 
         return redirect()->route('sales.show', $sale);
     }
-    // public function checkout(Request $request, SaleService $saleService)
-    // {
-    //     $cart = session('cart', []);
 
-    //     if (empty($cart)) {
-    //         return back()->withErrors(['cart' => 'Cart is empty']);
-    //     }
-
-    //     $request->validate([
-    //         'paid_amount' => 'required|numeric|min:0',
-    //     ]);
-
-    //     $items = collect($cart)->map(fn($item) => [
-    //         'product_id' => $item['product_id'],
-    //         'quantity' => $item['quantity'],
-    //     ])->values()->toArray();
-
-    //     $saleService->createSale($request->user()->id, $items, $request->paid_amount);
-
-    //     session()->forget('cart');
-
-    //     return redirect()->route('pos.index')->with('success', 'Sale completed');
-    // }
-
-    public function remove(int $productId)
+    /**
+     * Remove an item from the cart.
+     */
+    public function remove(string $key)
     {
         $cart = session('cart', []);
-
-        unset($cart[$productId]);
-
+        unset($cart[$key]);
         session(['cart' => $cart]);
 
-        return redirect()->route('pos.index');
+        return back();
     }
 
-    public function increase(int $productId)
+    /**
+     * Increase quantity in cart.
+     */
+    public function increase(string $key)
     {
         $cart = session('cart', []);
-        $product = Product::findOrFail($productId);
+        if (!isset($cart[$key])) return back();
 
-        if (!isset($cart[$productId])) {
-            return redirect()->route('pos.index');
-        }
-
-        if ($cart[$productId]['quantity'] + 1 > $product->currentStock()) {
-            return back()->withErrors(['cart' => 'Insufficient stock']);
-        }
-
-        $cart[$productId]['quantity']++;
-        $cart[$productId]['subtotal'] =
-            $cart[$productId]['quantity'] * $cart[$productId]['unit_price'];
-
-        session(['cart' => $cart]);
-
-        return redirect()->route('pos.index');
-    }
-
-    public function decrease(int $productId)
-    {
-        $cart = session('cart', []);
-
-        if (!isset($cart[$productId])) {
-            return redirect()->route('pos.index');
-        }
-
-        $cart[$productId]['quantity']--;
-
-        if ($cart[$productId]['quantity'] <= 0) {
-            unset($cart[$productId]);
-        } else {
-            $cart[$productId]['subtotal'] =
-                $cart[$productId]['quantity'] * $cart[$productId]['unit_price'];
-        }
-
-        session(['cart' => $cart]);
-
-        return redirect()->route('pos.index');
-    }
-
-    public function updateQuantity(Request $request, $id)
-    {
-        $cart = session('cart', []);
-
-        if (isset($cart[$id])) {
-            $product = Product::findOrFail($id);
-
-            // Ensure we are working with numbers
-            $qty = (int) $request->quantity;
-
-            if ($qty > $product->currentStock()) {
-                return back()->withErrors(['quantity' => 'Insufficient stock']);
+        if ($cart[$key]['item_type'] === 'product') {
+            $product = Product::findOrFail($cart[$key]['product_id']);
+            if ($cart[$key]['quantity'] + 1 > $product->currentStock()) {
+                return back()->withErrors(['cart' => 'Insufficient stock']);
             }
-
-            $cart[$id]['quantity'] = $qty;
-            $cart[$id]['subtotal'] = $qty * (float) $cart[$id]['unit_price'];
-
-            session(['cart' => $cart]);
         }
 
-        return redirect()->route('pos.index');
+        $cart[$key]['quantity']++;
+        $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
+
+        session(['cart' => $cart]);
+        return back();
     }
 
+    /**
+     * Decrease quantity in cart.
+     */
+    public function decrease(string $key)
+    {
+        $cart = session('cart', []);
+        if (!isset($cart[$key])) return back();
+
+        $cart[$key]['quantity']--;
+
+        if ($cart[$key]['quantity'] <= 0) {
+            unset($cart[$key]);
+        } else {
+            $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
+        }
+
+        session(['cart' => $cart]);
+        return back();
+    }
+
+    /**
+     * Manually update quantity in cart.
+     */
+    public function updateQuantity(Request $request, string $key)
+    {
+        $cart = session('cart', []);
+        if (!isset($cart[$key])) return back();
+
+        $qty = (int) $request->quantity;
+        if ($qty <= 0) {
+            unset($cart[$key]);
+        } else {
+            if ($cart[$key]['item_type'] === 'product') {
+                $product = Product::findOrFail($cart[$key]['product_id']);
+                if ($qty > $product->currentStock()) {
+                    return back()->withErrors(['quantity' => 'Insufficient stock']);
+                }
+            }
+            $cart[$key]['quantity'] = $qty;
+            $cart[$key]['subtotal'] = $qty * (float) $cart[$key]['unit_price'];
+        }
+
+        session(['cart' => $cart]);
+        return back();
+    }
 }

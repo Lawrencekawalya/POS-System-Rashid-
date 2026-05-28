@@ -13,7 +13,9 @@ class SaleItem extends Model
 
     protected $fillable = [
         'sale_id',
+        'item_type',
         'product_id',
+        'menu_item_id',
         'quantity',
         'unit_price',
         'subtotal',
@@ -22,6 +24,8 @@ class SaleItem extends Model
     protected $casts = [
         'unit_price' => 'decimal:2',
         'subtotal' => 'decimal:2',
+        'product_id' => 'integer',
+        'menu_item_id' => 'integer',
     ];
 
     /**
@@ -38,5 +42,25 @@ class SaleItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * A sale item belongs to a menu item.
+     */
+    public function menuItem()
+    {
+        return $this->belongsTo(MenuItem::class);
+    }
+
+    /**
+     * Helper to get the name of the item.
+     */
+    public function getNameAttribute()
+    {
+        if ($this->item_type === 'product') {
+            return $this->product?->name ?? 'Unknown Product';
+        }
+
+        return $this->menuItem?->name ?? 'Unknown Menu Item';
     }
 }

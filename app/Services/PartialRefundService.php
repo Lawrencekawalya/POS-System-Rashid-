@@ -31,12 +31,13 @@ class PartialRefundService
             $sale->load('items', 'refunds');
 
             foreach ($items as $productId => $qty) {
-                if ($qty <= 0)
+                if ($qty <= 0) {
                     continue;
+                }
 
                 $saleItem = $sale->items->firstWhere('product_id', $productId);
 
-                if (!$saleItem) {
+                if (! $saleItem) {
                     throw ValidationException::withMessages([
                         'refund' => 'Invalid product for this sale.',
                     ]);
@@ -70,7 +71,7 @@ class PartialRefundService
                     'type' => 'refund',
                     'reference_type' => 'sale',
                     'reference_id' => $sale->id,
-                    'remarks' => 'Partial refund of sale #' . $sale->id,
+                    'remarks' => 'Partial refund of sale #'.$sale->id,
                 ]);
             }
 

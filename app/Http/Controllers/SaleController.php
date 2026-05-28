@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
-use Illuminate\Http\Request;
-use App\Services\RefundService;
-use App\Services\PartialRefundService;
 use App\Models\SaleRefund;
+use App\Services\PartialRefundService;
+use App\Services\RefundService;
+use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {

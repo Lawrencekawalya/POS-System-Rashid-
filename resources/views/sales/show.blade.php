@@ -42,18 +42,21 @@
             <table class="w-full text-sm border">
                 @foreach ($sale->items as $item)
                     @php
-                        $refunded = $sale->refundedQuantityFor($item->product_id);
+                        // For refunds, we still track primarily by product_id in the stock_movements table
+                        // If it's a menu item, we might need a different refund strategy, but for now
+                        // we'll keep the UI working for products.
+                        $refunded = $sale->refundedQuantityFor($item->product_id ?? 0);
                         $remaining = $item->quantity - $refunded;
                     @endphp
 
                     @if ($remaining > 0)
                         <tr>
-                            <td class="border px-2 py-1">{{ $item->product->name }}</td>
+                            <td class="border px-2 py-1">{{ $item->name }}</td>
                             <td class="border px-2 py-1 text-center">
                                 {{ $remaining }} left
                             </td>
                             <td class="border px-2 py-1">
-                                <input type="number" name="items[{{ $item->product_id }}]" min="0"
+                                <input type="number" name="items[{{ $item->item_type === 'product' ? $item->product_id : 'menu_'.$item->menu_item_id }}]" min="0"
                                     max="{{ $remaining }}" class="w-full border px-1">
                             </td>
                         </tr>
@@ -103,7 +106,10 @@
             <h1 class="font-bold text-base">Palace Hotel</h1>
             <p class="text-xs">Mbarara, Uganda</p>
             <p class="text-xs">Receipt #{{ $sale->id }}</p>
-            <p class="text-xs">
+            @if($sale->room_id)
+                <p class="text-sm font-bold mt-1 text-black uppercase">Room: {{ $sale->room?->name }}</p>
+            @endif
+            <p class="text-xs mt-1">
                 {{ $sale->created_at->format('Y-m-d H:i') }}
             </p>
             <p class="text-xs">Cashier: {{ $sale->user->name }}</p>
@@ -123,7 +129,7 @@
                 @foreach ($sale->items as $item)
                     <tr>
                         <td class="text-left">
-                            {{ $item->product->name }}
+                            {{ $item->name }}
                         </td>
                         <td class="text-center">
                             {{ $item->quantity }}

@@ -13,9 +13,12 @@ class Sale extends Model
 
     protected $fillable = [
         'user_id',
+        'room_id',
         'total_amount',
         'paid_amount',
         'change_amount',
+        'payment_status',
+        'payment_method',
         'refunded_at',
         'refunded_by',
         'refund_reason',
@@ -27,12 +30,37 @@ class Sale extends Model
         'change_amount' => 'decimal:2',
         'created_at' => 'datetime',
         'refunded_at' => 'datetime',
+        'room_id' => 'integer',
     ];
 
     protected $dates = [
         'created_at',
         'refunded_at',
     ];
+
+    /**
+     * Get the balance remaining for this sale.
+     */
+    public function getBalanceAttribute(): float
+    {
+        return (float) ($this->total_amount - $this->payments()->sum('amount'));
+    }
+
+    /**
+     * A sale has many payments.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * A sale belongs to a room (optional).
+     */
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 
     /**
      * A sale belongs to a cashier (user).
@@ -55,7 +83,7 @@ class Sale extends Model
      */
     public function isRefunded(): bool
     {
-        return !is_null($this->refunded_at);
+        return ! is_null($this->refunded_at);
     }
 
     /**
@@ -65,12 +93,14 @@ class Sale extends Model
     {
         return $this->hasMany(SaleRefund::class);
     }
+
     public function refundedQuantityFor(int $productId): int
     {
         return (int) $this->refunds()
             ->where('product_id', $productId)
             ->sum('quantity');
     }
+
     public function isFullyRefunded(): bool
     {
         foreach ($this->items as $item) {
@@ -78,6 +108,7 @@ class Sale extends Model
                 return false;
             }
         }
+
         return true;
     }
 }

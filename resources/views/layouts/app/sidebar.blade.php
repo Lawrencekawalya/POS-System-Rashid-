@@ -51,6 +51,11 @@
                         {{ __('Products') }}
                     </flux:sidebar.item>
 
+                    <flux:sidebar.item icon="key" :href="route('rooms.index')"
+                        :current="request()->routeIs('rooms.*')" wire:navigate>
+                        {{ __('Rooms') }}
+                    </flux:sidebar.item>
+
                     <flux:sidebar.item icon="truck" :href="route('purchases.index')"
                         :current="request()->routeIs('purchases.*')" wire:navigate>
                         {{ __('Purchase History') }}
