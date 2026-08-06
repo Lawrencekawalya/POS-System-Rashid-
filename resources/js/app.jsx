@@ -30,9 +30,11 @@ import './bootstrap';
 import React from "react";
 import { createRoot } from "react-dom/client";
 import AnimatedWave from "./components/AnimatedWave";
+import TomSelect from 'tom-select';
+import 'tom-select/dist/css/tom-select.css';
 
 // Initialize Alpine
-// window.Alpine = Alpine;
+window.TomSelect = TomSelect;
 // Alpine.start();
 
 console.log("VITE APP LOADED");

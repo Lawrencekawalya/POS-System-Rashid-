@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
          * important for development and staging environments where you need to log in as an admin 
          * without having to go through a registration process. 
         */
-         $this->call(AdminUserSeeder::class);
+         $this->call([AdminUserSeeder::class,ProductSeeder::class]);
         // User::factory(10)->create();
 
         User::factory()->create([

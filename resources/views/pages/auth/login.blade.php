@@ -7,7 +7,7 @@
             <h1 class="font-['Cormorant_Garamond'] text-3xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white to-[#d4af37] uppercase">
                 Welcome Back
             </h1>
-            <p class="text-xs tracking-[3px] text-[#d4af37]/70 uppercase mt-2">The Scent of Elegance</p>
+            {{--<p class="text-xs tracking-[3px] text-[#d4af37]/70 uppercase mt-2">The Scent of Elegance</p>--}}
         </div>
 
         <x-auth-session-status class="text-center text-sm" :status="session('status')" />

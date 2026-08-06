@@ -12,15 +12,23 @@ class ProductController extends Controller
      */
     // public function index()
     // {
-    //     $products = Product::orderBy('name')->get();
+    //     $products = Product::with('stockMovements')
+    //         ->orderBy('name')
+    //         ->paginate(15);
+
 
     //     return view('products.index', compact('products'));
     // }
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('stockMovements')
-            ->orderBy('name')
-            ->get();
+        $query = Product::with('stockMovements')
+            ->orderBy('name');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(15);
 
         return view('products.index', compact('products'));
     }

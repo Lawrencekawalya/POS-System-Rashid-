@@ -42,6 +42,8 @@ class Product extends Model
     }
 
     // Check if the product is low in stock based on a given threshold.
+    //this is what we will use in the dashboard to show low stock (lowstock) products.
+    // We can adjust the threshold as needed.
     public function isLowStock(int $threshold = 1): bool
     {
         return $this->currentStock() <= $threshold;

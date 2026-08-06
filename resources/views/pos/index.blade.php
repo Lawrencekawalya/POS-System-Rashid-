@@ -1,149 +1,390 @@
 <x-layouts::app title="POS Checkout">
+    <div class="flex flex-col lg:flex-row gap-6">
 
-    <h1 class="text-xl font-semibold mb-4">POS Checkout</h1>
+        <div class="lg:w-1/4">
+            <h2 class="text-lg font-bold mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                </svg>
+                Current Stock
+            </h2>
+            <div class="border rounded-lg bg-white shadow-sm overflow-hidden">
+                {{--<div class="max-h-[calc(200vh-300px)] overflow-y-auto px-2 py-2">--}}
+                    <div class="max-h-[88vh] overflow-y-auto px-2 py-2">
+                        @foreach($products as $product)
+                            <div class="flex justify-between items-center p-2 border-b last:border-0 hover:bg-gray-50">
+                                <div>
+                                    <div class="font-medium text-sm text-gray-800">{{ $product->name }}</div>
+                                    <div class="text-xs text-gray-500 font-mono">{{ $product->barcode }}</div>
+                                </div>
+                                <div class="text-right">
+                                    <!-- <span class="inline-block px-2 py-1 rounded text-xs font-bold {{ $product->total_stock <= 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
+                                                                                                    {{ number_format($product->total_stock) }}
+                                                                                            </span> -->
+                                    <span
+                                        class="inline-block px-2 py-1 rounded text-xs font-bold {{ $product->currentStock() <= 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
+                                        {{ $product->currentStock() }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
 
-    @if ($errors->any())
-        <div class="mb-3 text-red-600">
-            {{ $errors->first() }}
-        </div>
-    @endif
+            <div class="lg:w-3/4">
+                <h1 class="text-xl font-semibold mb-4">POS Checkout</h1>
 
-    @if (session('success'))
-        <div class="mb-3 text-green-600">
-            {{ session('success') }}
-        </div>
-    @endif
+                @if ($errors->any())
+                    <div class="mb-3 p-3 bg-red-50 text-red-600 rounded border border-red-200">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
 
-    <form method="POST" action="{{ route('pos.add') }}" class="mb-4">
-        @csrf
-        <input type="text" name="barcode" autofocus placeholder="Scan barcode" class="border px-3 py-2 w-full">
-    </form>
+                @if (session('success'))
+                    <div class="mb-3 p-3 bg-green-50 text-green-600 rounded border border-green-200">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-    <table class="w-full border mb-4">
-        <thead>
-            <tr class="bg-gray-100">
-                <th class="border px-2 py-1">Product</th>
-                <th class="border px-2 py-1">Qty</th>
-                <th class="border px-2 py-1">Price</th>
-                <th class="border px-2 py-1">Subtotal</th>
-                <th class="border px-2 py-1">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($cart as $item)
-                <tr>
-                    <td class="border px-2 py-1">{{ $item['name'] }}</td>
-                    {{-- <td class="border px-2 py-1 text-center">{{ $item['quantity'] }}</td> --}}
-                    <td class="border px-2 py-1 text-center">
-                        <form method="POST" action="{{ route('pos.decrease', $item['product_id']) }}" class="inline">
+                <!-- <form method="POST" action="{{ route('pos.add') }}" class="mb-4">
+                @csrf
+                <div class="relative">
+                    <input type="text" name="barcode" autofocus placeholder="Scan barcode..."
+                        class="border-2 border-gray-300 px-4 py-3 w-full rounded-lg focus:border-black focus:outline-none text-lg">
+                    <div class="absolute right-3 top-3 text-gray-400">
+                        <kbd class="bg-gray-100 px-2 py-1 rounded border text-xs">Enter</kbd>
+                    </div>
+                </div>
+            </form> -->
+                <form method="POST" action="{{ route('pos.add') }}" class="mb-4">
+                    @csrf
+                    <div class="relative">
+                        <input list="product-list" name="barcode" autofocus
+                            placeholder="Search product or scan barcode..."
+                            class="border-2 border-gray-300 px-4 py-3 w-full rounded-lg focus:border-black focus:outline-none text-lg">
+
+                        <datalist id="product-list">
+                            @foreach($products as $product)
+                                <option value="{{ $product->barcode }}">{{ $product->name }} (Stock:
+                                    {{ $product->currentStock() }})
+                                </option>
+                            @endforeach
+                        </datalist>
+
+                        <div class="absolute right-3 top-3 text-gray-400">
+                            <kbd class="bg-gray-100 px-2 py-1 rounded border text-xs">Enter</kbd>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="border rounded-lg bg-white overflow-hidden mb-4 shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="px-4 py-3 font-semibold text-gray-700">Product</th>
+                                <th class="px-4 py-3 font-semibold text-gray-700 text-center">Qty</th>
+                                <th class="px-4 py-3 font-semibold text-gray-700 text-right">Price</th>
+                                <th class="px-4 py-3 font-semibold text-gray-700 text-right">Subtotal</th>
+                                <th class="px-4 py-3 font-semibold text-gray-700 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($cart as $item)
+                                {{-- 1. Add a unique ID to the row --}}
+                                <tr data-product-id="{{ $item['product_id'] }}">
+                                    <td class="px-4 py-3">{{ $item['name'] }}</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex items-center justify-center gap-2">
+                                            {{-- Decrease/Increase forms stay the same --}}
+
+                                            <form method="POST"
+                                                action="{{ route('pos.updateQuantity', $item['product_id']) }}"
+                                                id="update-qty-{{ $item['product_id'] }}">
+                                                @csrf
+                                                <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1"
+                                                    class="qty-input w-16 h-8 text-center font-bold border-gray-300 rounded"
+                                                    onblur="this.form.submit()"> {{-- Fires only when you click out of the
+                                                box --}}
+                                            </form>
+                                        </div>
+                                    </td>
+
+                                    {{-- 2. Add 'unit-price' class and data attribute --}}
+                                    <td class="px-4 py-3 text-right unit-price" data-price="{{ $item['unit_price'] }}">
+                                        {{ number_format($item['unit_price'], 2) }}
+                                    </td>
+
+                                    {{-- 3. Add 'subtotal-display' class --}}
+                                    <td class="px-4 py-3 text-right font-semibold subtotal-display">
+                                        {{ number_format($item['subtotal'], 2) }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <form method="POST" action="{{ route('pos.remove', $item['product_id']) }}">
+                                            @csrf
+                                            <button
+                                                class="text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {{--<tr class="border-b last:border-0 hover:bg-gray-50">
+                                    <td class="px-4 py-3">{{ $item['name'] }}</td>
+                                    {{--<td class="px-4 py-3 text-center">
+                                        <div class="flex items-center justify-center gap-3">
+                                            <form method="POST" action="{{ route('pos.decrease', $item['product_id']) }}">
+                                                @csrf
+                                                <button
+                                                    class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center">−</button>
+                                            </form>
+                                            <span class="font-bold w-4">{{ $item['quantity'] }}</span>
+                                            <form method="POST" action="{{ route('pos.increase', $item['product_id']) }}">
+                                                @csrf
+                                                <button
+                                                    class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center">+</button>
+                                            </form>
+                                        </div>
+                                    </td>--
+                                    <td class="px-4 py-3 text-right">{{ number_format($item['unit_price'], 2) }}</td>
+                                    <td class="px-4 py-3 text-right font-semibold">{{ number_format($item['subtotal'], 2) }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <form method="POST" action="{{ route('pos.remove', $item['product_id']) }}">
+                                            @csrf
+                                            <button
+                                                class="text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>--}}
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-12 text-gray-400">Scan items to build the cart.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 items-start mb-10">
+                    {{--<div class="flex-grow">
+                        <div class="text-3xl font-bold">
+                            Total: <span class="text-blue-600">{{ number_format($total, 2) }}</span>
+                        </div>
+                    </div>--}}
+                    <div class="text-3xl font-bold">
+                        {{-- Add id and data-total --}}
+                        Total: <span id="grand-total" class="text-blue-600" data-total="{{ $total }}">
+                            {{ number_format($total, 2) }}
+                        </span>
+                    </div>
+
+                    <div class="w-full md:w-80">
+                        <form method="POST" action="{{ route('pos.checkout') }}" class="space-y-2">
                             @csrf
-                            <button class="px-2">−</button>
+                            <input type="number" name="paid_amount" step="0.01" placeholder="Cash received"
+                                class="border-2 border-gray-300 px-4 py-3 w-full rounded-lg text-xl focus:border-green-500 focus:outline-none">
+                            <button
+                                class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-4 w-full rounded-lg shadow-lg transition">
+                                COMPLETE SALE
+                            </button>
                         </form>
+                    </div>
+                </div>
 
-                        {{ $item['quantity'] }}
+                <hr class="my-10 border-gray-300">
 
-                        <form method="POST" action="{{ route('pos.increase', $item['product_id']) }}" class="inline">
-                            @csrf
-                            <button class="px-2">+</button>
-                        </form>
-                    </td>
-                    <td class="border px-2 py-1">{{ number_format($item['unit_price'], 2) }}</td>
-                    <td class="border px-2 py-1">{{ number_format($item['subtotal'], 2) }}</td>
-                    <td class="border px-2 py-1 text-center">
-                        <form method="POST" action="{{ route('pos.remove', $item['product_id']) }}">
-                            @csrf
-                            <button class="text-red-600 text-sm">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center py-3">Cart is empty</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                <!-- <h2 class="text-lg font-semibold mb-4">Today’s Sales Summary</h2> -->
+                <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="p-4 bg-white border rounded-lg shadow-sm">
+                    <div class="text-gray-500 text-xs uppercase tracking-wider font-bold">Total Sales</div>
+                    <div class="text-2xl font-bold">{{ number_format($totalSales, 2) }}</div>
+                </div>
+                <div class="p-4 bg-white border rounded-lg shadow-sm">
+                    <div class="text-gray-500 text-xs uppercase tracking-wider font-bold">Refunds</div>
+                    <div class="text-2xl font-bold text-red-600">{{ number_format($totalRefunds, 2) }}</div>
+                </div>
+                <div class="p-4 bg-white border rounded-lg shadow-sm border-l-4 border-l-green-500">
+                    <div class="text-gray-500 text-xs uppercase tracking-wider font-bold">Net Revenue</div>
+                    <div class="text-2xl font-bold">{{ number_format($netTotal, 2) }}</div>
+                </div>
+            </div> -->
+                <h2 class="text-lg font-semibold mb-4">Sales Performance</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="p-4 bg-white border rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-xs uppercase tracking-wider font-bold">Today's Sales</div>
+                        <div class="text-2xl font-bold">{{ number_format($totalSales, 2) }}</div>
+                    </div>
 
-    <div class="mb-4 font-semibold">
-        Total: {{ number_format($total, 2) }}
-    </div>
+                    <div class="p-4 bg-white border rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-xs uppercase tracking-wider font-bold">Refunds</div>
+                        <div class="text-2xl font-bold text-red-600">{{ number_format($totalRefunds, 2) }}</div>
+                    </div>
 
-    <form method="POST" action="{{ route('pos.checkout') }}">
-        @csrf
-        <input type="number" name="paid_amount" step="0.01" placeholder="Cash received"
-            class="border px-3 py-2 w-full mb-2">
-        <button class="bg-black text-white px-4 py-2 w-full">
-            Complete Sale
-        </button>
-    </form>
-    <hr class="my-6">
+                    <div class="p-4 bg-white border rounded-lg shadow-sm">
+                        <div class="text-gray-500 text-xs uppercase tracking-wider font-bold">Today's Net</div>
+                        <div class="text-2xl font-bold text-green-600">{{ number_format($netTotal, 2) }}</div>
+                    </div>
 
-    <h2 class="text-lg font-semibold mb-2">Today’s Sales Summary</h2>
+                    <div class="p-4 bg-black text-white border rounded-lg shadow-sm">
+                        <div class="text-gray-400 text-xs uppercase tracking-wider font-bold">Cumulative Revenue</div>
+                        <div class="text-2xl font-bold text-blue-400">{{ number_format($cumulativeRevenue, 2) }}</div>
+                    </div>
+                </div>
 
-    <div class="grid grid-cols-3 gap-4 mb-4 text-sm">
-        <div class="p-3 border rounded">
-            <div class="text-gray-500">Total Sales</div>
-            <div class="font-semibold">{{ number_format($totalSales, 2) }}</div>
-        </div>
+                <hr class="my-10 border-gray-300">
+                <h2 class="text-lg font-semibold mb-4">Today's Sales</h2>
 
-        <div class="p-3 border rounded">
-            <div class="text-gray-500">Refunds</div>
-            <div class="font-semibold text-red-600">
-                {{ number_format($totalRefunds, 2) }}
+                <!-- @if ($salesToday->count())
+                <div class="overflow-x-auto border rounded-lg shadow-sm bg-white">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Receipt</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Time</th>
+                                <th class="px-4 py-3 text-right font-semibold text-gray-700">Amount</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-700">Status</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-700">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @foreach ($salesToday as $sale)
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="px-4 py-3 font-medium text-gray-900">
+                                        #{{ $sale->id }}
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-600">
+                                        {{ $sale->created_at->format('H:i') }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono">
+                                        {{ number_format($sale->total_amount, 2) }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        @if ($sale->isRefunded())
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                Refunded
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Sold
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <a href="{{ route('sales.show', $sale) }}"
+                                            class="text-blue-600 hover:text-blue-900 font-semibold">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="p-8 text-center border-2 border-dashed rounded-lg bg-gray-50">
+                    <p class="text-gray-500">No sales recorded today.</p>
+                </div>
+            @endif -->
+                @if ($salesToday->count())
+                    <div class="overflow-x-auto border rounded-lg shadow-sm bg-white">
+                        <table class="w-full text-sm text-left">
+                            <thead>
+                                <tr class="bg-gray-50 border-b">
+                                    <th class="px-4 py-3 font-semibold text-gray-700">Receipt</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-700">Time</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-700">Amount</th>
+                                    <th class="px-4 py-3 text-center font-semibold text-gray-700">Status</th>
+                                    <th class="px-4 py-3 text-center font-semibold text-gray-700">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @foreach ($salesToday as $sale)
+                                    <tr class="hover:bg-gray-50 transition">
+                                        <td class="px-4 py-3 font-medium text-gray-900">#{{ $sale->id }}</td>
+                                        <td class="px-4 py-3 text-gray-600">{{ $sale->created_at->format('H:i') }}</td>
+                                        <td class="px-4 py-3 text-right font-mono">{{ number_format($sale->total_amount, 2) }}
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            @if ($sale->isRefunded())
+                                                <span
+                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    Refunded
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Sold
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <a href="{{ route('sales.show', $sale) }}"
+                                                class="text-blue-600 hover:text-blue-900 font-semibold">
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot class="bg-gray-50 border-t-2 border-gray-200">
+                                <tr>
+                                    <td colspan="2" class="px-4 py-3 text-right font-bold text-gray-700">Total Today:</td>
+                                    <td class="px-4 py-3 text-right font-bold text-gray-900 font-mono text-base">
+                                        {{ number_format($salesToday->sum('total_amount'), 2) }}
+                                    </td>
+                                    <td colspan="2" class="bg-gray-50"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                @else
+                    <div class="p-8 text-center border-2 border-dashed rounded-lg bg-gray-50">
+                        <p class="text-gray-500">No sales recorded today.</p>
+                    </div>
+                @endif
             </div>
         </div>
+        <script>
+            // 1. Define the calculator function separately so it's reusable
+            function updateTotals() {
+                let grandTotal = 0;
 
-        <div class="p-3 border rounded">
-            <div class="text-gray-500">Net</div>
-            <div class="font-semibold">
-                {{ number_format($netTotal, 2) }}
-            </div>
-        </div>
-    </div>
+                document.querySelectorAll('tr[data-product-id]').forEach(row => {
+                    const qtyInput = row.querySelector('.qty-input');
+                    const subtotalDisplay = row.querySelector('.subtotal-display');
+                    const priceAttr = row.querySelector('.unit-price').dataset.price;
 
-    @if ($salesToday->count())
-        <table class="w-full border text-sm">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="border px-2 py-1">Receipt</th>
-                    <th class="border px-2 py-1">Time</th>
-                    <th class="border px-2 py-1">Amount</th>
-                    <th class="border px-2 py-1">Status</th>
-                    <th class="border px-2 py-1">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($salesToday as $sale)
-                    <tr>
-                        <td class="border px-2 py-1 text-center">
-                            #{{ $sale->id }}
-                        </td>
-                        <td class="border px-2 py-1">
-                            {{ $sale->created_at->format('H:i') }}
-                        </td>
-                        <td class="border px-2 py-1">
-                            {{ number_format($sale->total_amount, 2) }}
-                        </td>
-                        <td class="border px-2 py-1">
-                            @if ($sale->isRefunded())
-                                <span class="text-red-600">Refunded</span>
-                            @else
-                                <span class="text-green-600">Sold</span>
-                            @endif
-                        </td>
-                        <td class="border px-2 py-1 text-center">
-                            <a href="{{ route('sales.show', $sale) }}" class="text-blue-600 text-xs">
-                                View
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p class="text-sm text-gray-500">
-            No sales recorded today.
-        </p>
-    @endif
+                    if (!qtyInput || !subtotalDisplay) return;
 
+                    const qty = parseFloat(qtyInput.value) || 0;
+                    const price = parseFloat(priceAttr) || 0;
+                    const subtotal = qty * price;
+
+                    grandTotal += subtotal;
+
+                    // Update individual row subtotal text
+                    subtotalDisplay.innerText = new Intl.NumberFormat('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).format(subtotal);
+                });
+
+                // 2. Update the Grand Total display
+                const grandTotalDisplay = document.getElementById('grand-total');
+                if (grandTotalDisplay) {
+                    grandTotalDisplay.innerText = new Intl.NumberFormat('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).format(grandTotal);
+                }
+            }
+
+            // 3. Attach the event listener to all inputs once
+            document.querySelectorAll('.qty-input').forEach(input => {
+                input.addEventListener('input', updateTotals);
+            });
+        </script>
 </x-layouts::app>
