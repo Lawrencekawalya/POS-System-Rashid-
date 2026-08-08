@@ -6,7 +6,9 @@ use App\Models\Bill;
 use App\Models\BillItem;
 use App\Models\MenuItem;
 use App\Models\Product;
+use App\Services\SaleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BillController extends Controller
 {
@@ -212,21 +214,53 @@ class BillController extends Controller
     /**
      * Checkout bill (cash or credit)
      */
-    public function checkout(Request $request)
+    public function checkout(Request $request, SaleService $saleService)
     {
         $data = $request->validate([
-            'bill_id' => 'required',
-            'payment_type' => 'required',
+            'bill_id' => 'required|exists:bills,id',
+            'payment_type' => 'required|in:cash,bank,card,mobile_money,room',
         ]);
 
-        $bill = Bill::findOrFail($data['bill_id']);
+        $sale = DB::transaction(function () use ($data, $request, $saleService) {
+            $bill = Bill::with('items')->lockForUpdate()->findOrFail($data['bill_id']);
 
-        $bill->payment_type = $data['payment_type'];
-        $bill->status = 'closed';
-        $bill->save();
+            if ($bill->status !== 'open') {
+                abort(422, 'This bill has already been closed.');
+            }
 
-        // OPTIONAL: deduct stock here
+            if ($bill->items->isEmpty()) {
+                abort(422, 'A bill must contain at least one item before checkout.');
+            }
 
-        return redirect()->back()->with('success', 'Bill closed successfully');
+            $items = $bill->items->map(function (BillItem $item) {
+                return [
+                    'item_type' => $item->item_type,
+                    'product_id' => $item->item_type === 'product' ? $item->item_id : null,
+                    'menu_item_id' => $item->item_type === 'menu' ? $item->item_id : null,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->price,
+                ];
+            })->all();
+
+            $isRoomCharge = $data['payment_type'] === 'room';
+            $sale = $saleService->createSale(
+                $request->user()->id,
+                $items,
+                $isRoomCharge ? 0 : (float) $bill->calculateTotal(),
+                $bill->room_id,
+                $data['payment_type'],
+                true,
+            );
+
+            $bill->update([
+                'payment_type' => $data['payment_type'],
+                'status' => 'closed',
+                'sale_id' => $sale->id,
+            ]);
+
+            return $sale;
+        });
+
+        return redirect()->route('sales.show', $sale)->with('success', 'Bill closed and recorded as a sale.');
     }
 }

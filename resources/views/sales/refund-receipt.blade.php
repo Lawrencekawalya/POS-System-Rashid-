@@ -37,7 +37,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ $refund->product->name }}</td>
+                    <td>{{ $refund->saleItem->name }}</td>
                     <td class="text-center">{{ $refund->quantity }}</td>
                     <td class="text-right">{{ number_format($refund->amount, 0) }}</td>
                 </tr>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CashReconciliation;
 use App\Models\Expense;
-use App\Models\Sale;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,13 +25,13 @@ class CashReconciliationController extends Controller
         $date = now()->toDateString();
 
         // 1. CUMULATIVE REVENUE
-        $totalSales = Sale::sum('total_amount');
+        $totalCashReceived = Payment::where('method', 'cash')->sum('amount');
 
         $totalConfirmedExpenses = Expense::where('status', 'confirmed')
             ->where('payment_method', 'Cash')
             ->sum('amount');
 
-        $openingBalance = $totalSales - $totalConfirmedExpenses;
+        $openingBalance = $totalCashReceived - $totalConfirmedExpenses;
 
         // 2. Pending Expenses (to justify now)
         $pendingExpenses = Expense::where('status', 'pending')
@@ -65,13 +65,13 @@ class CashReconciliationController extends Controller
         $userId = Auth::id();
 
         // 1️ Recalculate cumulative revenue safely
-        $totalSales = Sale::sum('total_amount');
+        $totalCashReceived = Payment::where('method', 'cash')->sum('amount');
 
         $totalConfirmedExpenses = Expense::where('status', 'confirmed')
             ->where('payment_method', 'Cash')
             ->sum('amount');
 
-        $maxExpected = $totalSales - $totalConfirmedExpenses;
+        $maxExpected = $totalCashReceived - $totalConfirmedExpenses;
 
         // 2️ Get selected pending expenses safely
         $selectedExpenseIds = $request->expense_ids ?? [];

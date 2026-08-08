@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\MenuItem;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
-use App\Models\MenuItem;
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -15,15 +16,27 @@ class SaleService
     /**
      * Create a sale with multiple items.
      */
-    public function createSale(int $userId, array $items, float $paidAmount, ?int $roomId = null, string $paymentMethod = 'cash'): Sale
-    {
+    public function createSale(
+        int $userId,
+        array $items,
+        float $paidAmount,
+        ?int $roomId = null,
+        string $paymentMethod = 'cash',
+        bool $useItemPrices = false
+    ): Sale {
         if (empty($items)) {
             throw ValidationException::withMessages([
                 'items' => 'Sale must contain at least one item.',
             ]);
         }
 
-        return DB::transaction(function () use ($userId, $items, $paidAmount, $roomId, $paymentMethod) {
+        if ($paymentMethod === 'room' && ! $roomId) {
+            throw ValidationException::withMessages([
+                'room_id' => 'A room is required when charging a sale to a room.',
+            ]);
+        }
+
+        return DB::transaction(function () use ($userId, $items, $paidAmount, $roomId, $paymentMethod, $useItemPrices) {
 
             $totalAmount = 0;
             $processedItems = [];
@@ -40,16 +53,18 @@ class SaleService
                             'stock' => "Insufficient stock for {$product->name}.",
                         ]);
                     }
+                    $price = $useItemPrices ? (float) $item['unit_price'] : (float) $product->selling_price;
                     $processedItems[] = [
-                        'type' => 'product', 'model' => $product, 'quantity' => $quantity, 'price' => $product->selling_price
+                        'type' => 'product', 'model' => $product, 'quantity' => $quantity, 'price' => $price,
                     ];
-                    $totalAmount += $product->selling_price * $quantity;
+                    $totalAmount += $price * $quantity;
                 } else {
                     $menuItem = MenuItem::findOrFail($item['menu_item_id']);
+                    $price = $useItemPrices ? (float) $item['unit_price'] : (float) $menuItem->price;
                     $processedItems[] = [
-                        'type' => 'menu', 'model' => $menuItem, 'quantity' => $quantity, 'price' => $menuItem->price
+                        'type' => 'menu', 'model' => $menuItem, 'quantity' => $quantity, 'price' => $price,
                     ];
-                    $totalAmount += $menuItem->price * $quantity;
+                    $totalAmount += $price * $quantity;
                 }
             }
 
@@ -98,7 +113,7 @@ class SaleService
 
             // 4️⃣ Record the Payment if money was received
             if ($paidAmount > 0) {
-                \App\Models\Payment::create([
+                Payment::create([
                     'sale_id' => $sale->id,
                     'user_id' => $userId,
                     'amount' => min($paidAmount, $totalAmount), // Record only up to the sale total

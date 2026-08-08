@@ -16,6 +16,7 @@ class Sale extends Model
         'room_id',
         'total_amount',
         'paid_amount',
+        'refunded_amount',
         'change_amount',
         'payment_status',
         'payment_method',
@@ -27,6 +28,7 @@ class Sale extends Model
     protected $casts = [
         'total_amount' => 'decimal:2',
         'paid_amount' => 'decimal:2',
+        'refunded_amount' => 'decimal:2',
         'change_amount' => 'decimal:2',
         'created_at' => 'datetime',
         'refunded_at' => 'datetime',
@@ -43,7 +45,7 @@ class Sale extends Model
      */
     public function getBalanceAttribute(): float
     {
-        return (float) ($this->total_amount - $this->payments()->sum('amount'));
+        return max(0, (float) ($this->total_amount - $this->paid_amount - $this->refunded_amount));
     }
 
     /**
@@ -94,17 +96,17 @@ class Sale extends Model
         return $this->hasMany(SaleRefund::class);
     }
 
-    public function refundedQuantityFor(int $productId): int
+    public function refundedQuantityForSaleItem(int $saleItemId): int
     {
         return (int) $this->refunds()
-            ->where('product_id', $productId)
+            ->where('sale_item_id', $saleItemId)
             ->sum('quantity');
     }
 
     public function isFullyRefunded(): bool
     {
         foreach ($this->items as $item) {
-            if ($this->refundedQuantityFor($item->product_id) < $item->quantity) {
+            if ($this->refundedQuantityForSaleItem($item->id) < $item->quantity) {
                 return false;
             }
         }

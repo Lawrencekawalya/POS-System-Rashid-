@@ -20,7 +20,7 @@ class Room extends Model
 
     public function unpaidSales()
     {
-        return $this->hasMany(Sale::class)->where('payment_status', '!=', 'paid');
+        return $this->hasMany(Sale::class)->whereNotIn('payment_status', ['paid', 'refunded']);
     }
 
     /**
@@ -28,10 +28,9 @@ class Room extends Model
      */
     public function currentBalance(): float
     {
-        $totalSales = $this->sales()->sum('total_amount');
-        $totalPayments = $this->hasMany(Payment::class)->sum('amount');
-        
-        return (float) ($totalSales - $totalPayments);
+        return (float) $this->sales()
+            ->selectRaw('COALESCE(SUM(total_amount - paid_amount - refunded_amount), 0) as balance')
+            ->value('balance');
     }
 
     public function activeBill()

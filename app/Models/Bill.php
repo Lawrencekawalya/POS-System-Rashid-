@@ -11,6 +11,7 @@ class Bill extends Model
         'status',
         'total',
         'payment_type',
+        'sale_id',
     ];
 
     protected $casts = [
@@ -31,6 +32,11 @@ class Bill extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
     }
 
     /*

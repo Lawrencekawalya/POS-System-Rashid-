@@ -10,6 +10,7 @@ class SaleRefund extends Model
 
     protected $fillable = [
         'sale_id',
+        'sale_item_id',
         'product_id',
         'quantity',
         'amount',
@@ -29,5 +30,10 @@ class SaleRefund extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function saleItem()
+    {
+        return $this->belongsTo(SaleItem::class);
     }
 }

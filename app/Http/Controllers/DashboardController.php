@@ -241,8 +241,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
-use App\Models\Product; // Import the Expense model
+use App\Models\Payment; // Import the Expense model
+use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleRefund;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -254,8 +256,8 @@ class DashboardController extends Controller
         // 1. STATS & REVENUE LOGIC
 
         // Cumulative Revenue = All Payments - All Refunds - All CONFIRMED Expenses
-        $totalPaymentsAllTime = \App\Models\Payment::sum('amount');
-        $totalRefundsAllTime = \App\Models\SaleRefund::sum('amount');
+        $totalPaymentsAllTime = Payment::sum('amount');
+        $totalRefundsAllTime = SaleRefund::sum('amount');
         $totalConfirmedExpenses = Expense::where('status', 'confirmed')->sum('amount');
         $cumulativeRevenue = $totalPaymentsAllTime - $totalRefundsAllTime - $totalConfirmedExpenses;
 
@@ -263,20 +265,23 @@ class DashboardController extends Controller
         $grossSalesToday = $salesToday->sum('total_amount');
 
         // Refund total today
-        $refundTotalToday = \App\Models\SaleRefund::whereDate('created_at', $today)->sum('amount');
+        $refundTotalToday = SaleRefund::whereDate('created_at', $today)->sum('amount');
 
         // Actual cash collected today (direct POS + room settlements)
-        $cashReceivedToday = \App\Models\Payment::whereDate('created_at', $today)->sum('amount');
+        $cashReceivedToday = Payment::whereDate('created_at', $today)
+            ->where('method', 'cash')
+            ->sum('amount');
 
         // 2. CASH EXPECTED LOGIC
         // Today's Cash Expected = (Cash Received Today) - (Refunds Today) - (Confirmed Expenses recorded today)
         $expensesToday = Expense::whereDate('expense_date', $today)
             ->where('status', 'confirmed')
+            ->where('payment_method', 'Cash')
             ->sum('amount');
 
         $cashExpected = $cashReceivedToday - $refundTotalToday - $expensesToday;
 
-        $refundCount = \App\Models\SaleRefund::whereDate('created_at', $today)->count();
+        $refundCount = SaleRefund::whereDate('created_at', $today)->count();
 
         // 3. LOW STOCK LOGIC
         $lowStockProducts = Product::where('is_active', true)

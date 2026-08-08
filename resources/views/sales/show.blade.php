@@ -42,10 +42,7 @@
             <table class="w-full text-sm border">
                 @foreach ($sale->items as $item)
                     @php
-                        // For refunds, we still track primarily by product_id in the stock_movements table
-                        // If it's a menu item, we might need a different refund strategy, but for now
-                        // we'll keep the UI working for products.
-                        $refunded = $sale->refundedQuantityFor($item->product_id ?? 0);
+                        $refunded = $sale->refundedQuantityForSaleItem($item->id);
                         $remaining = $item->quantity - $refunded;
                     @endphp
 
@@ -56,7 +53,7 @@
                                 {{ $remaining }} left
                             </td>
                             <td class="border px-2 py-1">
-                                <input type="number" name="items[{{ $item->item_type === 'product' ? $item->product_id : 'menu_'.$item->menu_item_id }}]" min="0"
+                                <input type="number" name="items[{{ $item->id }}]" min="0"
                                     max="{{ $remaining }}" class="w-full border px-1">
                             </td>
                         </tr>

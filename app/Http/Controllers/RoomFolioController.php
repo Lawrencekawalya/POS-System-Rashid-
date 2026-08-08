@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use App\Models\Payment;
+use App\Models\Room;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +16,12 @@ class RoomFolioController extends Controller
      */
     public function show(Room $room)
     {
-        $room->load(['sales' => function($query) {
-            $query->where('payment_status', '!=', 'paid')->with('items');
+        $room->load(['sales' => function ($query) {
+            $query->whereNotIn('payment_status', ['paid', 'refunded'])->with('items');
         }]);
 
         $balance = $room->currentBalance();
-        
+
         // Also get payment history for this room
         $payments = Payment::where('room_id', $room->id)
             ->orWhereIn('sale_id', $room->sales->pluck('id'))
@@ -48,62 +48,57 @@ class RoomFolioController extends Controller
         $targetSaleId = $request->sale_id;
 
         DB::transaction(function () use ($room, $amountToPay, $request, &$remainingPayment, $targetSaleId) {
-            // 1. Record the Payment record
-            Payment::create([
-                'room_id' => $room->id,
-                'sale_id' => $targetSaleId, // Links directly if provided
-                'user_id' => Auth::id(),
-                'amount' => $amountToPay,
-                'method' => $request->method,
-                'remarks' => $request->remarks,
-            ]);
-
-            // 2. Apply payment logic
             if ($targetSaleId) {
-                // Targeted Settlement
-                $sale = Sale::findOrFail($targetSaleId);
-                $newPaidAmount = (float) $sale->paid_amount + $amountToPay;
-                
-                $status = 'partial';
-                if ($newPaidAmount >= (float) $sale->total_amount) {
-                    $newPaidAmount = $sale->total_amount;
-                    $status = 'paid';
+                $sales = $room->sales()
+                    ->whereKey($targetSaleId)
+                    ->whereNotIn('payment_status', ['paid', 'refunded'])
+                    ->lockForUpdate()
+                    ->get();
+
+                if ($sales->isEmpty()) {
+                    abort(422, 'The selected sale does not belong to this room or has already been paid.');
                 }
+            } else {
+                $sales = $room->sales()
+                    ->whereNotIn('payment_status', ['paid', 'refunded'])
+                    ->orderBy('created_at', 'asc')
+                    ->lockForUpdate()
+                    ->get();
+            }
+
+            $outstandingBalance = $sales->sum(fn (Sale $sale) => (float) $sale->total_amount - (float) $sale->paid_amount - (float) $sale->refunded_amount);
+
+            if ($amountToPay > $outstandingBalance) {
+                abort(422, 'Payment exceeds the outstanding room balance.');
+            }
+
+            foreach ($sales as $sale) {
+                if ($remainingPayment <= 0) {
+                    break;
+                }
+
+                $saleBalance = (float) $sale->total_amount - (float) $sale->paid_amount - (float) $sale->refunded_amount;
+                $allocation = min($remainingPayment, $saleBalance);
+                $newPaidAmount = (float) $sale->paid_amount + $allocation;
+
+                Payment::create([
+                    'room_id' => $room->id,
+                    'sale_id' => $sale->id,
+                    'user_id' => Auth::id(),
+                    'amount' => $allocation,
+                    'method' => $request->method,
+                    'remarks' => $request->remarks,
+                ]);
 
                 $sale->update([
                     'paid_amount' => $newPaidAmount,
-                    'payment_status' => $status
+                    'payment_status' => $newPaidAmount >= (float) $sale->total_amount ? 'paid' : 'partial',
                 ]);
-            } else {
-                // Bulk Settlement (FIFO logic)
-                $unpaidSales = $room->sales()
-                    ->where('payment_status', '!=', 'paid')
-                    ->orderBy('created_at', 'asc')
-                    ->get();
 
-                foreach ($unpaidSales as $sale) {
-                    if ($remainingPayment <= 0) break;
-
-                    $saleBalance = (float) ($sale->total_amount - $sale->paid_amount);
-                    
-                    if ($remainingPayment >= $saleBalance) {
-                        $sale->update([
-                            'paid_amount' => $sale->total_amount,
-                            'payment_status' => 'paid'
-                        ]);
-                        $remainingPayment -= $saleBalance;
-                    } else {
-                        $newPaidAmount = (float) $sale->paid_amount + $remainingPayment;
-                        $sale->update([
-                            'paid_amount' => $newPaidAmount,
-                            'payment_status' => 'partial'
-                        ]);
-                        $remainingPayment = 0;
-                    }
-                }
+                $remainingPayment -= $allocation;
             }
         });
 
-        return back()->with('success', 'Payment of ' . number_format($amountToPay, 2) . ' recorded successfully.');
+        return back()->with('success', 'Payment of '.number_format($amountToPay, 2).' recorded successfully.');
     }
 }

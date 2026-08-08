@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\SaleRefund;
 use Carbon\Carbon;
@@ -95,7 +96,7 @@ class ReportController extends Controller
         $grossSales = $sales->sum('total_amount');
 
         // 2. Refund calculation
-        $refundTotal = \App\Models\SaleRefund::whereBetween('created_at', [$from, $to])->sum('amount');
+        $refundTotal = SaleRefund::whereBetween('created_at', [$from, $to])->sum('amount');
 
         // 3. UPDATED: Only fetch CONFIRMED expenses
         // We ignore 'pending' because they haven't been verified by Admin yet
@@ -106,15 +107,18 @@ class ReportController extends Controller
             ->get();
 
         $totalExpenses = $expenses->sum('amount');
+        $cashExpenses = $expenses->where('payment_method', 'Cash')->sum('amount');
 
         // 4. Final Calculations
         $netSales = $grossSales - $refundTotal;
 
         // Actual money collected in this period (Includes direct POS payments + Room settlements)
-        $cashReceived = \App\Models\Payment::whereBetween('created_at', [$from, $to])->sum('amount');
+        $cashReceived = Payment::whereBetween('created_at', [$from, $to])
+            ->where('method', 'cash')
+            ->sum('amount');
 
         // The drawer balance logic
-        $cashExpected = $cashReceived - $refundTotal - $totalExpenses;
+        $cashExpected = $cashReceived - $refundTotal - $cashExpenses;
 
         return view('reports.z-report', compact(
             'startDate',
