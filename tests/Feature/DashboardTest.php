@@ -28,3 +28,20 @@ test('cashiers cannot access the dashboard', function () {
     $response = $this->get(route('dashboard'));
     $response->assertForbidden();
 });
+
+test('admins can view the complete low stock page', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $this->actingAs($admin)
+        ->get(route('products.low-stock'))
+        ->assertOk()
+        ->assertSee('Low Stock Products');
+});
+
+test('cashiers cannot view the complete low stock page', function () {
+    $cashier = User::factory()->create(['role' => 'cashier']);
+
+    $this->actingAs($cashier)
+        ->get(route('products.low-stock'))
+        ->assertForbidden();
+});

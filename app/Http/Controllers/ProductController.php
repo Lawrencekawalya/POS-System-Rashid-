@@ -33,6 +33,21 @@ class ProductController extends Controller
     }
 
     /**
+     * Display all active products at or below the low-stock threshold.
+     */
+    public function lowStock()
+    {
+        $products = Product::where('is_active', true)
+            ->with('stockMovements')
+            ->get()
+            ->filter(fn (Product $product) => $product->isLowStock(5))
+            ->sortBy(fn (Product $product) => $product->currentStock())
+            ->values();
+
+        return view('products.low-stock', compact('products'));
+    }
+
+    /**
      * Show the form for creating a new product.
      */
     public function create()

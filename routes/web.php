@@ -5,12 +5,14 @@ use App\Http\Controllers\CashReconciliationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InventoryReportController;
+use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfitabilityReportController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomFolioController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\TurnoverReportController;
 use App\Http\Controllers\UserController;
@@ -98,15 +100,15 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     | Room Folio & Settlement
     |--------------------------------------------------------------------------
     */
-    Route::get('/rooms/{room}/folio', [\App\Http\Controllers\RoomFolioController::class, 'show'])->name('rooms.folio');
-    Route::post('/rooms/{room}/settle', [\App\Http\Controllers\RoomFolioController::class, 'settle'])->name('rooms.settle');
+    Route::get('/rooms/{room}/folio', [RoomFolioController::class, 'show'])->name('rooms.folio');
+    Route::post('/rooms/{room}/settle', [RoomFolioController::class, 'settle'])->name('rooms.settle');
 
     /*
     |--------------------------------------------------------------------------
     | Menu Management (Shared)
     |--------------------------------------------------------------------------
     */
-    Route::resource('menu-items', \App\Http\Controllers\MenuItemController::class);
+    Route::resource('menu-items', MenuItemController::class);
 });
 
 /*
@@ -133,6 +135,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     | Product Management
     |--------------------------------------------------------------------------
     */
+
+    Route::get('/products/low-stock', [ProductController::class, 'lowStock'])
+        ->name('products.low-stock');
 
     Route::resource('products', ProductController::class);
 
@@ -205,9 +210,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     | Rooms Management
     |--------------------------------------------------------------------------
     */
-    Route::resource('rooms', \App\Http\Controllers\RoomController::class);
+    Route::resource('rooms', RoomController::class);
 });
-
 
 /*
 |--------------------------------------------------------------------------

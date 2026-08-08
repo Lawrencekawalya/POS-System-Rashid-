@@ -119,15 +119,10 @@
                 @endif
             </flux:sidebar.group>
 
-        </flux:sidebar.nav>
-        {{-- 🔔 Stock Section (Role Based) --}}
-        @if(auth()->user()->isAdmin())
-            @include('partials.current-stock-widget', [
-                'products' => \App\Models\Product::all()
-            ])
-        @elseif(auth()->user()->isCashier())
+            {{-- Stock alerts remain inside the scrollable sidebar navigation. --}}
             @include('partials.low-stock-widget')
-        @endif
+
+        </flux:sidebar.nav>
         <flux:spacer />
 
         <flux:sidebar.nav>
