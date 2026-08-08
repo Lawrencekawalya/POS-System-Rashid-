@@ -47,6 +47,8 @@
                     Bottles</option>
                 <option value="cartons" {{ old('unit_type', $product->unit_type) === 'cartons' ? 'selected' : '' }}>
                     Cartons</option>
+                <option value="portion" {{ old('unit_type', $product->unit_type) === 'portion' ? 'selected' : '' }}>
+                    Fresh-cut portions</option>
             </select>
         </div>
 
@@ -144,6 +146,7 @@
                                     <option value="pcs" {{ old('unit_type', $product->unit_type) == 'pcs' ? 'selected' : '' }}>Pieces (pcs)</option>
                                     <option value="bottles" {{ old('unit_type', $product->unit_type) == 'bottles' ? 'selected' : '' }}>Bottles</option>
                                     <option value="cartons" {{ old('unit_type', $product->unit_type) == 'cartons' ? 'selected' : '' }}>Cartons</option>
+                                    <option value="portion" {{ old('unit_type', $product->unit_type) == 'portion' ? 'selected' : '' }}>Fresh-cut portions</option>
                                 </select>
                             </div>
                         </div>

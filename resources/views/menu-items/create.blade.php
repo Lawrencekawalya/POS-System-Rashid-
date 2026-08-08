@@ -46,6 +46,39 @@
                             @error('price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
                     </div>
+
+                    <div x-data="{ tracksStock: @js((bool) old('stock_product_id')) }" class="rounded-xl border border-amber-200 bg-amber-50 p-5">
+                        <h3 class="font-bold text-amber-900">Fresh-cut stock movement</h3>
+                        <p class="mt-1 text-sm text-amber-800">Leave this unselected for items that do not affect stock. Linked items deduct portions when sold.</p>
+
+                        <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <label for="stock_product_id" class="block text-sm font-bold text-gray-700">Fresh-cut product</label>
+                                <select name="stock_product_id" id="stock_product_id" x-on:change="tracksStock = $event.target.value !== ''"
+                                    class="mt-2 w-full rounded-xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">Does not affect stock</option>
+                                    @foreach ($portionProducts as $product)
+                                        <option value="{{ $product->id }}" @selected(old('stock_product_id') == $product->id)>
+                                            {{ $product->name }} ({{ $product->currentStock() }} portions available)
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if ($portionProducts->isEmpty())
+                                    <p class="mt-2 text-xs text-amber-800">No fresh-cut portion products are available. <a href="{{ route('products.create') }}" class="font-bold underline" wire:navigate>Create one first.</a></p>
+                                @endif
+                                @error('stock_product_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label for="stock_quantity" class="block text-sm font-bold text-gray-700">Portions used per menu item</label>
+                                <input type="number" name="stock_quantity" id="stock_quantity" value="{{ old('stock_quantity', 1) }}" min="1" step="1"
+                                    x-bind:disabled="!tracksStock"
+                                    x-bind:class="!tracksStock && 'cursor-not-allowed bg-gray-100 text-gray-400'"
+                                    class="mt-2 w-full rounded-xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                @error('stock_quantity') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="pt-6 border-t flex justify-end">

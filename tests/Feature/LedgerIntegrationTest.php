@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\Sale;
 use App\Models\StockMovement;
 use App\Models\User;
+use App\Services\PartialRefundService;
 use App\Services\RefundService;
 use App\Services\SaleService;
 
@@ -109,4 +110,39 @@ test('a full refund records menu and product refunds but restores stock only for
         ->and($sale->refunds()->count())->toBe(2)
         ->and((float) $sale->refunds()->sum('amount'))->toBe(2500.0)
         ->and($product->fresh()->currentStock())->toBe(3);
+});
+
+test('a fresh-cut menu item deducts and restores its linked product portions', function () {
+    $user = ledgerUser();
+    $freshCut = Product::create([
+        'name' => 'Goat Fresh Cut',
+        'barcode' => 'GOAT-'.fake()->unique()->numerify('#####'),
+        'unit_type' => 'portion',
+        'cost_price' => 6000,
+        'selling_price' => 0,
+        'is_active' => true,
+    ]);
+    StockMovement::create(['product_id' => $freshCut->id, 'quantity' => 5, 'type' => 'purchase']);
+
+    $menuItem = MenuItem::create([
+        'name' => 'Goat Fresh Cut Platter',
+        'price' => 18000,
+        'category' => 'Fresh Cuts',
+        'stock_product_id' => $freshCut->id,
+        'stock_quantity' => 2,
+    ]);
+
+    $sale = app(SaleService::class)->createSale($user->id, [
+        ['item_type' => 'menu', 'menu_item_id' => $menuItem->id, 'quantity' => 2],
+    ], 36000);
+
+    $saleItem = $sale->items()->firstOrFail();
+
+    expect($saleItem->stock_product_id)->toBe($freshCut->id)
+        ->and($saleItem->stock_quantity)->toBe(2)
+        ->and($freshCut->fresh()->currentStock())->toBe(1);
+
+    app(PartialRefundService::class)->refund($sale, $user->id, [$saleItem->id => 1], 'One platter was returned');
+
+    expect($freshCut->fresh()->currentStock())->toBe(3);
 });

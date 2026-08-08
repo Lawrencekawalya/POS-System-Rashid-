@@ -59,10 +59,26 @@ class SaleService
                     ];
                     $totalAmount += $price * $quantity;
                 } else {
-                    $menuItem = MenuItem::findOrFail($item['menu_item_id']);
+                    $menuItem = MenuItem::with('stockProduct')->findOrFail($item['menu_item_id']);
                     $price = $useItemPrices ? (float) $item['unit_price'] : (float) $menuItem->price;
+
+                    $stockQuantity = $menuItem->stockProduct
+                        ? $menuItem->stock_quantity * $quantity
+                        : null;
+
+                    if ($menuItem->stockProduct && $menuItem->stockProduct->currentStock() < $stockQuantity) {
+                        throw ValidationException::withMessages([
+                            'stock' => "Insufficient fresh-cut portions for {$menuItem->name}.",
+                        ]);
+                    }
+
                     $processedItems[] = [
-                        'type' => 'menu', 'model' => $menuItem, 'quantity' => $quantity, 'price' => $price,
+                        'type' => 'menu',
+                        'model' => $menuItem,
+                        'quantity' => $quantity,
+                        'price' => $price,
+                        'stock_product' => $menuItem->stockProduct,
+                        'stock_quantity' => $menuItem->stockProduct ? $menuItem->stock_quantity : null,
                     ];
                     $totalAmount += $price * $quantity;
                 }
@@ -95,6 +111,8 @@ class SaleService
                     'item_type' => $pItem['type'],
                     'product_id' => $pItem['type'] === 'product' ? $pItem['model']->id : null,
                     'menu_item_id' => $pItem['type'] === 'menu' ? $pItem['model']->id : null,
+                    'stock_product_id' => $pItem['type'] === 'menu' ? $pItem['stock_product']?->id : null,
+                    'stock_quantity' => $pItem['type'] === 'menu' ? $pItem['stock_quantity'] : null,
                     'quantity' => $pItem['quantity'],
                     'unit_price' => $pItem['price'],
                     'subtotal' => $pItem['price'] * $pItem['quantity'],
@@ -107,6 +125,17 @@ class SaleService
                         'type' => 'sale',
                         'reference_type' => Sale::class,
                         'reference_id' => $sale->id,
+                    ]);
+                }
+
+                if ($pItem['type'] === 'menu' && $pItem['stock_product']) {
+                    StockMovement::create([
+                        'product_id' => $pItem['stock_product']->id,
+                        'quantity' => -($pItem['stock_quantity'] * $pItem['quantity']),
+                        'type' => 'sale',
+                        'reference_type' => Sale::class,
+                        'reference_id' => $sale->id,
+                        'remarks' => "Fresh-cut portions used by {$pItem['model']->name}",
                     ]);
                 }
             }

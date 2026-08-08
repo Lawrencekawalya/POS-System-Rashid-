@@ -16,6 +16,8 @@ class SaleItem extends Model
         'item_type',
         'product_id',
         'menu_item_id',
+        'stock_product_id',
+        'stock_quantity',
         'quantity',
         'unit_price',
         'subtotal',
@@ -26,6 +28,8 @@ class SaleItem extends Model
         'subtotal' => 'decimal:2',
         'product_id' => 'integer',
         'menu_item_id' => 'integer',
+        'stock_product_id' => 'integer',
+        'stock_quantity' => 'integer',
     ];
 
     /**
@@ -50,6 +54,11 @@ class SaleItem extends Model
     public function menuItem()
     {
         return $this->belongsTo(MenuItem::class);
+    }
+
+    public function stockProduct()
+    {
+        return $this->belongsTo(Product::class, 'stock_product_id');
     }
 
     /**

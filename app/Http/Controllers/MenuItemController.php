@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MenuItemController extends Controller
@@ -12,11 +13,11 @@ class MenuItemController extends Controller
      */
     public function index(Request $request)
     {
-        $query = MenuItem::orderBy('name');
+        $query = MenuItem::with('stockProduct')->orderBy('name');
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('category', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%')
+                ->orWhere('category', 'like', '%'.$request->search.'%');
         }
 
         $menuItems = $query->paginate(15);
@@ -29,7 +30,9 @@ class MenuItemController extends Controller
      */
     public function create()
     {
-        return view('menu-items.create');
+        return view('menu-items.create', [
+            'portionProducts' => $this->portionProducts(),
+        ]);
     }
 
     /**
@@ -41,7 +44,11 @@ class MenuItemController extends Controller
             'name' => 'required|string|max:255|unique:menu_items,name',
             'price' => 'required|numeric|min:0',
             'category' => 'nullable|string|max:255',
+            'stock_product_id' => 'nullable|exists:products,id',
+            'stock_quantity' => 'nullable|integer|min:1|required_with:stock_product_id',
         ]);
+
+        $this->clearStockQuantityWhenUntracked($validated);
 
         MenuItem::create($validated);
 
@@ -54,7 +61,10 @@ class MenuItemController extends Controller
      */
     public function edit(MenuItem $menuItem)
     {
-        return view('menu-items.edit', compact('menuItem'));
+        return view('menu-items.edit', [
+            'menuItem' => $menuItem,
+            'portionProducts' => $this->portionProducts(),
+        ]);
     }
 
     /**
@@ -63,10 +73,14 @@ class MenuItemController extends Controller
     public function update(Request $request, MenuItem $menuItem)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:menu_items,name,' . $menuItem->id,
+            'name' => 'required|string|max:255|unique:menu_items,name,'.$menuItem->id,
             'price' => 'required|numeric|min:0',
             'category' => 'nullable|string|max:255',
+            'stock_product_id' => 'nullable|exists:products,id',
+            'stock_quantity' => 'nullable|integer|min:1|required_with:stock_product_id',
         ]);
+
+        $this->clearStockQuantityWhenUntracked($validated);
 
         $menuItem->update($validated);
 
@@ -83,5 +97,21 @@ class MenuItemController extends Controller
 
         return redirect()->route('menu-items.index')
             ->with('success', 'Menu item deleted successfully.');
+    }
+
+    private function portionProducts()
+    {
+        return Product::where('is_active', true)
+            ->where('unit_type', 'portion')
+            ->orderBy('name')
+            ->get();
+    }
+
+    private function clearStockQuantityWhenUntracked(array &$validated): void
+    {
+        if (empty($validated['stock_product_id'])) {
+            $validated['stock_product_id'] = null;
+            $validated['stock_quantity'] = null;
+        }
     }
 }

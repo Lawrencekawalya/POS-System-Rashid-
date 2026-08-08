@@ -6,7 +6,7 @@
                 <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
                     Kitchen Menu
                 </h2>
-                <p class="mt-1 text-sm text-gray-500">Manage non-inventory items (meals, drinks, etc.) that can be ordered.</p>
+                <p class="mt-1 text-sm text-gray-500">Manage kitchen items and optionally link fresh cuts to portion-based stock.</p>
             </div>
             <div class="mt-4 flex md:mt-0 md:ml-4">
                 <a href="{{ route('menu-items.create') }}"
@@ -62,6 +62,9 @@
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Price</th>
                                 <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Stock Impact</th>
+                                <th scope="col"
                                     class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions</th>
                             </tr>
@@ -81,6 +84,14 @@
                                         <div class="text-sm font-bold text-gray-900">
                                             {{ number_format($item->price, 2) }}
                                         </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        @if ($item->stockProduct)
+                                            <span class="font-semibold text-amber-700">{{ $item->stock_quantity }} portion(s)</span>
+                                            <span class="text-gray-500">of {{ $item->stockProduct->name }}</span>
+                                        @else
+                                            <span class="text-gray-500">No stock movement</span>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end gap-3">

@@ -60,7 +60,7 @@ class PartialRefundService
                 SaleRefund::create([
                     'sale_id' => $sale->id,
                     'sale_item_id' => $saleItem->id,
-                    'product_id' => $saleItem->product_id,
+                    'product_id' => $saleItem->product_id ?? $saleItem->stock_product_id,
                     'quantity' => $qty,
                     'amount' => $amount,
                     'refunded_by' => $userId,
@@ -75,6 +75,17 @@ class PartialRefundService
                         'reference_type' => 'sale',
                         'reference_id' => $sale->id,
                         'remarks' => 'Refund of sale #'.$sale->id,
+                    ]);
+                }
+
+                if ($saleItem->stock_product_id) {
+                    StockMovement::create([
+                        'product_id' => $saleItem->stock_product_id,
+                        'quantity' => $saleItem->stock_quantity * $qty,
+                        'type' => 'refund',
+                        'reference_type' => 'sale',
+                        'reference_id' => $sale->id,
+                        'remarks' => 'Fresh-cut portions restored for refund of sale #'.$sale->id,
                     ]);
                 }
             }
