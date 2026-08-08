@@ -66,7 +66,7 @@ class RoomFolioController extends Controller
                     ->get();
             }
 
-            $outstandingBalance = $sales->sum(fn (Sale $sale) => (float) $sale->total_amount - (float) $sale->paid_amount - (float) $sale->refunded_amount);
+            $outstandingBalance = $sales->sum(fn (Sale $sale) => $sale->balance);
 
             if ($amountToPay > $outstandingBalance) {
                 abort(422, 'Payment exceeds the outstanding room balance.');
@@ -77,7 +77,7 @@ class RoomFolioController extends Controller
                     break;
                 }
 
-                $saleBalance = (float) $sale->total_amount - (float) $sale->paid_amount - (float) $sale->refunded_amount;
+                $saleBalance = $sale->balance;
                 $allocation = min($remainingPayment, $saleBalance);
                 $newPaidAmount = (float) $sale->paid_amount + $allocation;
 
@@ -92,7 +92,7 @@ class RoomFolioController extends Controller
 
                 $sale->update([
                     'paid_amount' => $newPaidAmount,
-                    'payment_status' => $newPaidAmount >= (float) $sale->total_amount ? 'paid' : 'partial',
+                    'payment_status' => $newPaidAmount + (float) ($sale->refunded_amount ?? 0) >= (float) $sale->total_amount ? 'paid' : 'partial',
                 ]);
 
                 $remainingPayment -= $allocation;

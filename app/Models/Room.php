@@ -28,9 +28,12 @@ class Room extends Model
      */
     public function currentBalance(): float
     {
-        return (float) $this->sales()
-            ->selectRaw('COALESCE(SUM(total_amount - paid_amount - refunded_amount), 0) as balance')
-            ->value('balance');
+        $balance = $this->sales()
+            ->selectRaw('COALESCE(SUM(total_amount - COALESCE(paid_amount, 0) - COALESCE(refunded_amount, 0)), 0) as room_balance')
+            ->first()
+            ?->room_balance;
+
+        return (float) $balance;
     }
 
     public function activeBill()

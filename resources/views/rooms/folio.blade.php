@@ -40,7 +40,7 @@
                             </thead>
                             <tbody class="divide-y">
                                 @forelse($room->sales as $sale)
-                                    @php $saleBal = $sale->total_amount - $sale->paid_amount; @endphp
+                                    @php $saleBal = $sale->balance; @endphp
                                     <tr class="hover:bg-gray-50 transition-colors" :class="targetSaleId == '{{ $sale->id }}' ? 'bg-blue-50' : ''">
                                         <td class="px-6 py-4">
                                             <div class="font-bold text-gray-900">#{{ $sale->id }}</div>

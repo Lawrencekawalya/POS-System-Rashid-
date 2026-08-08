@@ -93,6 +93,54 @@ test('room settlement allocates payments to each room sale and rejects another r
         ->assertStatus(422);
 });
 
+test('a room folio includes a partially paid sale with no refunds', function () {
+    $user = ledgerUser();
+    $room = Room::create(['name' => 'A4']);
+    $sale = Sale::create([
+        'user_id' => $user->id, 'room_id' => $room->id, 'total_amount' => 170000,
+        'paid_amount' => 160000, 'change_amount' => 0, 'payment_status' => 'partial', 'payment_method' => 'room',
+    ]);
+
+    expect($sale->refunded_amount)->toBeNull()
+        ->and($sale->balance)->toBe(10000.0)
+        ->and($room->currentBalance())->toBe(10000.0);
+
+    $this->actingAs($user)
+        ->get(route('rooms.folio', $room))
+        ->assertOk()
+        ->assertSee('10,000.00');
+});
+
+test('cashiers can view a room folio and record a front-desk payment', function () {
+    $cashier = ledgerUser();
+    $room = Room::create(['name' => 'A3']);
+    $sale = Sale::create([
+        'user_id' => $cashier->id, 'room_id' => $room->id, 'total_amount' => 1200,
+        'paid_amount' => 0, 'change_amount' => 0, 'payment_status' => 'unpaid', 'payment_method' => 'room',
+    ]);
+
+    $this->actingAs($cashier)
+        ->get(route('pos.index', ['mode' => 'room']))
+        ->assertOk()
+        ->assertSee('Room Service & Folios')
+        ->assertSee('Room A3');
+
+    $this->actingAs($cashier)
+        ->get(route('rooms.folio', $room))
+        ->assertOk()
+        ->assertSee('Room A3 Folio')
+        ->assertSee('1,200.00');
+
+    $this->post(route('rooms.settle', $room), [
+        'amount' => 1200,
+        'method' => 'mobile_money',
+        'remarks' => 'Paid at the front desk',
+    ])->assertRedirect();
+
+    expect($sale->fresh()->payment_status)->toBe('paid')
+        ->and(Payment::where('sale_id', $sale->id)->value('method'))->toBe('mobile_money');
+});
+
 test('a full refund records menu and product refunds but restores stock only for products', function () {
     $user = ledgerUser();
     $product = ledgerProduct();

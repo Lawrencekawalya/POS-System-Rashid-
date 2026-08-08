@@ -45,7 +45,7 @@ class Sale extends Model
      */
     public function getBalanceAttribute(): float
     {
-        return max(0, (float) ($this->total_amount - $this->paid_amount - $this->refunded_amount));
+        return max(0, (float) $this->total_amount - (float) $this->paid_amount - (float) ($this->refunded_amount ?? 0));
     }
 
     /**

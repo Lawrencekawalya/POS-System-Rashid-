@@ -24,6 +24,10 @@
                         wire:navigate>
                         {{ __('Sales') }}
                     </flux:sidebar.item>
+                    {{-- <flux:sidebar.item icon="key" :href="route('pos.index', ['mode' => 'room'])"
+                        :current="request()->routeIs('pos.*') && request('mode') === 'room'" wire:navigate>
+                        {{ __('Room Service & Folios') }}
+                    </flux:sidebar.item> --}}
                     {{-- Expenses: added for cashier --}}
                     <flux:sidebar.group label="{{ __('Expenses') }}" class="mt-4">
                         <flux:sidebar.item icon="plus-circle" :href="route('expenses.create')"
