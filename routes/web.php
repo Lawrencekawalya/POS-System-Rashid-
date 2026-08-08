@@ -139,6 +139,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/products/low-stock', [ProductController::class, 'lowStock'])
         ->name('products.low-stock');
 
+    Route::get('/products/current-stock', [ProductController::class, 'currentStock'])
+        ->name('products.current-stock');
+
     Route::resource('products', ProductController::class);
 
     /*

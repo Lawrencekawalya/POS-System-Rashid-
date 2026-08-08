@@ -48,6 +48,19 @@ class ProductController extends Controller
     }
 
     /**
+     * Display stock levels for every active product.
+     */
+    public function currentStock()
+    {
+        $products = Product::where('is_active', true)
+            ->with('stockMovements')
+            ->orderBy('name')
+            ->get();
+
+        return view('products.current-stock', compact('products'));
+    }
+
+    /**
      * Show the form for creating a new product.
      */
     public function create()

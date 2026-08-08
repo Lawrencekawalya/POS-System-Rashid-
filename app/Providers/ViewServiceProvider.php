@@ -27,7 +27,20 @@ class ViewServiceProvider extends ServiceProvider
                 ->take(5)
                 ->values();
 
-            $view->with('lowStockProducts', $lowStockProducts);
+            $currentStockProducts = Product::where('is_active', true)
+                ->with('stockMovements')
+                ->orderBy('name')
+                ->get()
+                ->map(fn (Product $product) => [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'barcode' => $product->barcode,
+                    'stock' => $product->currentStock(),
+                ])
+                ->take(5)
+                ->values();
+
+            $view->with(compact('lowStockProducts', 'currentStockProducts'));
         });
     }
 }

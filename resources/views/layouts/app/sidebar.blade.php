@@ -123,8 +123,12 @@
                 @endif
             </flux:sidebar.group>
 
-            {{-- Stock alerts remain inside the scrollable sidebar navigation. --}}
-            @include('partials.low-stock-widget')
+            {{-- Stock previews remain inside the scrollable sidebar navigation. --}}
+            @if (auth()->user()->isAdmin())
+                @include('partials.current-stock-widget')
+            @else
+                @include('partials.low-stock-widget')
+            @endif
 
         </flux:sidebar.nav>
         <flux:spacer />
