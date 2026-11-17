@@ -46,13 +46,18 @@
                         :current="request()->routeIs('menu-items.*')" wire:navigate>
                         {{ __('Kitchen Menu') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="qr-code" :href="route('menu.qr')"
+                        :current="request()->routeIs('menu.qr')" wire:navigate>
+                        {{ __('Menu QR Code') }}
+                    </flux:sidebar.item>
                 @endif
 
                 {{-- Admin-only navigation --}}
                 @if (auth()->user()->isAdmin())
                     @php
                         $activeAdminGroup = match (true) {
-                            request()->routeIs('products.*', 'menu-items.*') => 'catalog',
+                            request()->routeIs('products.*', 'menu-items.*', 'menu.qr') => 'catalog',
                             request()->routeIs('rooms.*', 'sales.*') => 'front-desk',
                             request()->routeIs('purchases.*', 'reports.inventory', 'reports.turnover') => 'inventory',
                             request()->routeIs('expenses.*', 'cash.reconcile.*', 'reports.profitability', 'reports.z') => 'finance',
@@ -74,6 +79,7 @@
                             <div x-show="open === 'catalog'" x-transition class="ml-3 space-y-1 border-l border-zinc-200 pl-2 dark:border-zinc-700">
                                 <flux:sidebar.item icon="cube" :href="route('products.index')" :current="request()->routeIs('products.*')" wire:navigate>{{ __('Products') }}</flux:sidebar.item>
                                 <flux:sidebar.item icon="book-open" :href="route('menu-items.index')" :current="request()->routeIs('menu-items.*')" wire:navigate>{{ __('Kitchen Menu') }}</flux:sidebar.item>
+                                <flux:sidebar.item icon="qr-code" :href="route('menu.qr')" :current="request()->routeIs('menu.qr')" wire:navigate>{{ __('Menu QR Code') }}</flux:sidebar.item>
                             </div>
                         </div>
 

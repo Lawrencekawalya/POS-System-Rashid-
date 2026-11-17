@@ -113,6 +113,10 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::resource('menu-items', MenuItemController::class);
+
+    // Printable QR code that opens the guest menu
+    Route::get('/menu-qr-code', [GuestMenuController::class, 'qrCode'])->name('menu.qr');
+    Route::get('/menu-qr-code.svg', [GuestMenuController::class, 'qrCodeSvg'])->name('menu.qr.svg');
 });
 
 /*

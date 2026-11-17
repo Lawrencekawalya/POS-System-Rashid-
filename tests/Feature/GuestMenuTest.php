@@ -127,3 +127,31 @@ test('the menu import is repeatable and keeps existing prices', function () {
         ->assertOk()
         ->assertSeeInOrder(['Breakfast', 'Palace full breakfast', 'Hot Beverages', 'African coffee', 'Bar', 'Soda']);
 });
+
+test('staff get a printable QR code for the menu', function () {
+    $cashier = User::factory()->create(['role' => 'cashier']);
+
+    $this->actingAs($cashier)
+        ->get('http://palacehotel.example/menu-qr-code')
+        ->assertOk()
+        ->assertSee('<svg', false)
+        ->assertSee('http://palacehotel.example/menu')
+        ->assertDontSee('only opens on this computer');
+
+    $this->actingAs($cashier)
+        ->get(route('menu.qr.svg'))
+        ->assertOk()
+        ->assertHeader('Content-Type', 'image/svg+xml')
+        ->assertDownload('menu-qr-code.svg');
+});
+
+test('the QR page warns when it points at a local address', function () {
+    $this->actingAs(User::factory()->create(['role' => 'admin']))
+        ->get('http://127.0.0.1:8000/menu-qr-code')
+        ->assertOk()
+        ->assertSee('only opens on this computer');
+});
+
+test('guests cannot open the QR code page', function () {
+    $this->get(route('menu.qr'))->assertRedirect(route('login'));
+});
