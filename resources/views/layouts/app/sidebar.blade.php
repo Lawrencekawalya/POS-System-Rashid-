@@ -6,8 +6,10 @@
 </head>
 
 <body class="min-h-screen bg-white text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+    {{-- The sidebar itself doesn't scroll: only the middle nav does, so the
+         logo stays at the top and the user menu stays pinned to the bottom. --}}
     <flux:sidebar sticky collapsible="mobile"
-        class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        class="overflow-y-hidden! border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
             <div class="pointer-events-none">
                 <x-app-logo :sidebar="true" wire:navigate />
@@ -15,7 +17,7 @@
             <flux:sidebar.collapse class="lg:hidden" />
         </flux:sidebar.header>
 
-        <flux:sidebar.nav>
+        <flux:sidebar.nav class="-mx-2 min-h-0! flex-1 overflow-y-auto! overscroll-contain px-2">
             <flux:sidebar.group :heading="__('Platform')" class="grid">
 
                 {{-- Sales: visible to everyone --}}
@@ -141,7 +143,6 @@
             @endif
 
         </flux:sidebar.nav>
-        <flux:spacer />
 
         <flux:sidebar.nav>
             {{-- <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
