@@ -32,6 +32,7 @@ class MenuItemController extends Controller
     {
         return view('menu-items.create', [
             'portionProducts' => $this->portionProducts(),
+            'menuSections' => $this->menuSections(),
         ]);
     }
 
@@ -46,9 +47,11 @@ class MenuItemController extends Controller
             'category' => 'nullable|string|max:255',
             'stock_product_id' => 'nullable|exists:products,id',
             'stock_quantity' => 'nullable|integer|min:1|required_with:stock_product_id',
+            'description' => 'nullable|string|max:1000',
         ]);
 
         $this->clearStockQuantityWhenUntracked($validated);
+        $validated['show_on_menu'] = $request->boolean('show_on_menu');
 
         MenuItem::create($validated);
 
@@ -64,6 +67,7 @@ class MenuItemController extends Controller
         return view('menu-items.edit', [
             'menuItem' => $menuItem,
             'portionProducts' => $this->portionProducts(),
+            'menuSections' => $this->menuSections(),
         ]);
     }
 
@@ -78,9 +82,11 @@ class MenuItemController extends Controller
             'category' => 'nullable|string|max:255',
             'stock_product_id' => 'nullable|exists:products,id',
             'stock_quantity' => 'nullable|integer|min:1|required_with:stock_product_id',
+            'description' => 'nullable|string|max:1000',
         ]);
 
         $this->clearStockQuantityWhenUntracked($validated);
+        $validated['show_on_menu'] = $request->boolean('show_on_menu');
 
         $menuItem->update($validated);
 
@@ -97,6 +103,18 @@ class MenuItemController extends Controller
 
         return redirect()->route('menu-items.index')
             ->with('success', 'Menu item deleted successfully.');
+    }
+
+    /**
+     * Food section names from config/menu.php, suggested for the category field.
+     */
+    private function menuSections(): array
+    {
+        return collect(config('menu.groups', []))
+            ->reject(fn (array $group) => ($group['source'] ?? 'menu_items') === 'products')
+            ->flatMap(fn (array $group) => array_keys($group['sections']))
+            ->values()
+            ->all();
     }
 
     private function portionProducts()

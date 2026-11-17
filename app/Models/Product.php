@@ -17,6 +17,7 @@ class Product extends Model
         'cost_price',
         'selling_price',
         'is_active',
+        'menu_section',
     ];
 
     protected $casts = [

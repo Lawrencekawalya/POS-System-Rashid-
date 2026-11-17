@@ -28,10 +28,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="category" class="block text-sm font-bold text-gray-700 dark:text-zinc-200 uppercase tracking-wider mb-2">Category</label>
-                            <input type="text" name="category" id="category" value="{{ old('category', $menuItem->category) }}"
+                            <input type="text" name="category" id="category" list="menu-sections" value="{{ old('category', $menuItem->category) }}"
                                 class="w-full border-gray-300 dark:border-zinc-600 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-3 px-4"
                                 placeholder="e.g. Main Course">
                             @error('category') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                            <datalist id="menu-sections">
+                                @foreach ($menuSections as $section)
+                                    <option value="{{ $section }}"></option>
+                                @endforeach
+                            </datalist>
                         </div>
 
                         <div>
@@ -45,6 +50,27 @@
                                     placeholder="0.00">
                             </div>
                             @error('price') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-orange-200 dark:border-orange-900 bg-orange-50 dark:bg-orange-950/40 p-5 space-y-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-orange-900 dark:text-orange-300">Guest menu</h3>
+                                <p class="mt-1 text-sm text-orange-800 dark:text-orange-300">Shown on the public menu at <a href="{{ route('menu') }}" target="_blank" class="underline">{{ route('menu') }}</a>, under its category.</p>
+                            </div>
+                            <label class="inline-flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-zinc-200 whitespace-nowrap">
+                                <input type="checkbox" name="show_on_menu" value="1" class="rounded border-gray-300 dark:border-zinc-600 text-indigo-600 focus:ring-indigo-500" @checked(old('show_on_menu', $menuItem->show_on_menu))>
+                                Show on guest menu
+                            </label>
+                        </div>
+
+                        <div>
+                            <label for="description" class="block text-sm font-bold text-gray-700 dark:text-zinc-200">Description <span class="font-normal text-gray-500 dark:text-zinc-400">(optional)</span></label>
+                            <textarea name="description" id="description" rows="2" maxlength="1000"
+                                class="mt-2 w-full rounded-xl border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                placeholder="e.g. Served with chips or chapati">{{ old('description', $menuItem->description) }}</textarea>
+                            @error('description') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
                     </div>
 

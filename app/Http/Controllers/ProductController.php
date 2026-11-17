@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -65,7 +66,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        return view('products.create', ['barSections' => $this->barSections()]);
     }
 
     /**
@@ -80,9 +81,11 @@ class ProductController extends Controller
             'unit_type' => 'required|string|max:50',
             'cost_price' => 'required|numeric|min:0.01',
             'selling_price' => 'required|numeric|min:0.01',
+            'menu_section' => ['nullable', 'string', Rule::in($this->barSections())],
         ]);
 
         $validated['is_active'] = $request->has('is_active');
+        $validated['menu_section'] = $validated['menu_section'] ?? null;
 
         Product::create($validated);
 
@@ -96,7 +99,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('products.edit', compact('product'));
+        return view('products.edit', ['product' => $product, 'barSections' => $this->barSections()]);
     }
 
     /**
@@ -111,10 +114,12 @@ class ProductController extends Controller
             'unit_type' => 'required|string|max:50',
             'cost_price' => 'required|numeric|min:0.01',
             'selling_price' => 'required|numeric|min:0.01',
+            'menu_section' => ['nullable', 'string', Rule::in($this->barSections())],
         ]);
 
         // Force boolean value for checkbox
         $validated['is_active'] = $request->has('is_active');
+        $validated['menu_section'] = $validated['menu_section'] ?? null;
 
         $product->update($validated);
 
@@ -133,5 +138,17 @@ class ProductController extends Controller
         return redirect()
             ->route('products.index')
             ->with('success', 'Product deleted successfully.');
+    }
+
+    /**
+     * Bar section names from config/menu.php a product can be listed under.
+     */
+    private function barSections(): array
+    {
+        return collect(config('menu.groups', []))
+            ->filter(fn (array $group) => ($group['source'] ?? null) === 'products')
+            ->flatMap(fn (array $group) => array_keys($group['sections']))
+            ->values()
+            ->all();
     }
 }

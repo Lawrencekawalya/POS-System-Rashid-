@@ -164,6 +164,18 @@
                                 <div class="w-11 h-6 bg-gray-200 dark:bg-zinc-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                             </label>
                         </div>
+                        <div class="mt-5 pt-5 border-t border-gray-100 dark:border-zinc-700">
+                            <label for="menu_section" class="block text-sm font-semibold text-gray-800 dark:text-zinc-100">Guest menu section</label>
+                            <p class="text-xs text-gray-500 dark:text-zinc-400">List this drink on the public menu under a bar heading.</p>
+                            <select name="menu_section" id="menu_section"
+                                class="mt-2 block w-full rounded-lg border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 shadow-sm px-4 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="">Not on the guest menu</option>
+                                @foreach ($barSections as $section)
+                                    <option value="{{ $section }}" @selected(old('menu_section', $product->menu_section) === $section)>{{ $section }}</option>
+                                @endforeach
+                            </select>
+                            @error('menu_section') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
 

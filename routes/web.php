@@ -4,6 +4,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\CashReconciliationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\GuestMenuController;
 use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\POSController;
@@ -27,6 +28,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// Guest menu (public, e.g. opened from a QR code on the table)
+Route::get('/menu', [GuestMenuController::class, 'show'])->name('menu');
 
 /*
 |--------------------------------------------------------------------------
