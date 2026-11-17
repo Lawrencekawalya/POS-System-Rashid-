@@ -1,0 +1,926 @@
+[
+    {
+        "type": "menu_item",
+        "name": "Palace full breakfast",
+        "url": "https://live.staticflickr.com/3064/3016306391_6ceef08d4f_b.jpg",
+        "credit": "Photo: peasap, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/21314760@N00/3016306391"
+    },
+    {
+        "type": "menu_item",
+        "name": "Palace petit breakfast",
+        "url": "https://live.staticflickr.com/3315/3241926435_cb6ec2c588_b.jpg",
+        "credit": "Photo: Avid Hills, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/25690635@N03/3241926435"
+    },
+    {
+        "type": "menu_item",
+        "name": "African coffee",
+        "url": "https://live.staticflickr.com/4070/4325230234_f0919ae3d2_b.jpg",
+        "credit": "Photo: Etenil, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/47140246@N02/4325230234"
+    },
+    {
+        "type": "menu_item",
+        "name": "Black coffee",
+        "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHgxNDE4ODg4LWltYWdlLWt3dnZ5dW51LmpwZw.jpg",
+        "credit": "Photo: Unknown photographer, CC0",
+        "credit_url": "https://www.rawpixel.com/image/5911577/image-public-domain-coffee-free"
+    },
+    {
+        "type": "menu_item",
+        "name": "African tea",
+        "url": "https://pd.w.org/2026/06/7766a285a68672d97.61980722-2048x1536.jpg",
+        "credit": "Photo: Mehraz Morshed, CC0",
+        "credit_url": "https://wordpress.org/photos/photo/7766a285a6/"
+    },
+    {
+        "type": "menu_item",
+        "name": "Black tea",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Cup_of_black_tea.JPG",
+        "credit": "Photo: AntanO, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=40266689"
+    },
+    {
+        "type": "menu_item",
+        "name": "English tea",
+        "url": "https://live.staticflickr.com/8453/8011352063_547f41e52d_b.jpg",
+        "credit": "Photo: jemasmith, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/26085795@N02/8011352063"
+    },
+    {
+        "type": "menu_item",
+        "name": "Lemon tea",
+        "url": "https://live.staticflickr.com/5159/5872068364_fea1a605e2_b.jpg",
+        "credit": "Photo: Forban300, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/64277901@N08/5872068364"
+    },
+    {
+        "type": "menu_item",
+        "name": "Dawa tea",
+        "url": "https://live.staticflickr.com/65535/49617421186_5d53f9be25_b.jpg",
+        "credit": "Photo: rjw1, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/48524258@N00/49617421186"
+    },
+    {
+        "type": "menu_item",
+        "name": "A glass of hot or cold milk",
+        "url": "https://live.staticflickr.com/6102/6331771638_4bf2593829_b.jpg",
+        "credit": "Photo: Marina Shemesh, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/52743784@N05/6331771638"
+    },
+    {
+        "type": "menu_item",
+        "name": "Hot chocolate",
+        "url": "https://live.staticflickr.com/4690/38614148644_4d861f4f59_b.jpg",
+        "credit": "Photo: nick.amoscato, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/91374488@N07/38614148644"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fresh hibiscus flower tea",
+        "url": "https://live.staticflickr.com/7569/15689044632_ac3009c7e2_b.jpg",
+        "credit": "Photo: T.Kiya, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/38217580@N05/15689044632"
+    },
+    {
+        "type": "menu_item",
+        "name": "Iced tea",
+        "url": "https://live.staticflickr.com/862/43670804651_9c4395cf63_b.jpg",
+        "credit": "Photo: Saigon Time, CC0",
+        "credit_url": "https://www.flickr.com/photos/117673294@N04/43670804651"
+    },
+    {
+        "type": "menu_item",
+        "name": "Lemon iced tea",
+        "url": "https://live.staticflickr.com/3257/2427512992_ec7356c26a_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2427512992"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fresh juice",
+        "url": "https://live.staticflickr.com/3799/12396496643_a785f3792e_b.jpg",
+        "credit": "Photo: bertholf, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/61800045@N02/12396496643"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fruit cocktail",
+        "url": "https://live.staticflickr.com/3602/3439622646_b6c1f7f39d_b.jpg",
+        "credit": "Photo: gordonflood.com, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/90074625@N00/3439622646"
+    },
+    {
+        "type": "menu_item",
+        "name": "Bread omelette",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Bread-Omelette_%26_Tea.jpg",
+        "credit": "Photo: Twit Rajat, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=40990227"
+    },
+    {
+        "type": "menu_item",
+        "name": "Sunny side up egg",
+        "url": "https://live.staticflickr.com/2436/3747947540_1ff0a01446_b.jpg",
+        "credit": "Photo: dbgg1979, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/11538141@N08/3747947540"
+    },
+    {
+        "type": "menu_item",
+        "name": "Egg on toast",
+        "url": "https://live.staticflickr.com/7721/17250196716_a7e65324f7_b.jpg",
+        "credit": "Photo: ultrakml, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/34948727@N00/17250196716"
+    },
+    {
+        "type": "menu_item",
+        "name": "Cheese on toast",
+        "url": "https://live.staticflickr.com/3231/3089764056_eb4dd3a704_b.jpg",
+        "credit": "Photo: tristanf, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/89056504@N00/3089764056"
+    },
+    {
+        "type": "menu_item",
+        "name": "Scrambled eggs",
+        "url": "https://live.staticflickr.com/3193/2409085893_ef652e7374_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2409085893"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fried eggs",
+        "url": "https://live.staticflickr.com/2907/13916201522_7079f48d50_b.jpg",
+        "credit": "Photo: Matthew Murdoch, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/54423233@N05/13916201522"
+    },
+    {
+        "type": "menu_item",
+        "name": "Boiled eggs",
+        "url": "https://live.staticflickr.com/8253/8749857318_533678fc8b_b.jpg",
+        "credit": "Photo: Teresa Trimm, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/7714612@N04/8749857318"
+    },
+    {
+        "type": "menu_item",
+        "name": "Omelette",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Omelette-Plate.jpg",
+        "credit": "Photo: MaedaAkihiko, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=106394162"
+    },
+    {
+        "type": "menu_item",
+        "name": "French toast",
+        "url": "https://live.staticflickr.com/2034/2306605339_3a51097b84_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2306605339"
+    },
+    {
+        "type": "menu_item",
+        "name": "A pair of beef sausages",
+        "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvc3YxOTQzNzItaW1hZ2Uta3d2dWh2ajQuanBn.jpg",
+        "credit": "Photo: Unknown photographer, CC0",
+        "credit_url": "https://www.rawpixel.com/image/5902174/photo-image-public-domain-food-free"
+    },
+    {
+        "type": "menu_item",
+        "name": "Toasted or fresh bread",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/27/Toast_bread_slice.jpg",
+        "credit": "Photo: Gnu-Bricoleur, CC BY 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=151011838"
+    },
+    {
+        "type": "menu_item",
+        "name": "A plate of katogo (vegetables)",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/Ugandan_starches.jpg",
+        "credit": "Photo: Roxanne.heston, CC0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=161506695"
+    },
+    {
+        "type": "menu_item",
+        "name": "A plate of katogo (beef)",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Ugandanfoodpumplin_matooke_beef_green_vegetables_chicken_peas.jpg",
+        "credit": "Photo: Rebeccananonof, CC0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=150131126"
+    },
+    {
+        "type": "menu_item",
+        "name": "Greek salad",
+        "url": "https://live.staticflickr.com/7231/7206018248_06d9c21b18_b.jpg",
+        "credit": "Photo: susan@kingstreetmarketinggroup, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/64141731@N00/7206018248"
+    },
+    {
+        "type": "menu_item",
+        "name": "Garden salad",
+        "url": "https://live.staticflickr.com/3229/2664190472_d13e0eb85f_b.jpg",
+        "credit": "Photo: tadd_debbie, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/30304782@N00/2664190472"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken pasta salad",
+        "url": "https://live.staticflickr.com/7188/13920669598_a335b9e893_b.jpg",
+        "credit": "Photo: ken ratcliff, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/95212304@N00/13920669598"
+    },
+    {
+        "type": "menu_item",
+        "name": "Cucumber salad",
+        "url": "https://live.staticflickr.com/7026/6477974999_aafc7940bc_b.jpg",
+        "credit": "Photo: C John Thompson, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/71266843@N03/6477974999"
+    },
+    {
+        "type": "menu_item",
+        "name": "Tomato soup",
+        "url": "https://live.staticflickr.com/2004/2235570691_750d078374_b.jpg",
+        "credit": "Photo: stu_spivack, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/35034346243@N01/2235570691"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable soup",
+        "url": "https://live.staticflickr.com/8198/8175288613_3920fe6939_b.jpg",
+        "credit": "Photo: Bernt Rostad, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/67975030@N00/8175288613"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pumpkin soup",
+        "url": "https://live.staticflickr.com/106/313561882_5830e604fe_b.jpg",
+        "credit": "Photo: stu_spivack, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/35034346243@N01/313561882"
+    },
+    {
+        "type": "menu_item",
+        "name": "Mushroom soup",
+        "url": "https://live.staticflickr.com/2218/2287144051_a7f9c67522_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2287144051"
+    },
+    {
+        "type": "menu_item",
+        "name": "Potato soup",
+        "url": "https://live.staticflickr.com/2318/2238550149_18112793a3_b.jpg",
+        "credit": "Photo: Average Jane, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/64401168@N00/2238550149"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken soup",
+        "url": "https://live.staticflickr.com/2269/2122160738_053b3a2ec3_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2122160738"
+    },
+    {
+        "type": "menu_item",
+        "name": "French onion soup",
+        "url": "https://live.staticflickr.com/1181/539943342_0e09b527df_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/539943342"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pan fried goat mchomo",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Fried_Goat_Meat.jpg",
+        "credit": "Photo: Edithobayaa1, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=103024476"
+    },
+    {
+        "type": "menu_item",
+        "name": "Grilled goat mchomo",
+        "url": "https://live.staticflickr.com/5013/5541270576_1412619dfe_b.jpg",
+        "credit": "Photo: michaelseangallagher, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/13518023@N03/5541270576"
+    },
+    {
+        "type": "menu_item",
+        "name": "Goat curry",
+        "url": "https://live.staticflickr.com/3250/2786164923_fdabe30a28_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2786164923"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beef stroganoff",
+        "url": "https://live.staticflickr.com/4013/4703242780_7a5331cf49_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/4703242780"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beef stir fry",
+        "url": "https://live.staticflickr.com/8107/8496649164_5b8b26cc85_b.jpg",
+        "credit": "Photo: jules:stonesoup, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/58367355@N00/8496649164"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pepper steak",
+        "url": "https://live.staticflickr.com/2360/2225347845_d213300d5e_b.jpg",
+        "credit": "Photo: mdid, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/58246614@N00/2225347845"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beef burger",
+        "url": "https://live.staticflickr.com/3085/2746950805_72ef9b183c_b.jpg",
+        "credit": "Photo: Salim Virji, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/44124427152@N01/2746950805"
+    },
+    {
+        "type": "menu_item",
+        "name": "Cheese burger",
+        "url": "https://live.staticflickr.com/4110/5007282483_72ea82b4b3_b.jpg",
+        "credit": "Photo: BurgerAustin, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/42022505@N03/5007282483"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beef bitoka",
+        "url": "https://live.staticflickr.com/8333/8117286566_81a306687d_b.jpg",
+        "credit": "Photo: jeffreyw, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/7927684@N03/8117286566"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken curry",
+        "url": "https://live.staticflickr.com/218/490198749_37470ad022_b.jpg",
+        "credit": "Photo: rovingI, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/70522326@N00/490198749"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken stroganoff",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Chicken_stroganoff.jpg",
+        "credit": "Photo: Sandip Bhattacharya from Toronto, Canada, CC BY 2.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=131083764"
+    },
+    {
+        "type": "menu_item",
+        "name": "Sweet & sour chicken",
+        "url": "https://live.staticflickr.com/3214/2596872969_663b15eb3b_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2596872969"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken stir fry",
+        "url": "https://live.staticflickr.com/7175/6728585965_aba9d55275_b.jpg",
+        "credit": "Photo: TheGirlsNY, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/55768440@N00/6728585965"
+    },
+    {
+        "type": "menu_item",
+        "name": "Mushroom chicken",
+        "url": "https://live.staticflickr.com/5293/5472169079_585efbca43_b.jpg",
+        "credit": "Photo: TheGirlsNY, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/55768440@N00/5472169079"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken pasta bake",
+        "url": "https://live.staticflickr.com/4152/4977586419_83ff5860b1_b.jpg",
+        "credit": "Photo: Steve A Johnson, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/14529257@N03/4977586419"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken biryani",
+        "url": "https://live.staticflickr.com/2336/2182870752_080dbcaf8c_b.jpg",
+        "credit": "Photo: Charles Haynes, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/87232391@N00/2182870752"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken wrap",
+        "url": "https://live.staticflickr.com/143/335163752_6dee79e3be_b.jpg",
+        "credit": "Photo: Sebastian Mary, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/58862846@N00/335163752"
+    },
+    {
+        "type": "menu_item",
+        "name": "Whole chicken",
+        "url": "https://live.staticflickr.com/8497/8284538008_9ab55958d4_b.jpg",
+        "credit": "Photo: LeonardKong, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/30216515@N05/8284538008"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pork with chips, matooke or chapati",
+        "url": "https://live.staticflickr.com/3048/3015036072_353be8a0fa_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/3015036072"
+    },
+    {
+        "type": "menu_item",
+        "name": "Grilled pork",
+        "url": "https://live.staticflickr.com/2637/3999696317_46dc7c97b8_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/3999696317"
+    },
+    {
+        "type": "menu_item",
+        "name": "Palace pork special",
+        "url": "https://live.staticflickr.com/5106/5625746815_7d0ea89014_b.jpg",
+        "credit": "Photo: TheHungryDudes, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/47854142@N04/5625746815"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pork medallions al creamy",
+        "url": "https://live.staticflickr.com/2028/1782303737_30dc135afd_b.jpg",
+        "credit": "Photo: wickenden, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/26667277@N00/1782303737"
+    },
+    {
+        "type": "menu_item",
+        "name": "Whole fish",
+        "url": "https://pd.w.org/2026/07/3096a5bde86c9be25.93330742-2048x1536.jpg",
+        "credit": "Photo: Joan Namunina, CC0",
+        "credit_url": "https://wordpress.org/photos/photo/3096a5bde8/"
+    },
+    {
+        "type": "menu_item",
+        "name": "Grilled fish fillet (tilapia)",
+        "url": "https://live.staticflickr.com/65535/53484587384_ebae544235_b.jpg",
+        "credit": "Photo: 2508256625, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/198613871@N06/53484587384"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fish fingers or battered fish fillet",
+        "url": "https://live.staticflickr.com/40/82904095_2533b1005f_b.jpg",
+        "credit": "Photo: ndrwfgg, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/69024001@N00/82904095"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fish masala or fish curry",
+        "url": "https://live.staticflickr.com/115/309333096_de09fb4647_b.jpg",
+        "credit": "Photo: rovingI, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/70522326@N00/309333096"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chef's special fish luwombo",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/be/Matooke_and_Luwombo_prepared_chicken.JPG",
+        "credit": "Photo: Namuganyi, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=36393303"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fish stir fry",
+        "url": "https://live.staticflickr.com/8223/8341883833_3612fb2cab_b.jpg",
+        "credit": "Photo: Peter O'Connor aka anemoneprojectors, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/58414938@N00/8341883833"
+    },
+    {
+        "type": "menu_item",
+        "name": "Grilled palace potato special",
+        "url": "https://live.staticflickr.com/3146/2454884545_4dff492b0e_b.jpg",
+        "credit": "Photo: thebittenword.com, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/22198928@N00/2454884545"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable pasta bake",
+        "url": "https://live.staticflickr.com/4152/4977586419_83ff5860b1_b.jpg",
+        "credit": "Photo: Steve A Johnson, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/14529257@N03/4977586419"
+    },
+    {
+        "type": "menu_item",
+        "name": "Mixed vegetable curry",
+        "url": "https://live.staticflickr.com/1335/1040262550_39e13a3648_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/1040262550"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable ratatouille",
+        "url": "https://live.staticflickr.com/6205/6031855501_04a5aff55c_b.jpg",
+        "credit": "Photo: balise42, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/22722986@N08/6031855501"
+    },
+    {
+        "type": "menu_item",
+        "name": "Aloo matar masala",
+        "url": "https://live.staticflickr.com/1326/786285405_898e46c1b5_b.jpg",
+        "credit": "Photo: rusvaplauke, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/7440954@N05/786285405"
+    },
+    {
+        "type": "menu_item",
+        "name": "Aloo gobi masala",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Aloo_gobi.jpg",
+        "credit": "Photo: Unknown photographer, CC BY-SA 2.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=1455961"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable biryani",
+        "url": "https://live.staticflickr.com/5210/5276421343_1ef76a841f_b.jpg",
+        "credit": "Photo: gagandeepsapra, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/17983554@N00/5276421343"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable cutlets",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/Vegetable_cutlets_with_cabbage.jpg",
+        "credit": "Photo: Nickispeaki, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=60999248"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken and bacon pasta bake",
+        "url": "https://live.staticflickr.com/4110/4978196518_ae181cd777_b.jpg",
+        "credit": "Photo: Steve A Johnson, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/14529257@N03/4978196518"
+    },
+    {
+        "type": "menu_item",
+        "name": "Macaroni cheese",
+        "url": "https://live.staticflickr.com/117/260985612_ba245692be_b.jpg",
+        "credit": "Photo: abbamouse, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/92329419@N00/260985612"
+    },
+    {
+        "type": "menu_item",
+        "name": "Spaghetti bolognaise",
+        "url": "https://live.staticflickr.com/3692/11267496906_6648d873fd_b.jpg",
+        "credit": "Photo: matsuyuki, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/12173213@N00/11267496906"
+    },
+    {
+        "type": "menu_item",
+        "name": "Spaghetti carbonara",
+        "url": "https://live.staticflickr.com/23/34677096_e769ea905d_b.jpg",
+        "credit": "Photo: stu_spivack, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/35034346243@N01/34677096"
+    },
+    {
+        "type": "menu_item",
+        "name": "Spaghetti napolitano",
+        "url": "https://live.staticflickr.com/4120/4803085938_16d42baf20_b.jpg",
+        "credit": "Photo: chordmonkey, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/34046467@N06/4803085938"
+    },
+    {
+        "type": "menu_item",
+        "name": "Palace special pizza",
+        "url": "https://live.staticflickr.com/2869/9103596029_8b9c722f53_b.jpg",
+        "credit": "Photo: ray_explores, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/66801522@N00/9103596029"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pizza with olives",
+        "url": "https://live.staticflickr.com/3500/3205051549_206b3829c3_b.jpg",
+        "credit": "Photo: rando111us, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/8469739@N05/3205051549"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable pizza",
+        "url": "https://live.staticflickr.com/3359/4602835745_20b97f5400_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/4602835745"
+    },
+    {
+        "type": "menu_item",
+        "name": "Hawaii pizza",
+        "url": "https://live.staticflickr.com/3939/15452035777_294cefced5_b.jpg",
+        "credit": "Photo: elsie.hui, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/91188380@N05/15452035777"
+    },
+    {
+        "type": "menu_item",
+        "name": "Margherita pizza",
+        "url": "https://live.staticflickr.com/3136/2684906438_b1df99afb7_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2684906438"
+    },
+    {
+        "type": "menu_item",
+        "name": "Bacon, lettuce & tomato (BLT)",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f1/BLT_sandwich_%281%29.jpg",
+        "credit": "Photo: Unknown photographer, CC BY 2.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=1415992"
+    },
+    {
+        "type": "menu_item",
+        "name": "Egg sandwich",
+        "url": "https://live.staticflickr.com/2741/4465937856_dd282a4cea_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/4465937856"
+    },
+    {
+        "type": "menu_item",
+        "name": "Cheese sandwich",
+        "url": "https://live.staticflickr.com/8441/7839601924_207da1e98a_b.jpg",
+        "credit": "Photo: Ruth and Dave, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/95142644@N00/7839601924"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken mayonnaise sandwich",
+        "url": "https://live.staticflickr.com/8270/8712425260_a6769f1435_b.jpg",
+        "credit": "Photo: stu_spivack, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/35034346243@N01/8712425260"
+    },
+    {
+        "type": "menu_item",
+        "name": "Plain chips",
+        "url": "https://live.staticflickr.com/5135/5729028796_6473e15393_b.jpg",
+        "credit": "Photo: waferboard, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/60944931@N00/5729028796"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chips chicken",
+        "url": "https://live.staticflickr.com/1392/1355100945_7a9702198b_b.jpg",
+        "credit": "Photo: BryanAlexander, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/36521954815@N01/1355100945"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chips goat",
+        "url": "https://pd.w.org/2026/03/44169c86421d3e4c3.52989450-2048x1830.jpg",
+        "credit": "Photo: Joan Namunina, CC0",
+        "credit_url": "https://wordpress.org/photos/photo/44169c8642/"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chips beef",
+        "url": "https://live.staticflickr.com/2233/2077104683_7cff12b96f_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/2077104683"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chips pork",
+        "url": "https://live.staticflickr.com/65535/53401154080_39c76902c8_b.jpg",
+        "credit": "Photo: rjw1, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/48524258@N00/53401154080"
+    },
+    {
+        "type": "menu_item",
+        "name": "1kg pork (plain)",
+        "url": "https://live.staticflickr.com/3494/3313928742_c56b8d8b93_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/3313928742"
+    },
+    {
+        "type": "menu_item",
+        "name": "1kg goat",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Nyama_choma_the_cultural_food.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "credit": "Photo: Fatma Ramadhan, CC0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=190628529"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pilau rice",
+        "url": "https://live.staticflickr.com/1424/608627954_b33407aaf3_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/608627954"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chapati",
+        "url": "https://live.staticflickr.com/2179/1557720545_3f16d0f97c_b.jpg",
+        "credit": "Photo: rovingI, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/70522326@N00/1557720545"
+    },
+    {
+        "type": "menu_item",
+        "name": "Sausages (a pair)",
+        "url": "https://live.staticflickr.com/5244/5313699580_44506018a1_b.jpg",
+        "credit": "Photo: Hobbit_71, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/56342890@N03/5313699580"
+    },
+    {
+        "type": "menu_item",
+        "name": "Yellow banana",
+        "url": "https://live.staticflickr.com/10/15288615_8a5421cd9f_b.jpg",
+        "credit": "Photo: keepon, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/44124364575@N01/15288615"
+    },
+    {
+        "type": "menu_item",
+        "name": "Guacamole",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/La_Olla_Guacamole_%26_tortilla_chips.jpg",
+        "credit": "Photo: Unknown photographer, CC BY 2.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=57518025"
+    },
+    {
+        "type": "menu_item",
+        "name": "Popcorn",
+        "url": "https://cdn.stocksnap.io/img-thumbs/960w/885S4Q0UVA.jpg",
+        "credit": "Photo: Alex Munsell, CC0",
+        "credit_url": "https://stocksnap.io/photo/popcorn-bowl-885S4Q0UVA"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken nuggets with chips",
+        "url": "https://live.staticflickr.com/2912/14243316316_5be561f910_b.jpg",
+        "credit": "Photo: Walt Stoneburner, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/8404611@N06/14243316316"
+    },
+    {
+        "type": "menu_item",
+        "name": "Fish fillet or fingers with chips",
+        "url": "https://live.staticflickr.com/2/2112344_8b8ec33226_b.jpg",
+        "credit": "Photo: Kevin Hutchinson, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/36374942@N00/2112344"
+    },
+    {
+        "type": "menu_item",
+        "name": "Ryan chips masala",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Chips_Masala%2C_Cabbage_Salad_and_tomato_sauce.jpg/1280px-Chips_Masala%2C_Cabbage_Salad_and_tomato_sauce.jpg",
+        "credit": "Photo: Samuel Kiongo, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=163098462"
+    },
+    {
+        "type": "menu_item",
+        "name": "Tropical fruit salad",
+        "url": "https://live.staticflickr.com/3644/3471292501_2a47796c37_b.jpg",
+        "credit": "Photo: lori05871, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/10563005@N06/3471292501"
+    },
+    {
+        "type": "menu_item",
+        "name": "Pancake parisienne",
+        "url": "https://live.staticflickr.com/3169/3097935110_31c3a7bdc5_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/3097935110"
+    },
+    {
+        "type": "menu_item",
+        "name": "Assorted fruit platter",
+        "url": "https://live.staticflickr.com/3104/3482675971_ed8e7d21c6_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/3482675971"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chocolate banana",
+        "url": "https://live.staticflickr.com/2299/2246262572_915623782b_b.jpg",
+        "credit": "Photo: stu_spivack, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/35034346243@N01/2246262572"
+    },
+    {
+        "type": "menu_item",
+        "name": "Mango magic",
+        "url": "https://live.staticflickr.com/6184/6049103170_f9dfd0be72_b.jpg",
+        "credit": "Photo: TheGirlsNY, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/55768440@N00/6049103170"
+    },
+    {
+        "type": "menu_item",
+        "name": "Watermelon crush",
+        "url": "https://live.staticflickr.com/3103/2625681138_6451a503d6_b.jpg",
+        "credit": "Photo: corsi photo, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/11211909@N00/2625681138"
+    },
+    {
+        "type": "menu_item",
+        "name": "Tropical storm",
+        "url": "https://live.staticflickr.com/4221/33908826224_d34e090c74_b.jpg",
+        "credit": "Photo: EasyHealthySmoothie, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/150788323@N04/33908826224"
+    },
+    {
+        "type": "menu_item",
+        "name": "Vegetable katogo",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Katogo_Breakfast.jpg",
+        "credit": "Photo: Ssemmanda will, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=162661080"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beef katogo",
+        "url": "https://pd.w.org/2026/04/19069cf48f091c982.61458697-2048x1469.jpg",
+        "credit": "Photo: Joan Namunina, CC0",
+        "credit_url": "https://wordpress.org/photos/photo/19069cf48f/"
+    },
+    {
+        "type": "menu_item",
+        "name": "Groundnut sauce",
+        "url": "https://pd.w.org/2026/07/2036a5bdaf6d43c48.40278748-2048x1600.jpg",
+        "credit": "Photo: Joan Namunina, CC0",
+        "credit_url": "https://wordpress.org/photos/photo/2036a5bdaf/"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beans goulash",
+        "url": "https://live.staticflickr.com/8324/8083012836_e1fe06a791_b.jpg",
+        "credit": "Photo: Stacy Spensley, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/21001756@N06/8083012836"
+    },
+    {
+        "type": "menu_item",
+        "name": "Peas goulash",
+        "url": "https://live.staticflickr.com/4001/4589742986_56c647eda8_b.jpg",
+        "credit": "Photo: Jason Riedy, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/66142667@N00/4589742986"
+    },
+    {
+        "type": "menu_item",
+        "name": "Beef or goat stew",
+        "url": "https://live.staticflickr.com/22/37188624_c48be2f7a0_b.jpg",
+        "credit": "Photo: avlxyz, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/10559879@N00/37188624"
+    },
+    {
+        "type": "menu_item",
+        "name": "Chicken stew",
+        "url": "https://live.staticflickr.com/1298/1205814362_e1971b43f9_b.jpg",
+        "credit": "Photo: rovingI, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/70522326@N00/1205814362"
+    },
+    {
+        "type": "product",
+        "name": "Soda",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Coca-Cola_glass_bottle.png",
+        "credit": "Photo: Oleg Yunakov, CC BY-SA 4.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=152630317"
+    },
+    {
+        "type": "product",
+        "name": "Heineken 330ml",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Heineken_Bottle.JPG",
+        "credit": "Photo: Sansvase, CC BY-SA 3.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=18918622"
+    },
+    {
+        "type": "product",
+        "name": "Heineken Can 500ml",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Heineken_can_2011_UEFA_Champions_League_Final.jpg",
+        "credit": "Photo: Humero Simpson, CC0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=15115202"
+    },
+    {
+        "type": "product",
+        "name": "Captain Morgan",
+        "url": "https://live.staticflickr.com/2614/3726289163_894913f364_b.jpg",
+        "credit": "Photo: FaceMePLS, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/38891071@N00/3726289163"
+    },
+    {
+        "type": "product",
+        "name": "Captain Morgan Quarter",
+        "url": "https://live.staticflickr.com/2614/3726289163_894913f364_b.jpg",
+        "credit": "Photo: FaceMePLS, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/38891071@N00/3726289163"
+    },
+    {
+        "type": "product",
+        "name": "Black Label Full",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/21/Johnnie_Walker_Black_Label.jpg",
+        "credit": "Photo: Iceman7840, CC BY-SA 3.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=16224778"
+    },
+    {
+        "type": "product",
+        "name": "Black Label Shot",
+        "url": "https://live.staticflickr.com/8506/8449824755_06a4385ff7_b.jpg",
+        "credit": "Photo: pilonjea, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/57796686@N00/8449824755"
+    },
+    {
+        "type": "product",
+        "name": "Red Bull",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Pyramid_of_Red_Bull_cans.jpg",
+        "credit": "Photo: Rodrigo.Argenton, CC BY-SA 3.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=33029353"
+    },
+    {
+        "type": "product",
+        "name": "Sting",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Sting_energy_drink_gold_rush.jpg",
+        "credit": "Photo: WH33LS, CC BY 3.0",
+        "credit_url": "https://commons.wikimedia.org/w/index.php?curid=104392040"
+    },
+    {
+        "type": "product",
+        "name": "Guarana",
+        "url": "https://live.staticflickr.com/3646/3606091300_a99e57564d_b.jpg",
+        "credit": "Photo: Carl242, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/29751864@N08/3606091300"
+    },
+    {
+        "type": "product",
+        "name": "4 Cousins Red",
+        "url": "https://live.staticflickr.com/1238/1403787329_39c4a6df14_b.jpg",
+        "credit": "Photo: willia4, CC BY-SA 2.0",
+        "credit_url": "https://www.flickr.com/photos/21854088@N00/1403787329"
+    },
+    {
+        "type": "product",
+        "name": "4 Cousins White",
+        "url": "https://live.staticflickr.com/550/19529672220_d844901bb9_b.jpg",
+        "credit": "Photo: Didriks, CC BY 2.0",
+        "credit_url": "https://www.flickr.com/photos/49889671@N03/19529672220"
+    }
+]
