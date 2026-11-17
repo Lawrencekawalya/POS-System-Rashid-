@@ -9,7 +9,8 @@
 @source "../**/*.blade.php"; 
 @source "../**/*.jsx";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* Anything inside a `.light` container (e.g. printable receipts) keeps its light styles. */
+@custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -48,6 +49,20 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
+    /* Native controls (selects, date pickers, scrollbars) follow the theme. */
+    .dark {
+        color-scheme: dark;
+    }
+
+    .dark *:not(:where(.light, .light *)) {
+        border-color: var(--color-zinc-700, currentColor);
+    }
+
+    .light {
+        color-scheme: light;
+        color: var(--color-black);
+    }
 }
 
 [data-flux-field]:not(ui-radio, ui-checkbox) {
@@ -67,3 +82,38 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Tom Select (product search dropdowns) in dark mode. Unlayered so it beats the library's own CSS. */
+.dark .ts-wrapper .ts-control,
+.dark .ts-wrapper.single .ts-control,
+.dark .ts-wrapper.single.input-active .ts-control,
+.dark .ts-wrapper.focus .ts-control {
+    background: var(--color-zinc-900);
+    border-color: var(--color-zinc-600);
+    color: var(--color-zinc-100);
+}
+
+.dark .ts-wrapper .ts-control > input {
+    color: var(--color-zinc-100);
+}
+
+.dark .ts-wrapper .ts-control > input::placeholder {
+    color: var(--color-zinc-500);
+}
+
+.dark .ts-dropdown {
+    background: var(--color-zinc-900);
+    border-color: var(--color-zinc-700);
+    color: var(--color-zinc-100);
+}
+
+.dark .ts-dropdown .active {
+    background: var(--color-zinc-700);
+    color: var(--color-white);
+}
+
+.dark .ts-dropdown .no-results,
+.dark .ts-dropdown .optgroup-header {
+    background: transparent;
+    color: var(--color-zinc-400);
+}

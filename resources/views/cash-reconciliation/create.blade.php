@@ -3,7 +3,7 @@
     <h1 class="text-xl font-semibold mb-4">Cash Reconciliation</h1>
     <div class="flex items-center justify-between mb-4">
         @if ($errors->any())
-        <div class="mb-4 text-red-600">
+        <div class="mb-4 text-red-600 dark:text-red-400">
             {{ $errors->first() }}
         </div>
         @endif
@@ -16,12 +16,12 @@
 
         <div class="mb-3">
             <label class="block text-sm">Business Date</label>
-            <input value="{{ $date }}" disabled class="border px-3 py-2 w-full bg-gray-100">
+            <input value="{{ $date }}" disabled class="border px-3 py-2 w-full bg-gray-100 dark:bg-zinc-800">
         </div>
 
         <div class="mb-3">
             <label class="block text-sm">Cash Expected</label>
-            <input value="{{ number_format($cashExpected, 2) }}" disabled class="border px-3 py-2 w-full bg-gray-100">
+            <input value="{{ number_format($cashExpected, 2) }}" disabled class="border px-3 py-2 w-full bg-gray-100 dark:bg-zinc-800">
         </div>
 
         <div class="mb-3">
@@ -34,7 +34,7 @@
             <textarea name="notes" class="border px-3 py-2 w-full"></textarea>
         </div>
 
-        <button class="bg-black text-white px-4 py-2 w-full">
+        <button class="bg-black dark:bg-white text-white dark:text-zinc-900 px-4 py-2 w-full">
             Submit Reconciliation
         </button>
     </form>
@@ -47,7 +47,7 @@
         <h1 class="text-2xl font-bold mb-6">Cash Reconciliation</h1>
 
         @if ($errors->any())
-            <div class="mb-4 p-3 bg-red-100 text-red-600 rounded-lg text-sm">
+            <div class="mb-4 p-3 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-lg text-sm">
                 {{ $errors->first() }}
             </div>
         @endif
@@ -82,10 +82,10 @@
             </div>
 
             <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase text-gray-500 mb-3 tracking-widest">Justify Pending Expenses</h3>
-                <div class="bg-white border rounded-xl overflow-hidden">
+                <h3 class="text-sm font-bold uppercase text-gray-500 dark:text-zinc-400 mb-3 tracking-widest">Justify Pending Expenses</h3>
+                <div class="bg-white dark:bg-zinc-900 border rounded-xl overflow-hidden">
                     <table class="w-full text-sm">
-                        <thead class="bg-gray-50 border-b">
+                        <thead class="bg-gray-50 dark:bg-zinc-800 border-b">
                             <tr>
                                 <th class="p-3 text-left">Verify</th>
                                 <th class="p-3 text-left">Category</th>
@@ -98,13 +98,13 @@
                                     <td class="p-3">
                                         <input type="checkbox" name="expense_ids[]" value="{{ $expense->id }}"
                                             data-amount="{{ $expense->amount }}"
-                                            class="expense-checkbox w-4 h-4 rounded text-indigo-600">
+                                            class="expense-checkbox w-4 h-4 rounded text-indigo-600 dark:text-indigo-400">
                                     </td>
                                     <td class="p-3">
                                         <div class="font-medium">{{ $expense->category }}</div>
                                         <div class="text-xs text-gray-400">{{ $expense->notes }}</div>
                                     </td>
-                                    <td class="p-3 text-right font-mono font-bold text-gray-700">
+                                    <td class="p-3 text-right font-mono font-bold text-gray-700 dark:text-zinc-200">
                                         {{ number_format($expense->amount) }}
                                     </td>
                                 </tr>
@@ -119,18 +119,18 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            <div class="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-gray-200 dark:border-zinc-700 shadow-sm space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Actual Cash Counted</label>
+                    <label class="block text-xs font-bold uppercase text-gray-500 dark:text-zinc-400 mb-1">Actual Cash Counted</label>
                     <input name="cash_counted" id="cash_counted" type="number" step="0.01"
-                        class="w-full border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold"
+                        class="w-full border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold"
                         placeholder="Enter total money in drawer">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Notes / Discrepancy
+                    <label class="block text-xs font-bold uppercase text-gray-500 dark:text-zinc-400 mb-1">Notes / Discrepancy
                         Reason</label>
-                    <textarea name="notes" rows="2" class="w-full border-gray-300 rounded-lg text-sm"
+                    <textarea name="notes" rows="2" class="w-full border-gray-300 dark:border-zinc-600 rounded-lg text-sm"
                         placeholder="e.g. Forgot to record a small expense..."></textarea>
                 </div>
 

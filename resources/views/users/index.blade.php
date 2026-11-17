@@ -3,13 +3,13 @@
     <h1 class="text-xl font-semibold mb-4">User Management</h1>
 
     @if (session('success'))
-        <div class="mb-3 p-2 bg-green-100 text-green-800 rounded">
+        <div class="mb-3 p-2 bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 rounded">
             {{ session('success') }}
         </div>
     @endif
 
     @if (session('error'))
-        <div class="mb-3 p-2 bg-red-100 text-red-800 rounded">
+        <div class="mb-3 p-2 bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 rounded">
             {{ session('error') }}
         </div>
     @endif
@@ -22,7 +22,7 @@
 
     <table class="w-full border text-sm">
         <thead>
-            <tr class="bg-gray-100">
+            <tr class="bg-gray-100 dark:bg-zinc-800">
                 <th class="border px-2 py-1">Name</th>
                 <th class="border px-2 py-1">Email</th>
                 <th class="border px-2 py-1 text-center">Role</th>
@@ -42,14 +42,14 @@
                         {{ ucfirst($user->role) }}
                     </td>
                     <td class="border px-2 py-1 text-center space-x-2">
-                        <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:underline">
+                        <a href="{{ route('users.edit', $user) }}" class="text-blue-600 dark:text-blue-400 hover:underline">
                             Edit
                         </a>
 
                         <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button onclick="return confirm('Delete this user?')" class="text-red-600 hover:underline">
+                            <button onclick="return confirm('Delete this user?')" class="text-red-600 dark:text-red-400 hover:underline">
                                 Delete
                             </button>
                         </form>
@@ -57,7 +57,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="border px-2 py-2 text-center text-gray-500">
+                    <td colspan="4" class="border px-2 py-2 text-center text-gray-500 dark:text-zinc-400">
                         No users found
                     </td>
                 </tr>

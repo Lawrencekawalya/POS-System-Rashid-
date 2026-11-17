@@ -3,7 +3,7 @@
     <h1 class="text-xl font-semibold mb-4">Edit User</h1>
 
     @if ($errors->any())
-        <div class="mb-3 p-2 bg-red-100 text-red-800 rounded">
+        <div class="mb-3 p-2 bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 rounded">
             <ul class="list-disc list-inside">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -52,7 +52,7 @@
                 Update User
             </button>
 
-            <a href="{{ route('users.index') }}" class="px-4 py-2 bg-gray-300 rounded">
+            <a href="{{ route('users.index') }}" class="px-4 py-2 bg-gray-300 dark:bg-zinc-600 rounded">
                 Cancel
             </a>
         </div>

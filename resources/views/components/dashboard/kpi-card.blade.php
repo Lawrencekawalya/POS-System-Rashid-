@@ -1,5 +1,5 @@
 <div class="rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
-    <div class="text-sm text-neutral-500 mb-1">
+    <div class="text-sm text-neutral-500 dark:text-zinc-400 mb-1">
         {{ $label }}
     </div>
 

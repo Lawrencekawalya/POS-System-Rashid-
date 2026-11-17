@@ -14,17 +14,17 @@
                     class="border px-2 py-1 rounded text-sm">
             </div>
 
-            <button class="px-3 py-1 bg-black text-white rounded text-sm">
+            <button class="px-3 py-1 bg-black dark:bg-white text-white dark:text-zinc-900 rounded text-sm">
                 View
             </button>
         </form>
 
-        <button onclick="window.print()" class="px-3 py-1 bg-black text-white rounded text-sm">
+        <button onclick="window.print()" class="px-3 py-1 bg-black dark:bg-white text-white dark:text-zinc-900 rounded text-sm">
             Print
         </button>
     </div>
 
-    <div class="thermal-receipt mx-auto">
+    <div class="light thermal-receipt mx-auto">
 
         <h1 class="text-center font-bold mb-2">Z REPORT</h1>
         {{-- <p class="text-center text-xs mb-2">Date: {{ $date }}</p> -
@@ -140,18 +140,18 @@
     <div class="print:hidden flex justify-between mb-4">
         <form method="GET" class="flex gap-2 items-end">
             <div>
-                <label class="text-xs font-bold text-gray-500">From</label>
+                <label class="text-xs font-bold text-gray-500 dark:text-zinc-400">From</label>
                 <input type="date" name="start_date" value="{{ $startDate }}"
                     class="border px-2 py-1 rounded text-sm focus:ring-2 focus:ring-black">
             </div>
 
             <div>
-                <label class="text-xs font-bold text-gray-500">To</label>
+                <label class="text-xs font-bold text-gray-500 dark:text-zinc-400">To</label>
                 <input type="date" name="end_date" value="{{ $endDate }}"
                     class="border px-2 py-1 rounded text-sm focus:ring-2 focus:ring-black">
             </div>
 
-            <button class="px-4 py-1 bg-black text-white rounded text-sm hover:bg-gray-800 transition">
+            <button class="px-4 py-1 bg-black dark:bg-white text-white dark:text-zinc-900 rounded text-sm hover:bg-gray-800 dark:hover:bg-zinc-200 transition">
                 View
             </button>
         </form>
@@ -161,7 +161,7 @@
         </button>
     </div>
 
-    <div class="thermal-receipt mx-auto shadow-sm border border-gray-100">
+    <div class="light thermal-receipt mx-auto shadow-sm border border-gray-100 dark:border-zinc-700">
 
         <h1 class="text-center font-bold text-lg mb-1">Z REPORT</h1>
         <p class="text-center text-[10px] uppercase tracking-widest mb-2 underline">Financial Summary</p>
@@ -176,18 +176,18 @@
                 <span>{{ number_format($grossSales) }}</span>
             </div>
 
-            <div class="flex justify-between text-red-600 italic">
+            <div class="flex justify-between text-red-600 dark:text-red-400 italic">
                 <span>Total Refunds</span>
                 <span>-{{ number_format($refundTotal) }}</span>
             </div>
 
-            <div class="flex justify-between font-bold border-t border-black pt-1 mt-1">
+            <div class="flex justify-between font-bold border-t border-black dark:border-zinc-400 pt-1 mt-1">
                 <span>Net Sales</span>
                 <span>{{ number_format($netSales) }}</span>
             </div>
 
             {{-- Strictly Confirmed Expenses --}}
-            <div class="flex justify-between text-red-600 italic">
+            <div class="flex justify-between text-red-600 dark:text-red-400 italic">
                 <span>Confirmed Expenses</span>
                 <span>-{{ number_format($totalExpenses) }}</span>
             </div>
@@ -198,17 +198,17 @@
                 <span>{{ number_format($cashReceived) }}</span>
             </div>
 
-            <div class="flex justify-between text-red-600 italic">
+            <div class="flex justify-between text-red-600 dark:text-red-400 italic">
                 <span>Cash Refunded</span>
                 <span>-{{ number_format($cashRefunded) }}</span>
             </div>
 
-            <div class="flex justify-between text-red-600 italic">
+            <div class="flex justify-between text-red-600 dark:text-red-400 italic">
                 <span>Cash Expenses</span>
                 <span>-{{ number_format($cashExpenses) }}</span>
             </div>
 
-            <div class="flex justify-between font-bold border-t-2 border-black pt-1 mt-2 text-sm bg-gray-50 px-1">
+            <div class="flex justify-between font-bold border-t-2 border-black dark:border-zinc-400 pt-1 mt-2 text-sm bg-gray-50 dark:bg-zinc-800 px-1">
                 <span>CASH EXPECTED</span>
                 <span>{{ number_format($cashExpected) }}</span>
             </div>
@@ -234,12 +234,12 @@
         @endphp
 
         @if($pendingExpenses->count() > 0)
-            <div class="mt-4 p-2 bg-yellow-50 border border-yellow-200 print:bg-transparent print:border-black">
-                <p class="text-[9px] font-bold text-yellow-800 uppercase print:text-black italic underline">
+            <div class="mt-4 p-2 bg-yellow-50 dark:bg-yellow-950/40 border border-yellow-200 dark:border-yellow-900 print:bg-transparent print:border-black">
+                <p class="text-[9px] font-bold text-yellow-800 dark:text-yellow-300 uppercase print:text-black italic underline">
                     * Pending Review (Not in Total)
                 </p>
                 @foreach($pendingExpenses as $pending)
-                    <div class="flex justify-between text-[9px] text-yellow-700 print:text-black">
+                    <div class="flex justify-between text-[9px] text-yellow-700 dark:text-yellow-300 print:text-black">
                         <span>{{ $pending->category }}</span>
                         <span>{{ number_format($pending->amount) }}</span>
                     </div>
@@ -247,7 +247,7 @@
             </div>
         @endif
 
-        <div class="mt-6 border-t border-dashed pt-2 text-center text-[9px] text-gray-500 italic">
+        <div class="mt-6 border-t border-dashed pt-2 text-center text-[9px] text-gray-500 dark:text-zinc-400 italic">
             <p>Generated by: {{ auth()->user()->name }}</p>
             <p>{{ now()->format('Y-m-d H:i:s') }}</p>
         </div>

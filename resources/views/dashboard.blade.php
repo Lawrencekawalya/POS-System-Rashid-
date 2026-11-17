@@ -2,10 +2,10 @@
 
     {{-- 1. Top KPI Row (4 Columns) --}}
     <div class="grid gap-4 md:grid-cols-4">
-        <div class="p-4 bg-black text-white rounded-xl border border-neutral-800 shadow-sm">
+        <div class="p-4 bg-black dark:bg-zinc-950 text-white rounded-xl border border-neutral-800 dark:border-zinc-600 shadow-sm">
             <div class="text-neutral-400 text-xs uppercase tracking-wider font-bold">Cumulative Revenue</div>
             <div class="text-2xl font-bold mt-1 text-blue-400">{{ number_format($cumulativeRevenue, 0) }}</div>
-            <div class="text-xs text-neutral-500 mt-2">All-time total</div>
+            <div class="text-xs text-neutral-500 dark:text-zinc-400 mt-2">All-time total</div>
         </div>
 
         <x-dashboard.kpi-card label="Net Sales Today" :value="number_format($netSalesToday, 0)" :subtext="'Gross: ' . number_format($grossSalesToday, 0)" />
@@ -18,33 +18,33 @@
     <div class="grid gap-6 md:grid-cols-2 mt-6">
 
         {{-- Top Selling Products --}}
-        <div class="rounded-xl border border-neutral-200 bg-white shadow-sm overflow-hidden">
-            <div class="p-4 font-semibold border-b bg-gray-50 flex items-center justify-between">
+        <div class="rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
+            <div class="p-4 font-semibold border-b bg-gray-50 dark:bg-zinc-800 flex items-center justify-between">
                 <span>🔥 Top 5 Sellers Today</span>
             </div>
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+                <thead class="bg-gray-50 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 uppercase text-xs">
                     <tr>
                         <th class="px-4 py-2 text-left">Product</th>
                         <th class="px-4 py-2 text-center">Qty</th>
                         <th class="px-4 py-2 text-right">Revenue</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-100 dark:divide-zinc-700">
                     {{-- {{ $product->name }}--}}
                     @forelse($topProducts as $index => $item)
                         {{-- @php $item = (array) $item; @endphp {{-- Ensure it is an array --}}
-                        <tr class="hover:bg-blue-50/50 transition">
+                        <tr class="hover:bg-blue-50/50 dark:hover:bg-blue-950/40 transition">
                             <td class="px-4 py-3 font-medium">
                                 <span class="text-gray-400 mr-2">#{{ $index + 1 }}</span>
                                 {{ $item->name }}
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">
+                                <span class="bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-bold">
                                     {{ number_format($item->total_qty) }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-right font-mono font-bold text-gray-700">
+                            <td class="px-4 py-3 text-right font-mono font-bold text-gray-700 dark:text-zinc-200">
                                 {{ number_format($item->total_revenue, 0) }}
                             </td>
                         </tr>
@@ -58,9 +58,9 @@
         </div>
 
         {{-- Low Stock Alerts --}}
-        <div class="rounded-xl border border-red-200 bg-red-50 p-4">
+        <div class="rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 p-4">
             <div class="mb-3 flex items-center justify-between gap-3">
-                <h3 class="flex items-center gap-2 font-bold text-red-800">
+                <h3 class="flex items-center gap-2 font-bold text-red-800 dark:text-red-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,14 +68,14 @@
                     </svg>
                     Low Stock Alerts
                 </h3>
-                <a href="{{ route('products.low-stock') }}" class="text-sm font-semibold text-red-700 hover:text-red-900" wire:navigate>
+                <a href="{{ route('products.low-stock') }}" class="text-sm font-semibold text-red-700 dark:text-red-300 hover:text-red-900 dark:hover:text-red-300" wire:navigate>
                     See all
                 </a>
             </div>
             <div class="space-y-2">
                 @forelse($lowStockProducts as $product)
-                    <div class="flex justify-between items-center bg-white p-3 rounded-lg border border-red-100 shadow-sm">
-                        <span class="text-sm font-semibold text-gray-700">
+                    <div class="flex justify-between items-center bg-white dark:bg-zinc-900 p-3 rounded-lg border border-red-100 dark:border-red-900 shadow-sm">
+                        <span class="text-sm font-semibold text-gray-700 dark:text-zinc-200">
                             {{ $product['name'] }}
                         </span>
                         <span class="text-xs font-bold bg-red-600 text-white px-2 py-1 rounded">
@@ -83,20 +83,20 @@
                         </span>
                     </div>
                 @empty
-                    <p class="text-xs text-green-600 italic">All stock levels healthy.</p>
+                    <p class="text-xs text-green-600 dark:text-green-400 italic">All stock levels healthy.</p>
                 @endforelse
             </div>
         </div>
     </div>
 
     {{-- 3. Activity Feed (Full Width) --}}
-    <div class="mt-6 rounded-xl border border-neutral-200 bg-white shadow-sm overflow-hidden">
-        <div class="p-4 font-semibold border-b bg-gray-50 flex justify-between items-center">
+    <div class="mt-6 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
+        <div class="p-4 font-semibold border-b bg-gray-50 dark:bg-zinc-800 flex justify-between items-center">
             <span>Full Sales History</span>
-            <span class="text-xs font-normal text-gray-500">Showing 20 per page</span>
+            <span class="text-xs font-normal text-gray-500 dark:text-zinc-400">Showing 20 per page</span>
         </div>
         <table class="w-full text-sm">
-            <thead class="bg-neutral-50 text-gray-600">
+            <thead class="bg-neutral-50 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300">
                 <tr>
                     <th class="px-4 py-3 text-left font-semibold">Time</th>
                     <th class="px-4 py-3 text-left font-semibold">Sale #</th>
@@ -105,15 +105,15 @@
                     <th class="px-4 py-3 text-center font-semibold">Status</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-neutral-100">
+            <tbody class="divide-y divide-neutral-100 dark:divide-zinc-700">
                 @forelse ($recentSales as $sale)
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-4 py-3 text-gray-500">{{ $sale->created_at->format('H:i') }}</td>
+                    <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                        <td class="px-4 py-3 text-gray-500 dark:text-zinc-400">{{ $sale->created_at->format('H:i') }}</td>
                         <td class="px-4 py-3 font-medium">#{{ $sale->id }}</td>
-                        <td class="px-4 py-3 text-center text-gray-500">
+                        <td class="px-4 py-3 text-center text-gray-500 dark:text-zinc-400">
                             <div class="flex items-center justify-center">
                                 <div
-                                    class="h-7 w-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[10px] font-bold mr-2">
+                                    class="h-7 w-7 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-[10px] font-bold mr-2">
                                     {{ substr($sale->user->name, 0, 2) }}
                                 </div>
                                 {{ $sale->user->name }}
@@ -124,10 +124,10 @@
                         <td class="px-4 py-3 text-center">
                             @if ($sale->isRefunded())
                                 <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">Refunded</span>
+                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">Refunded</span>
                             @else
                                 <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700">Success</span>
+                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">Success</span>
                             @endif
                         </td>
                     </tr>

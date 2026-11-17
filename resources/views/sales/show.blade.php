@@ -2,29 +2,29 @@
 
     {{-- Top action bar
     <div class="flex justify-between mb-4 print:hidden">
-        <a href="{{ route('pos.index') }}" class="px-4 py-2 bg-gray-200 rounded">
+        <a href="{{ route('pos.index') }}" class="px-4 py-2 bg-gray-200 dark:bg-zinc-700 rounded">
             ← Back to POS
         </a>
 
-        <button onclick="window.print()" class="px-4 py-2 bg-black text-white rounded">
+        <button onclick="window.print()" class="px-4 py-2 bg-black dark:bg-white text-white dark:text-zinc-900 rounded">
             Print Receipt
         </button>
     </div>--}}
     <div class="flex justify-between mb-4 print:hidden">
         {{-- Only show Back to POS if the user is NOT an admin --}}
         @if(!auth()->user()->isAdmin()) 
-            <a href="{{ route('pos.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors">
+            <a href="{{ route('pos.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-600 text-gray-700 dark:text-zinc-200 font-medium rounded-lg transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 Back to POS
             </a>
         @else
             {{-- Optional: Show a different link for Admins, like Back to Salse --}}
-            <a href="{{ route('sales.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors">
+            <a href="{{ route('sales.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-600 text-gray-700 dark:text-zinc-200 font-medium rounded-lg transition-colors">
                 Back to Sales 
             </a>
         @endif
 
-        <button onclick="window.print()" class="inline-flex items-center px-5 py-2 bg-gray-900 hover:bg-black text-white font-bold rounded-lg shadow-sm transition-all transform active:scale-95">
+        <button onclick="window.print()" class="inline-flex items-center px-5 py-2 bg-gray-900 dark:bg-white hover:bg-black dark:hover:bg-zinc-200 text-white dark:text-zinc-900 font-bold rounded-lg shadow-sm transition-all transform active:scale-95">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
             Print Receipt
         </button>
@@ -70,7 +70,7 @@
 
     {{-- Refund history --}}
     @if ($sale->refunds->count())
-        <div class="print:hidden mb-4 text-sm border rounded p-3 bg-gray-50">
+        <div class="print:hidden mb-4 text-sm border rounded p-3 bg-gray-50 dark:bg-zinc-800">
             <p class="font-semibold mb-2">Refunds</p>
 
             <ul class="space-y-1">
@@ -78,13 +78,13 @@
                     <li class="flex justify-between items-center">
                         <span>
                             Refund #{{ $refund->id }}
-                            <span class="text-gray-500 text-xs">
+                            <span class="text-gray-500 dark:text-zinc-400 text-xs">
                                 ({{ $refund->created_at->format('Y-m-d H:i') }})
                             </span>
                         </span>
 
                         <a href="{{ route('sales.refund-receipt', [$sale, $refund]) }}"
-                            class="text-blue-600 text-xs hover:underline">
+                            class="text-blue-600 dark:text-blue-400 text-xs hover:underline">
                             View receipt
                         </a>
                     </li>
@@ -96,7 +96,7 @@
 
 
     {{-- Thermal receipt --}}
-    <div class="thermal-receipt mx-auto">
+    <div class="light thermal-receipt mx-auto">
 
         <div class="text-center mb-2">
             <img src="{{ asset('images/og-share.png') }}" alt="Palace Hotel Logo" class="mx-auto">
@@ -104,7 +104,7 @@
             <p class="text-xs">Mbarara, Uganda</p>
             <p class="text-xs">Receipt #{{ $sale->id }}</p>
             @if($sale->room_id)
-                <p class="text-sm font-bold mt-1 text-black uppercase">Room: {{ $sale->room?->name }}</p>
+                <p class="text-sm font-bold mt-1 text-black dark:text-zinc-100 uppercase">Room: {{ $sale->room?->name }}</p>
             @endif
             <p class="text-xs mt-1">
                 {{ $sale->created_at->format('Y-m-d H:i') }}

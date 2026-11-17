@@ -1,15 +1,15 @@
 <x-layouts::app title="Record Purchase">
-    <div class="min-h-screen bg-gray-50 pb-12">
+    <div class="min-h-screen bg-gray-50 dark:bg-zinc-800 pb-12">
         {{-- Header Section --}}
-        <div class="bg-white border-b border-gray-200 mb-8">
+        <div class="bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700 mb-8">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Record Stock In</h1>
-                        <p class="text-sm text-gray-500">Add new inventory items to your stock levels.</p>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-zinc-100">Record Stock In</h1>
+                        <p class="text-sm text-gray-500 dark:text-zinc-400">Add new inventory items to your stock levels.</p>
                     </div>
                     <a href="{{ route('purchases.index') }}" wire:navigate
-                        class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">
                         &larr; Back to History
                     </a>
                 </div>
@@ -22,7 +22,7 @@
 
                 {{-- Feedback Messages --}}
                 @if ($errors->any())
-                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-400 text-red-700">
+                    <div class="mb-6 p-4 bg-red-50 dark:bg-red-950/40 border-l-4 border-red-400 text-red-700 dark:text-red-300">
                         <div class="flex">
                             <div class="ml-3 font-medium">{{ $errors->first() }}</div>
                         </div>
@@ -32,10 +32,10 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {{-- Left Column: Items Table --}}
                     <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-white shadow-sm border border-gray-200 rounded-xl">
+                        <div class="bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-700 rounded-xl">
                             <div
-                                class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                                <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Purchase Items</h2>
+                                class="px-6 py-4 border-b border-gray-100 dark:border-zinc-700 flex justify-between items-center bg-gray-50/50 dark:bg-zinc-800/50">
+                                <h2 class="text-sm font-bold text-gray-700 dark:text-zinc-200 uppercase tracking-wider">Purchase Items</h2>
                                 <button type="button" onclick="addRow()"
                                     class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,26 +46,26 @@
                             </div>
 
                             <div>
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
+                                    <thead class="bg-gray-50 dark:bg-zinc-800">
                                         <tr>
-                                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">#
+                                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase">#
                                             </th>
-                                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">
+                                            <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase">
                                                 Product</th>
                                             <th
-                                                class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase w-24">
+                                                class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase w-24">
                                                 Qty</th>
                                             <th
-                                                class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase w-32">
+                                                class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase w-32">
                                                 Unit Cost</th>
                                             <th
-                                                class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase w-32">
+                                                class="px-4 py-3 text-right text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase w-32">
                                                 Subtotal</th>
                                             <th class="px-4 py-3"></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="items-body" class="divide-y divide-gray-100 bg-white">
+                                    <tbody id="items-body" class="divide-y divide-gray-100 dark:divide-zinc-700 bg-white dark:bg-zinc-900">
                                         {{-- Rows injected by JS --}}
                                     </tbody>
                                 </table>
@@ -75,20 +75,20 @@
 
                     {{-- Right Column: Details & Submit --}}
                     <div class="space-y-6">
-                        <div class="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
-                            <h3 class="text-sm font-bold text-gray-900 mb-4 uppercase">Purchase Details</h3>
+                        <div class="bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-700 rounded-xl p-6">
+                            <h3 class="text-sm font-bold text-gray-900 dark:text-zinc-100 mb-4 uppercase">Purchase Details</h3>
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Supplier
+                                    <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Supplier
                                         Name</label>
                                     <input type="text" name="supplier_name" value="{{ old('supplier_name') }}" required
-                                        class="block w-full rounded-xl border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        class="block w-full rounded-xl border border-gray-300 dark:border-zinc-600 px-2 py-1 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Reference /
+                                    <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Reference /
                                         Invoice #</label>
                                     <input type="text" name="reference_no" value="{{ old('reference_no') }}"
-                                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 px-3 py-2 sm:text-sm font-mono">
+                                        class="block w-full rounded-lg border-gray-300 dark:border-zinc-600 shadow-sm focus:ring-indigo-500 px-3 py-2 sm:text-sm font-mono">
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
             // --- ROW MANAGEMENT ---
             window.addRow = function (preset = null) {
                 const row = document.createElement('tr');
-                row.className = "hover:bg-gray-50 transition-colors";
+                row.className = "hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors";
                 row.innerHTML = `
                     <td class="px-4 py-3 text-sm text-gray-400 font-mono row-number"></td>
                     <td class="px-4 py-3">
@@ -160,16 +160,16 @@
                     <td class="px-4 py-3">
                         <input type="number" name="items[${index}][quantity]" min="1" 
                             value="${preset ? preset.quantity : 1}"
-                            class="qty block w-full rounded-xl border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            class="qty block w-full rounded-xl border border-gray-300 dark:border-zinc-600 px-2 py-1 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                     </td>
                     <td class="px-4 py-3">
                         <input type="number" name="items[${index}][unit_cost]" min="0" step="0.01" 
                             value="${preset ? preset.unit_cost : 0}"
-                            class="cost block w-full rounded-lg border-gray-300 text-sm">
+                            class="cost block w-full rounded-lg border-gray-300 dark:border-zinc-600 text-sm">
                     </td>
-                    <td class="px-4 py-3 text-right text-sm font-bold text-gray-900 subtotal">0.00</td>
+                    <td class="px-4 py-3 text-right text-sm font-bold text-gray-900 dark:text-zinc-100 subtotal">0.00</td>
                     <td class="px-4 py-3 text-center">
-                        <button type="button" class="remove-btn text-gray-400 hover:text-red-600">
+                        <button type="button" class="remove-btn text-gray-400 hover:text-red-600 dark:hover:text-red-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                     </td>

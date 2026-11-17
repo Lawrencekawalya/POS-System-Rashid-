@@ -3,10 +3,10 @@
 
         <div class="md:flex md:items-center md:justify-between mb-8">
             <div class="flex-1 min-w-0">
-                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-zinc-100 sm:text-3xl sm:truncate">
                     Product Inventory
                 </h2>
-                <p class="mt-1 text-sm text-gray-500">A detailed list of all products, stock levels, and pricing.</p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-zinc-400">A detailed list of all products, stock levels, and pricing.</p>
             </div>
             <div class="mt-4 flex md:mt-0 md:ml-4">
                 <a href="{{ route('products.create') }}"
@@ -20,7 +20,7 @@
         </div>
 
         @if (session('success'))
-            <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-400 text-green-700 shadow-sm" role="alert">
+            <div class="mb-6 p-4 bg-green-50 dark:bg-green-950/40 border-l-4 border-green-400 text-green-700 dark:text-green-300 shadow-sm" role="alert">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -36,7 +36,7 @@
             </div>
         @endif
 
-        <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-4 mb-6">
+        <div class="bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-700 rounded-lg p-4 mb-6">
             <form method="GET" action="{{ route('products.index') }}" class="flex gap-4">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by product name..."
                     class="w-full px-4 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500">
@@ -46,81 +46,81 @@
             </form>
         </div>
 
-        <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+        <div class="bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-700 rounded-lg overflow-hidden">
             @if ($products->count())
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
+                        <thead class="bg-gray-50 dark:bg-zinc-800">
                             <tr>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Product Info</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Barcode & Unit</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Pricing</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Stock</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Status</th>
                                 <th scope="col"
-                                    class="px-6 py-3 class text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 class text-right text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white dark:bg-zinc-900 divide-y divide-gray-200 dark:divide-zinc-700">
                             @foreach ($products as $product)
-                                <tr class=" hover:bg-gray-50 transition-colors">
+                                <tr class=" hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-semibold text-gray-900">{{ $product->name }}
+                                        <div class="text-sm font-semibold text-gray-900 dark:text-zinc-100">{{ $product->name }}
                                         </div>
-                                        <div class="text-xs text-gray-500">{{ $product->brand ?? 'No Brand' }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-zinc-400">{{ $product->brand ?? 'No Brand' }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 font-mono">{{ $product->barcode }}</div>
+                                        <div class="text-sm text-gray-900 dark:text-zinc-100 font-mono">{{ $product->barcode }}</div>
                                         <div class="text-xs text-gray-400 capitalize">{{ $product->unit_type }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">S: UGX
+                                        <div class="text-sm text-gray-900 dark:text-zinc-100">S: UGX
                                             {{ number_format($product->selling_price, 2) }}
                                         </div>
-                                        <div class="text-xs text-gray-500 italic">C:
+                                        <div class="text-xs text-gray-500 dark:text-zinc-400 italic">C:
                                             UGX {{ number_format($product->cost_price, 2) }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @php $stock = $product->currentStock(); @endphp
                                         @if ($stock <= 0)
                                             <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300">
                                                 Out of Stock
                                             </span>
                                         @elseif ($stock < 5) <span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300">
                                             {{ $stock }} Low Stock
-                                        </span> @else <span class="text-sm font-semibold text-gray-700">{{ $stock }}</span>
+                                        </span> @else <span class="text-sm font-semibold text-gray-700 dark:text-zinc-200">{{ $stock }}</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($product->is_active)
                                             <span class="h-2.5 w-2.5 rounded-full bg-green-500 inline-block mr-1"></span>
-                                            <span class="text-sm text-gray-600">Active</span>
+                                            <span class="text-sm text-gray-600 dark:text-zinc-300">Active</span>
                                         @else
-                                            <span class="h-2.5 w-2.5 rounded-full bg-gray-300 inline-block mr-1"></span>
+                                            <span class="h-2.5 w-2.5 rounded-full bg-gray-300 dark:bg-zinc-600 inline-block mr-1"></span>
                                             <span class="text-sm text-gray-400">Inactive</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="{{ route('products.edit', $product) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                            class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-3">Edit</a>
                                         <form action="{{ route('products.destroy', $product) }}" method="POST" class="inline">
                                             @csrf @method('DELETE')
                                             <button type="submit" onclick="return confirm('Delete this product?')"
-                                                class="text-red-400 hover:text-red-600">
+                                                class="text-red-400 hover:text-red-600 dark:hover:text-red-400">
                                                 Delete
                                             </button>
                                         </form>
@@ -137,8 +137,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-3m-3 0H9m-3 0H6" />
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No products</h3>
-                    <p class="mt-1 text-sm text-gray-500">Get started by creating a new product.</p>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-zinc-100">No products</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-zinc-400">Get started by creating a new product.</p>
                 </div>
             @endif
         </div>

@@ -2,17 +2,17 @@
 
     {{-- Actions --}}
     <div class="flex justify-between mb-4 print:hidden">
-        <a href="{{ route('sales.show', $sale) }}" class="px-3 py-1 bg-gray-200 rounded text-sm">
+        <a href="{{ route('sales.show', $sale) }}" class="px-3 py-1 bg-gray-200 dark:bg-zinc-700 rounded text-sm">
             ← Back to Receipt
         </a>
 
-        <button onclick="window.print()" class="px-3 py-1 bg-black text-white rounded text-sm">
+        <button onclick="window.print()" class="px-3 py-1 bg-black dark:bg-white text-white dark:text-zinc-900 rounded text-sm">
             Print
         </button>
     </div>
 
     {{-- Thermal --}}
-    <div class="thermal-receipt mx-auto">
+    <div class="light thermal-receipt mx-auto">
 
         <div class="text-center mb-2">
             <img src="{{ asset('images/og-share.png') }}" alt="AR Scents" class="mx-auto">

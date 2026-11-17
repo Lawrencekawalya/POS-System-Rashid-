@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold mb-6">Edit Cash Reconciliation</h1>
 
         @if ($errors->any())
-            <div class="mb-4 p-3 bg-red-100 text-red-600 rounded-lg text-sm">
+            <div class="mb-4 p-3 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-lg text-sm">
                 {{ $errors->first() }}
             </div>
         @endif
@@ -39,26 +39,26 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+            <div class="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-gray-200 dark:border-zinc-700 shadow-sm space-y-4">
 
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">
+                    <label class="block text-xs font-bold uppercase text-gray-500 dark:text-zinc-400 mb-1">
                         Actual Cash Counted
                     </label>
                     <input name="cash_counted"
                            type="number"
                            step="0.01"
                            value="{{ old('cash_counted', $reconciliation->cash_counted) }}"
-                           class="w-full border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold">
+                           class="w-full border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">
+                    <label class="block text-xs font-bold uppercase text-gray-500 dark:text-zinc-400 mb-1">
                         Notes / Discrepancy Reason
                     </label>
                     <textarea name="notes"
                               rows="2"
-                              class="w-full border-gray-300 rounded-lg text-sm">{{ old('notes', $reconciliation->notes) }}</textarea>
+                              class="w-full border-gray-300 dark:border-zinc-600 rounded-lg text-sm">{{ old('notes', $reconciliation->notes) }}</textarea>
                 </div>
 
                 <button type="submit"

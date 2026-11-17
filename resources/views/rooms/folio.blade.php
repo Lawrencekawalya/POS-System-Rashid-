@@ -3,12 +3,12 @@
         
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Room {{ $room->name }} Folio</h1>
-                <p class="text-gray-500">Manage outstanding balances and settlements</p>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-zinc-100">Room {{ $room->name }} Folio</h1>
+                <p class="text-gray-500 dark:text-zinc-400">Manage outstanding balances and settlements</p>
             </div>
             <div class="text-right">
-                <div class="text-sm text-gray-500 uppercase font-bold tracking-wider">Total Outstanding</div>
-                <div class="text-4xl font-black text-red-600">{{ number_format($balance, 2) }}</div>
+                <div class="text-sm text-gray-500 dark:text-zinc-400 uppercase font-bold tracking-wider">Total Outstanding</div>
+                <div class="text-4xl font-black text-red-600 dark:text-red-400">{{ number_format($balance, 2) }}</div>
             </div>
         </div>
 
@@ -16,15 +16,15 @@
             
             <!-- LEFT: UNPAID SALES -->
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white border rounded-xl shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
-                        <h2 class="font-bold text-gray-700 uppercase text-sm tracking-widest">Unpaid Orders</h2>
+                <div class="bg-white dark:bg-zinc-900 border rounded-xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b bg-gray-50 dark:bg-zinc-800 flex justify-between items-center">
+                        <h2 class="font-bold text-gray-700 dark:text-zinc-200 uppercase text-sm tracking-widest">Unpaid Orders</h2>
                         <div class="flex gap-2">
                             <button @click="settlementAmount = {{ $balance }}; targetSaleId = ''; targetSaleLabel = 'Total Balance'" 
-                                class="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full font-bold transition-colors">
+                                class="text-xs bg-gray-200 dark:bg-zinc-700 hover:bg-gray-300 dark:hover:bg-zinc-600 px-3 py-1 rounded-full font-bold transition-colors">
                                 Reset to Total
                             </button>
-                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">{{ $room->sales->count() }} Orders</span>
+                            <span class="bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-1 rounded text-xs font-bold">{{ $room->sales->count() }} Orders</span>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -41,13 +41,13 @@
                             <tbody class="divide-y">
                                 @forelse($room->sales as $sale)
                                     @php $saleBal = $sale->balance; @endphp
-                                    <tr class="hover:bg-gray-50 transition-colors" :class="targetSaleId == '{{ $sale->id }}' ? 'bg-blue-50' : ''">
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors" :class="targetSaleId == '{{ $sale->id }}' ? 'bg-blue-50 dark:bg-blue-950/40' : ''">
                                         <td class="px-6 py-4">
-                                            <div class="font-bold text-gray-900">#{{ $sale->id }}</div>
-                                            <div class="text-xs text-gray-500">{{ $sale->created_at->format('d M, H:i') }}</div>
+                                            <div class="font-bold text-gray-900 dark:text-zinc-100">#{{ $sale->id }}</div>
+                                            <div class="text-xs text-gray-500 dark:text-zinc-400">{{ $sale->created_at->format('d M, H:i') }}</div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <div class="text-sm text-gray-600">
+                                            <div class="text-sm text-gray-600 dark:text-zinc-300">
                                                 {{ $sale->items->take(2)->map(fn($i) => $i->name)->join(', ') }}
                                                 @if($sale->items->count() > 2)
                                                     <span class="text-gray-400">... +{{ $sale->items->count() - 2 }} more</span>
@@ -55,7 +55,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 text-right font-medium text-gray-400">{{ number_format($sale->total_amount, 2) }}</td>
-                                        <td class="px-6 py-4 text-right text-red-600 font-bold">{{ number_format($saleBal, 2) }}</td>
+                                        <td class="px-6 py-4 text-right text-red-600 dark:text-red-400 font-bold">{{ number_format($saleBal, 2) }}</td>
                                         <td class="px-6 py-4 text-center">
                                             <button @click="settlementAmount = {{ $saleBal }}; targetSaleId = '{{ $sale->id }}'; targetSaleLabel = 'Order #{{ $sale->id }}'" 
                                                 class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black px-3 py-1.5 rounded uppercase tracking-tighter shadow-sm transition-transform active:scale-90">
@@ -76,9 +76,9 @@
                 </div>
 
                 <!-- PAYMENT HISTORY -->
-                <div class="bg-white border rounded-xl shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b bg-gray-50">
-                        <h2 class="font-bold text-gray-700 uppercase text-sm tracking-widest">Recent Payments</h2>
+                <div class="bg-white dark:bg-zinc-900 border rounded-xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b bg-gray-50 dark:bg-zinc-800">
+                        <h2 class="font-bold text-gray-700 dark:text-zinc-200 uppercase text-sm tracking-widest">Recent Payments</h2>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -93,14 +93,14 @@
                             <tbody class="divide-y">
                                 @forelse($payments as $payment)
                                     <tr>
-                                        <td class="px-6 py-4 text-sm text-gray-600">{{ $payment->created_at->format('d M, H:i') }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-zinc-300">{{ $payment->created_at->format('d M, H:i') }}</td>
                                         <td class="px-6 py-4">
-                                            <span class="px-2 py-1 rounded text-[10px] font-bold uppercase bg-blue-100 text-blue-700">
+                                            <span class="px-2 py-1 rounded text-[10px] font-bold uppercase bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
                                                 {{ $payment->method }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 italic">{{ $payment->remarks ?? '-' }}</td>
-                                        <td class="px-6 py-4 text-right font-bold text-green-600">{{ number_format($payment->amount, 2) }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-zinc-400 italic">{{ $payment->remarks ?? '-' }}</td>
+                                        <td class="px-6 py-4 text-right font-bold text-green-600 dark:text-green-400">{{ number_format($payment->amount, 2) }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -171,7 +171,7 @@
                     </form>
 
                     <div class="mt-8 pt-8 border-t border-gray-800 text-center">
-                        <p class="text-gray-500 text-xs">
+                        <p class="text-gray-500 dark:text-zinc-400 text-xs">
                             Processing a payment will automatically clear outstanding orders starting from the oldest first.
                         </p>
                     </div>
