@@ -256,3 +256,12 @@ test('deleting a menu item deletes its photo', function () {
 
     Storage::disk('menu_images')->assertMissing('old.webp');
 });
+
+test('the menu page includes the phone navigation helpers', function () {
+    MenuItem::create(['name' => 'Goat curry', 'price' => 23000, 'category' => 'Goat', 'show_on_menu' => true]);
+
+    $this->get(route('menu'))
+        ->assertOk()
+        ->assertSee('aria-label="Back to top"', false)
+        ->assertSee('<a href="#main-courses" title="Main Courses">Mains</a>', false);
+});

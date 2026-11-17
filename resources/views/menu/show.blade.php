@@ -109,7 +109,8 @@
         }
 
         .nav a:hover,
-        .nav a:focus-visible { background: var(--orange); }
+        .nav a:focus-visible,
+        .nav a.is-active { background: var(--orange); }
 
         /* Very narrow phones: tighter buttons so they still fit in two rows. */
         @media (max-width: 359px) {
@@ -295,8 +296,57 @@
 
         [hidden] { display: none !important; }
 
+        /* "More" under descriptions that are cut off; tapping it shows the rest. */
+        .card__more {
+            align-self: flex-start;
+            margin: 0;
+            padding: 2px 0;
+            border: 0;
+            background: none;
+            color: var(--maroon);
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .card.is-open .card__desc { display: block; -webkit-line-clamp: unset; overflow: visible; }
+
+        .to-top {
+            position: fixed;
+            right: 16px;
+            bottom: calc(16px + env(safe-area-inset-bottom));
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--maroon);
+            color: #fff;
+            box-shadow: 0 4px 12px rgb(43 29 22 / 0.25);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .to-top.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+        .to-top:hover, .to-top:focus-visible { background: var(--orange); }
+        .to-top svg { width: 22px; height: 22px; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .to-top { transition: none; }
+        }
+
         @media print {
-            .toolbar { display: none; }
+            .toolbar, .to-top, .card__more { display: none; }
+            .card__desc { display: block; -webkit-line-clamp: unset; overflow: visible; }
             .banner { padding: 16px; clip-path: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
             .section { break-inside: avoid; }
             .card { break-inside: avoid; }
@@ -393,6 +443,10 @@
 
     <footer>{{ $title }} &middot; Please let us know about any allergies.</footer>
 
+    <button type="button" class="to-top" id="to-top" aria-label="Back to top" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+
     <script>
         (() => {
             const input = document.getElementById('menu-search');
@@ -426,7 +480,92 @@
                 }
 
                 noResults.style.display = anyVisible ? 'none' : 'block';
+                updateMoreButtons();
+                onScroll();
             });
+
+            // Highlight the section button for the part of the menu on screen.
+            const toolbar = document.querySelector('.toolbar');
+            const links = new Map([...document.querySelectorAll('.nav a')].map(a => [a.getAttribute('href').slice(1), a]));
+            const toTop = document.getElementById('to-top');
+            const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let ticking = false;
+
+            function onScroll() {
+                ticking = false;
+                // A section is "current" once its heading passes a third of the way down the visible area.
+                const barBottom = toolbar.getBoundingClientRect().bottom;
+                const line = barBottom + (window.innerHeight - barBottom) / 3;
+                let current = null;
+
+                for (const group of groups) {
+                    if (!group.hidden && group.getBoundingClientRect().top <= line) {
+                        current = group.id;
+                    }
+                }
+
+                for (const [id, link] of links) {
+                    const active = id === current;
+                    link.classList.toggle('is-active', active);
+                    active ? link.setAttribute('aria-current', 'true') : link.removeAttribute('aria-current');
+                }
+
+                const showTop = window.scrollY > window.innerHeight * 1.5;
+                toTop.classList.toggle('is-visible', showTop);
+                toTop.tabIndex = showTop ? 0 : -1;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(onScroll);
+                }
+            }, { passive: true });
+
+            toTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+                input.focus({ preventScroll: true });
+            });
+
+            // Descriptions are cut to three lines; add "More" where text is hidden.
+            function updateMoreButtons() {
+                for (const card of document.querySelectorAll('.card')) {
+                    const desc = card.querySelector('.card__desc');
+                    let button = card.querySelector('.card__more');
+
+                    if (!desc || card.hidden || card.classList.contains('is-open')) {
+                        continue;
+                    }
+
+                    const clipped = desc.scrollHeight > desc.clientHeight + 1;
+
+                    if (clipped && !button) {
+                        button = document.createElement('button');
+                        button.type = 'button';
+                        button.className = 'card__more';
+                        button.textContent = 'More';
+                        button.setAttribute('aria-expanded', 'false');
+                        button.addEventListener('click', () => {
+                            const open = card.classList.toggle('is-open');
+                            button.textContent = open ? 'Less' : 'More';
+                            button.setAttribute('aria-expanded', String(open));
+                        });
+                        desc.after(button);
+                    } else if (!clipped && button) {
+                        button.remove();
+                    }
+                }
+            }
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(updateMoreButtons, 150);
+            });
+
+            updateMoreButtons();
+            document.fonts?.ready.then(updateMoreButtons);
+            onScroll();
         })();
     </script>
 </body>
