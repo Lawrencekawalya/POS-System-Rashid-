@@ -2,80 +2,60 @@
 
 namespace App\Services;
 
+use App\Models\Expense;
+use App\Models\Payment;
 use App\Models\Sale;
+use App\Models\SaleRefund;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class ZReportService
 {
-    public function summaryForPeriod($startDate, $endDate, $userId = null): array
+    /**
+     * Summarise sales and the cash drawer for a period.
+     *
+     * Sales figures are based on when the sale/refund happened. Cash figures
+     * are based on the payments ledger, so room settlements count on the day the
+     * money was received and refunds only count what was actually paid back.
+     */
+    public function summaryForPeriod($startDate, $endDate): array
     {
         $from = Carbon::parse($startDate)->startOfDay();
         $to = Carbon::parse($endDate)->endOfDay();
 
-        // Sales query
-        $salesQuery = Sale::whereBetween('created_at', [$from, $to]);
+        $sales = Sale::whereBetween('created_at', [$from, $to])->get();
+        $grossSales = (float) $sales->sum('total_amount');
+        $refundTotal = (float) SaleRefund::whereBetween('created_at', [$from, $to])->sum('amount');
 
-        if ($userId) {
-            $salesQuery->where('user_id', $userId);
-        }
+        $cashPayments = Payment::whereBetween('created_at', [$from, $to])->where('method', 'cash');
+        $cashReceived = (float) (clone $cashPayments)->where('amount', '>', 0)->sum('amount');
+        $cashRefunded = (float) -(clone $cashPayments)->where('amount', '<', 0)->sum('amount');
 
-        $sales = $salesQuery->get();
+        // Only confirmed expenses: pending ones are unverified and rejected ones
+        // mean the money should still be in the drawer.
+        $expenses = Expense::with('user')
+            ->whereBetween('expense_date', [$from, $to])
+            ->where('status', 'confirmed')
+            ->get();
 
-        // Gross sales
-        $grossSales = $sales->sum('total_amount');
-
-        // Refunds (event-based, quantity-aware)
-        $refundTotal = DB::table('stock_movements')
-            ->join('sale_items', function ($join) {
-                $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
-                    ->on('sale_items.product_id', '=', 'stock_movements.product_id');
-            })
-            ->where('stock_movements.type', 'refund')
-            ->whereBetween('stock_movements.created_at', [$from, $to])
-            ->when($userId, function ($q) use ($userId) {
-                $q->whereIn('stock_movements.reference_id', function ($sub) use ($userId) {
-                    $sub->select('id')
-                        ->from('sales')
-                        ->where('user_id', $userId);
-                });
-            })
-            ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
-
-        // Net sales
-        $netSales = $grossSales - $refundTotal;
-
-        // Cash actually kept (paid − change)
-        $cashReceived = $sales->sum(function ($sale) {
-            return $sale->paid_amount - $sale->change_amount;
-        });
-
-        // Cash expected in drawer
-        $cashExpected = $cashReceived - $refundTotal;
+        $totalExpenses = (float) $expenses->sum('amount');
+        $cashExpenses = (float) $expenses->where('payment_method', 'Cash')->sum('amount');
 
         return [
             'grossSales' => $grossSales,
             'refundTotal' => $refundTotal,
-            'netSales' => $netSales,
+            'netSales' => $grossSales - $refundTotal,
             'cashReceived' => $cashReceived,
-            'cashExpected' => $cashExpected,
+            'cashRefunded' => $cashRefunded,
+            'cashExpenses' => $cashExpenses,
+            'totalExpenses' => $totalExpenses,
+            'cashExpected' => $cashReceived - $cashRefunded - $cashExpenses,
             'sales' => $sales,
+            'expenses' => $expenses,
         ];
     }
 
-    /**
-     * Convenience helper for a single day
-     */
-    public function summaryForDate($date, $userId = null): array
+    public function summaryForDate($date): array
     {
-        return $this->summaryForPeriod($date, $date, $userId);
-    }
-
-    /**
-     * Convenience helper used by cash reconciliation
-     */
-    public function cashExpectedForDate($date, $userId = null): float
-    {
-        return $this->summaryForDate($date, $userId)['cashExpected'];
+        return $this->summaryForPeriod($date, $date);
     }
 }

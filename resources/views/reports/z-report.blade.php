@@ -192,6 +192,22 @@
                 <span>-{{ number_format($totalExpenses) }}</span>
             </div>
 
+            {{-- Cash drawer: based on money actually received and paid back --}}
+            <div class="flex justify-between border-t border-dashed pt-1 mt-2">
+                <span>Cash Received</span>
+                <span>{{ number_format($cashReceived) }}</span>
+            </div>
+
+            <div class="flex justify-between text-red-600 italic">
+                <span>Cash Refunded</span>
+                <span>-{{ number_format($cashRefunded) }}</span>
+            </div>
+
+            <div class="flex justify-between text-red-600 italic">
+                <span>Cash Expenses</span>
+                <span>-{{ number_format($cashExpenses) }}</span>
+            </div>
+
             <div class="flex justify-between font-bold border-t-2 border-black pt-1 mt-2 text-sm bg-gray-50 px-1">
                 <span>CASH EXPECTED</span>
                 <span>{{ number_format($cashExpected) }}</span>

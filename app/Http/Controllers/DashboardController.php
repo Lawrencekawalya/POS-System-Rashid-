@@ -255,11 +255,10 @@ class DashboardController extends Controller
 
         // 1. STATS & REVENUE LOGIC
 
-        // Cumulative Revenue = All Payments - All Refunds - All CONFIRMED Expenses
+        // Cumulative Revenue = All Payments (refund payouts are negative payments) - All CONFIRMED Expenses
         $totalPaymentsAllTime = Payment::sum('amount');
-        $totalRefundsAllTime = SaleRefund::sum('amount');
         $totalConfirmedExpenses = Expense::where('status', 'confirmed')->sum('amount');
-        $cumulativeRevenue = $totalPaymentsAllTime - $totalRefundsAllTime - $totalConfirmedExpenses;
+        $cumulativeRevenue = $totalPaymentsAllTime - $totalConfirmedExpenses;
 
         $salesToday = Sale::whereDate('created_at', $today)->get();
         $grossSalesToday = $salesToday->sum('total_amount');
@@ -267,19 +266,19 @@ class DashboardController extends Controller
         // Refund total today
         $refundTotalToday = SaleRefund::whereDate('created_at', $today)->sum('amount');
 
-        // Actual cash collected today (direct POS + room settlements)
+        // Net cash collected today (direct POS + room settlements - refund payouts)
         $cashReceivedToday = Payment::whereDate('created_at', $today)
             ->where('method', 'cash')
             ->sum('amount');
 
         // 2. CASH EXPECTED LOGIC
-        // Today's Cash Expected = (Cash Received Today) - (Refunds Today) - (Confirmed Expenses recorded today)
+        // Today's Cash Expected = (Net Cash Received Today) - (Confirmed Cash Expenses recorded today)
         $expensesToday = Expense::whereDate('expense_date', $today)
             ->where('status', 'confirmed')
             ->where('payment_method', 'Cash')
             ->sum('amount');
 
-        $cashExpected = $cashReceivedToday - $refundTotalToday - $expensesToday;
+        $cashExpected = $cashReceivedToday - $expensesToday;
 
         $refundCount = SaleRefund::whereDate('created_at', $today)->count();
 

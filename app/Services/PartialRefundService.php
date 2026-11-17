@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\SaleRefund;
 use App\Models\StockMovement;
@@ -90,6 +91,8 @@ class PartialRefundService
                 }
             }
 
+            $this->recordPayout($sale, $userId, $refundedAmount);
+
             // Mark sale fully refunded if applicable
             if ($sale->isFullyRefunded()) {
                 $sale->update([
@@ -108,5 +111,49 @@ class PartialRefundService
                 ]);
             }
         });
+    }
+
+    /**
+     * Pay back money the customer no longer owes.
+     *
+     * The customer only gets back what they paid beyond the value of the items
+     * they keep, so refunding an unpaid room charge pays nothing out. Payouts
+     * are recorded as negative payments, using the methods the customer paid
+     * with, most recent first.
+     */
+    private function recordPayout(Sale $sale, int $userId, float $refundedAmount): void
+    {
+        $payments = $sale->payments()->orderByDesc('id')->get();
+        $amountDue = (float) $sale->total_amount - $refundedAmount;
+        $payout = round((float) $payments->sum('amount') - $amountDue, 2);
+
+        if ($payout <= 0) {
+            return;
+        }
+
+        $netByMethod = $payments->groupBy('method')->map(fn ($group) => (float) $group->sum('amount'));
+
+        foreach ($payments->pluck('method')->unique() as $method) {
+            $allocation = min($payout, $netByMethod[$method]);
+
+            if ($allocation <= 0) {
+                continue;
+            }
+
+            Payment::create([
+                'room_id' => $sale->room_id,
+                'sale_id' => $sale->id,
+                'user_id' => $userId,
+                'amount' => -$allocation,
+                'method' => $method,
+                'remarks' => 'Refund payout for sale #'.$sale->id,
+            ]);
+
+            $payout = round($payout - $allocation, 2);
+
+            if ($payout <= 0) {
+                break;
+            }
+        }
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Expense;
-use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\SaleRefund;
+use App\Services\ZReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,56 +82,18 @@ class ReportController extends Controller
     //         'sales'
     //     ));
     // }
-    public function zReport(Request $request)
+    public function zReport(Request $request, ZReportService $zReportService)
     {
         $startDate = $request->start_date ?? now()->toDateString();
         $endDate = $request->end_date ?? now()->toDateString();
 
-        $from = Carbon::parse($startDate)->startOfDay();
-        $to = Carbon::parse($endDate)->endOfDay();
-
-        // 1. Sales in period
-        $sales = Sale::whereBetween('created_at', [$from, $to])->get();
-        $grossSales = $sales->sum('total_amount');
-
-        // 2. Refund calculation
-        $refundTotal = SaleRefund::whereBetween('created_at', [$from, $to])->sum('amount');
-
-        // 3. UPDATED: Only fetch CONFIRMED expenses
-        // We ignore 'pending' because they haven't been verified by Admin yet
-        // We ignore 'rejected' because that money should still be in the drawer
-        $expenses = Expense::with('user')
-            ->whereBetween('expense_date', [$from, $to])
-            ->where('status', 'confirmed')
-            ->get();
-
-        $totalExpenses = $expenses->sum('amount');
-        $cashExpenses = $expenses->where('payment_method', 'Cash')->sum('amount');
-
-        // 4. Final Calculations
-        $netSales = $grossSales - $refundTotal;
-
-        // Actual money collected in this period (Includes direct POS payments + Room settlements)
-        $cashReceived = Payment::whereBetween('created_at', [$from, $to])
-            ->where('method', 'cash')
-            ->sum('amount');
-
-        // The drawer balance logic
-        $cashExpected = $cashReceived - $refundTotal - $cashExpenses;
-
-        return view('reports.z-report', compact(
-            'startDate',
-            'endDate',
-            'grossSales',
-            'refundTotal',
-            'totalExpenses',
-            'netSales',
-            'cashExpected',
-            'cashReceived',
-            'sales',
-            'expenses'
-        ));
+        return view('reports.z-report', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            ...$zReportService->summaryForPeriod($startDate, $endDate),
+        ]);
     }
+
     // public function zReport(Request $request)
     // {
     //     $startDate = $request->start_date ?? now()->toDateString();

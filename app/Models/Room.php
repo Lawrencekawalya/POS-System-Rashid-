@@ -28,12 +28,9 @@ class Room extends Model
      */
     public function currentBalance(): float
     {
-        $balance = $this->sales()
-            ->selectRaw('COALESCE(SUM(total_amount - COALESCE(paid_amount, 0) - COALESCE(refunded_amount, 0)), 0) as room_balance')
-            ->first()
-            ?->room_balance;
-
-        return (float) $balance;
+        // Refund payouts are recorded as payments, so a refunded sale must not
+        // also count as a negative balance (credit) on the room.
+        return (float) $this->unpaidSales()->get()->sum(fn (Sale $sale) => $sale->balance);
     }
 
     public function activeBill()

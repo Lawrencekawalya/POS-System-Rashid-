@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Expense;
 use App\Models\MenuItem;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Room;
 use App\Models\Sale;
-use App\Models\SaleItem;
+use App\Models\SaleRefund;
 use App\Services\SaleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class POSController extends Controller
 {
@@ -21,7 +21,7 @@ class POSController extends Controller
     public function index()
     {
         $cart = session('cart', []);
-        $total = collect($cart)->sum(fn($item) => $item['subtotal']);
+        $total = collect($cart)->sum(fn ($item) => $item['subtotal']);
 
         $today = now()->toDateString();
         $userId = Auth::id();
@@ -58,24 +58,14 @@ class POSController extends Controller
         /**
          * Refunds Logic
          */
-        $totalRefunds = DB::table('stock_movements')
-            ->join('sale_items', function ($join) {
-                $join->on('sale_items.sale_id', '=', 'stock_movements.reference_id')
-                    ->on('sale_items.product_id', '=', 'stock_movements.product_id');
-            })
-            ->where('stock_movements.type', 'refund')
-            ->whereDate('stock_movements.created_at', now()->toDateString())
-            ->whereIn('stock_movements.reference_id', function ($q) use ($userId) {
-                $q->select('id')
-                    ->from('sales')
-                    ->where('user_id', $userId);
-            })
-            ->sum(DB::raw('stock_movements.quantity * sale_items.unit_price'));
+        $totalRefunds = SaleRefund::whereDate('created_at', $today)
+            ->whereHas('sale', fn ($q) => $q->where('user_id', $userId))
+            ->sum('amount');
 
         $netTotal = $totalSales - $totalRefunds;
 
-        $cumulativeRevenue = \App\Models\Payment::sum('amount')
-            - \App\Models\SaleRefund::sum('amount')
+        // Refund payouts are recorded as negative payments.
+        $cumulativeRevenue = Payment::sum('amount')
             - Expense::where('status', 'confirmed')->sum('amount');
 
         return view('pos.index', compact(
@@ -103,7 +93,7 @@ class POSController extends Controller
             'barcode' => 'nullable|string',
             'custom_name' => 'nullable|string',
             'custom_price' => 'nullable|numeric|min:0',
-            'save_to_menu' => 'nullable|boolean'
+            'save_to_menu' => 'nullable|boolean',
         ]);
 
         $cart = session('cart', []);
@@ -123,7 +113,7 @@ class POSController extends Controller
                 $menuItem->update(['price' => $price]);
             }
 
-            $key = 'menu_' . $menuItem->id;
+            $key = 'menu_'.$menuItem->id;
             if (isset($cart[$key])) {
                 $cart[$key]['quantity']++;
             } else {
@@ -136,7 +126,7 @@ class POSController extends Controller
                 ];
             }
             $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
-        } 
+        }
         // 2. Handle Barcode/Search Input
         elseif ($request->filled('barcode')) {
             $input = $request->barcode;
@@ -144,15 +134,15 @@ class POSController extends Controller
             // Try Product
             $product = Product::where('barcode', $input)->first();
             if ($product) {
-                $key = 'product_' . $product->id;
+                $key = 'product_'.$product->id;
                 if (isset($cart[$key])) {
                     if ($cart[$key]['quantity'] + 1 > $product->currentStock()) {
-                        return back()->withErrors(['barcode' => 'Insufficient stock for ' . $product->name]);
+                        return back()->withErrors(['barcode' => 'Insufficient stock for '.$product->name]);
                     }
                     $cart[$key]['quantity']++;
                 } else {
                     if ($product->currentStock() < 1) {
-                        return back()->withErrors(['barcode' => $product->name . ' is currently out of stock']);
+                        return back()->withErrors(['barcode' => $product->name.' is currently out of stock']);
                     }
                     $cart[$key] = [
                         'item_type' => 'product',
@@ -167,7 +157,7 @@ class POSController extends Controller
                 // Try Menu Item
                 $menuItem = MenuItem::where('name', $input)->first();
                 if ($menuItem) {
-                    $key = 'menu_' . $menuItem->id;
+                    $key = 'menu_'.$menuItem->id;
                     if (isset($cart[$key])) {
                         $cart[$key]['quantity']++;
                     } else {
@@ -185,10 +175,11 @@ class POSController extends Controller
                 }
             }
         } else {
-            return back()->withErrors(['barcode' => "Please enter an item or barcode."]);
+            return back()->withErrors(['barcode' => 'Please enter an item or barcode.']);
         }
 
         session(['cart' => $cart]);
+
         return redirect()->route('pos.index', ['mode' => $request->mode, 'room_id' => $request->room_id]);
     }
 
@@ -242,7 +233,9 @@ class POSController extends Controller
     public function increase(string $key)
     {
         $cart = session('cart', []);
-        if (!isset($cart[$key])) return back();
+        if (! isset($cart[$key])) {
+            return back();
+        }
 
         if ($cart[$key]['item_type'] === 'product') {
             $product = Product::findOrFail($cart[$key]['product_id']);
@@ -255,6 +248,7 @@ class POSController extends Controller
         $cart[$key]['subtotal'] = $cart[$key]['quantity'] * $cart[$key]['unit_price'];
 
         session(['cart' => $cart]);
+
         return back();
     }
 
@@ -264,7 +258,9 @@ class POSController extends Controller
     public function decrease(string $key)
     {
         $cart = session('cart', []);
-        if (!isset($cart[$key])) return back();
+        if (! isset($cart[$key])) {
+            return back();
+        }
 
         $cart[$key]['quantity']--;
 
@@ -275,6 +271,7 @@ class POSController extends Controller
         }
 
         session(['cart' => $cart]);
+
         return back();
     }
 
@@ -284,7 +281,9 @@ class POSController extends Controller
     public function updateQuantity(Request $request, string $key)
     {
         $cart = session('cart', []);
-        if (!isset($cart[$key])) return back();
+        if (! isset($cart[$key])) {
+            return back();
+        }
 
         $qty = (int) $request->quantity;
         if ($qty <= 0) {
@@ -301,6 +300,7 @@ class POSController extends Controller
         }
 
         session(['cart' => $cart]);
+
         return back();
     }
 }
