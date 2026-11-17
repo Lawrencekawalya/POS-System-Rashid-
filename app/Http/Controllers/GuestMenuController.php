@@ -18,9 +18,12 @@ class GuestMenuController extends Controller
      */
     public function show(GuestMenuService $menu)
     {
+        $groups = $menu->groups();
+
         return view('menu.show', [
             'title' => config('menu.title'),
-            'groups' => $menu->groups(),
+            'groups' => $groups,
+            'hasStandInPhotos' => collect($groups)->pluck('sections')->flatten(1)->pluck('items')->flatten(1)->contains(fn (array $item) => $item['credit'] !== null),
         ]);
     }
 

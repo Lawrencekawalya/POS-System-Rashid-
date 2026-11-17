@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\MenuImageService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -72,7 +73,7 @@ class ProductController extends Controller
     /**
      * Store a newly created product in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, MenuImageService $images)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -82,10 +83,13 @@ class ProductController extends Controller
             'cost_price' => 'required|numeric|min:0.01',
             'selling_price' => 'required|numeric|min:0.01',
             'menu_section' => ['nullable', 'string', Rule::in($this->barSections())],
+            ...MenuImageService::rules(),
         ]);
 
         $validated['is_active'] = $request->has('is_active');
         $validated['menu_section'] = $validated['menu_section'] ?? null;
+        unset($validated['image'], $validated['remove_image']);
+        $validated = [...$validated, ...$images->sync($request, null)];
 
         Product::create($validated);
 
@@ -105,7 +109,7 @@ class ProductController extends Controller
     /**
      * Update the specified product in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product, MenuImageService $images)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -115,11 +119,14 @@ class ProductController extends Controller
             'cost_price' => 'required|numeric|min:0.01',
             'selling_price' => 'required|numeric|min:0.01',
             'menu_section' => ['nullable', 'string', Rule::in($this->barSections())],
+            ...MenuImageService::rules(),
         ]);
 
         // Force boolean value for checkbox
         $validated['is_active'] = $request->has('is_active');
         $validated['menu_section'] = $validated['menu_section'] ?? null;
+        unset($validated['image'], $validated['remove_image']);
+        $validated = [...$validated, ...$images->sync($request, $product->image_path)];
 
         $product->update($validated);
 
@@ -131,9 +138,10 @@ class ProductController extends Controller
     /**
      * Soft delete the specified product.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, MenuImageService $images)
     {
         $product->delete();
+        $images->delete($product->image_path);
 
         return redirect()
             ->route('products.index')

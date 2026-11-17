@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\MenuImageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,12 +19,17 @@ class Product extends Model
         'selling_price',
         'is_active',
         'menu_section',
+        'image_path',
+        'image_credit',
+        'image_credit_url',
+        'image_is_stock',
     ];
 
     protected $casts = [
         'cost_price' => 'decimal:2',
         'selling_price' => 'decimal:2',
         'is_active' => 'boolean',
+        'image_is_stock' => 'boolean',
     ];
 
     /**
@@ -59,5 +65,10 @@ class Product extends Model
     {
         return $this->hasMany(BillItem::class, 'item_id')
             ->where('item_type', 'product');
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return MenuImageService::url($this->image_path);
     }
 }

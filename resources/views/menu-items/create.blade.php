@@ -12,7 +12,7 @@
         </div>
 
         <div class="bg-white dark:bg-zinc-900 shadow-xl border border-gray-100 dark:border-zinc-700 rounded-2xl overflow-hidden">
-            <form action="{{ route('menu-items.store') }}" method="POST" class="p-8 space-y-6">
+            <form action="{{ route('menu-items.store') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
                 @csrf
 
                 <div class="grid grid-cols-1 gap-6">
@@ -71,6 +71,8 @@
                                 placeholder="e.g. Served with chips or chapati">{{ old('description') }}</textarea>
                             @error('description') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
+
+                        <x-menu-photo-field :current="null" />
                     </div>
 
                     <div x-data="{ tracksStock: @js((bool) old('stock_product_id')) }" class="rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 p-5">

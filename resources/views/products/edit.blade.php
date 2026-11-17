@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('products.update', $product) }}" class="max-w-5xl mx-auto overflow-hidden px-4 sm:px-6 lg:mb-8">
+        <form method="POST" action="{{ route('products.update', $product) }}" class="max-w-5xl mx-auto overflow-hidden px-4 sm:px-6 lg:mb-8" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -175,6 +175,10 @@
                                 @endforeach
                             </select>
                             @error('menu_section') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+
+                            <div class="mt-4">
+                                <x-menu-photo-field :current="$product->image_url" :stand-in="$product->image_is_stock ? $product->image_credit : null" />
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,6 +4,8 @@ use App\Models\MenuItem;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\PalaceMenuSeeder;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 function menuProduct(string $name, ?string $section, int $price = 5000, bool $active = true): Product
 {
@@ -154,4 +156,103 @@ test('the QR page warns when it points at a local address', function () {
 
 test('guests cannot open the QR code page', function () {
     $this->get(route('menu.qr'))->assertRedirect(route('login'));
+});
+
+test('menu cards show a photo when there is one and a placeholder otherwise', function () {
+    MenuItem::create(['name' => 'Goat curry', 'price' => 23000, 'category' => 'Goat', 'show_on_menu' => true, 'image_path' => 'goat.webp']);
+    MenuItem::create(['name' => 'Beef stew', 'price' => 22000, 'category' => 'Goat', 'show_on_menu' => true]);
+    menuProduct('Nile Special', 'Beers')->update(['image_path' => 'nile.webp']);
+
+    $this->get(route('menu'))
+        ->assertOk()
+        ->assertSee('src="'.asset('uploads/menu/goat.webp').'"', false)
+        ->assertSee('alt="Goat curry"', false)
+        ->assertSee('src="'.asset('uploads/menu/nile.webp').'"', false)
+        ->assertSee('loading="lazy"', false)
+        ->assertSee('card__placeholder', false);
+});
+
+test('uploaded menu photos are resized to WebP and replaced or removed cleanly', function () {
+    Storage::fake('menu_images');
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $this->actingAs($admin)->post(route('menu-items.store'), [
+        'name' => 'Goat curry',
+        'price' => 23000,
+        'category' => 'Goat',
+        'show_on_menu' => '1',
+        'image' => UploadedFile::fake()->image('goat.jpg', 2400, 1800),
+    ])->assertRedirect(route('menu-items.index'));
+
+    $item = MenuItem::where('name', 'Goat curry')->sole();
+    $first = $item->image_path;
+
+    expect($first)->toEndWith('.webp');
+    Storage::disk('menu_images')->assertExists($first);
+    [$width, $height] = getimagesizefromstring(Storage::disk('menu_images')->get($first));
+    expect([$width, $height])->toBe([800, 600]);
+
+    // Replacing the photo deletes the old file.
+    $this->actingAs($admin)->put(route('menu-items.update', $item), [
+        'name' => 'Goat curry',
+        'price' => 23000,
+        'category' => 'Goat',
+        'show_on_menu' => '1',
+        'image' => UploadedFile::fake()->image('goat2.png', 600, 600),
+    ])->assertRedirect(route('menu-items.index'));
+
+    $second = $item->fresh()->image_path;
+    expect($second)->not->toBe($first);
+    Storage::disk('menu_images')->assertMissing($first);
+    Storage::disk('menu_images')->assertExists($second);
+
+    // Removing the photo deletes the file and clears the path.
+    $this->actingAs($admin)->put(route('menu-items.update', $item), [
+        'name' => 'Goat curry',
+        'price' => 23000,
+        'category' => 'Goat',
+        'show_on_menu' => '1',
+        'remove_image' => '1',
+    ])->assertRedirect(route('menu-items.index'));
+
+    expect($item->fresh()->image_path)->toBeNull();
+    Storage::disk('menu_images')->assertMissing($second);
+});
+
+test('products accept a photo and reject files that are not images', function () {
+    Storage::fake('menu_images');
+    $admin = User::factory()->create(['role' => 'admin']);
+    $product = menuProduct('Coke', 'Soft Drinks', 2000);
+    $form = [
+        'name' => 'Coke',
+        'barcode' => $product->barcode,
+        'unit_type' => 'bottle',
+        'cost_price' => 1000,
+        'selling_price' => 2000,
+        'is_active' => '1',
+        'menu_section' => 'Soft Drinks',
+    ];
+
+    $this->actingAs($admin)->put(route('products.update', $product), [...$form, 'image' => UploadedFile::fake()->create('menu.pdf', 50, 'application/pdf')])
+        ->assertSessionHasErrors('image');
+
+    $this->actingAs($admin)->put(route('products.update', $product), [...$form, 'image' => UploadedFile::fake()->image('coke.jpg', 300, 900)])
+        ->assertRedirect(route('products.index'));
+
+    $path = $product->fresh()->image_path;
+    Storage::disk('menu_images')->assertExists($path);
+    [$width, $height] = getimagesizefromstring(Storage::disk('menu_images')->get($path));
+    expect([$width, $height])->toBe([267, 800]);
+});
+
+test('deleting a menu item deletes its photo', function () {
+    Storage::fake('menu_images');
+    Storage::disk('menu_images')->put('old.webp', 'x');
+    $item = MenuItem::create(['name' => 'Old dish', 'price' => 1000, 'image_path' => 'old.webp']);
+
+    $this->actingAs(User::factory()->create(['role' => 'admin']))
+        ->delete(route('menu-items.destroy', $item))
+        ->assertRedirect();
+
+    Storage::disk('menu_images')->assertMissing('old.webp');
 });

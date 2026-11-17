@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
 use App\Models\Product;
+use App\Services\MenuImageService;
 use Illuminate\Http\Request;
 
 class MenuItemController extends Controller
@@ -39,7 +40,7 @@ class MenuItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, MenuImageService $images)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:menu_items,name',
@@ -48,10 +49,13 @@ class MenuItemController extends Controller
             'stock_product_id' => 'nullable|exists:products,id',
             'stock_quantity' => 'nullable|integer|min:1|required_with:stock_product_id',
             'description' => 'nullable|string|max:1000',
+            ...MenuImageService::rules(),
         ]);
 
         $this->clearStockQuantityWhenUntracked($validated);
         $validated['show_on_menu'] = $request->boolean('show_on_menu');
+        unset($validated['image'], $validated['remove_image']);
+        $validated = [...$validated, ...$images->sync($request, null)];
 
         MenuItem::create($validated);
 
@@ -74,7 +78,7 @@ class MenuItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MenuItem $menuItem)
+    public function update(Request $request, MenuItem $menuItem, MenuImageService $images)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:menu_items,name,'.$menuItem->id,
@@ -83,10 +87,13 @@ class MenuItemController extends Controller
             'stock_product_id' => 'nullable|exists:products,id',
             'stock_quantity' => 'nullable|integer|min:1|required_with:stock_product_id',
             'description' => 'nullable|string|max:1000',
+            ...MenuImageService::rules(),
         ]);
 
         $this->clearStockQuantityWhenUntracked($validated);
         $validated['show_on_menu'] = $request->boolean('show_on_menu');
+        unset($validated['image'], $validated['remove_image']);
+        $validated = [...$validated, ...$images->sync($request, $menuItem->image_path)];
 
         $menuItem->update($validated);
 
@@ -97,9 +104,10 @@ class MenuItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MenuItem $menuItem)
+    public function destroy(MenuItem $menuItem, MenuImageService $images)
     {
         $menuItem->delete();
+        $images->delete($menuItem->image_path);
 
         return redirect()->route('menu-items.index')
             ->with('success', 'Menu item deleted successfully.');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\MenuImageService;
 use Illuminate\Database\Eloquent\Model;
 
 class MenuItem extends Model
@@ -15,6 +16,10 @@ class MenuItem extends Model
         'description',
         'show_on_menu',
         'sort_order',
+        'image_path',
+        'image_credit',
+        'image_credit_url',
+        'image_is_stock',
     ];
 
     protected $casts = [
@@ -22,6 +27,7 @@ class MenuItem extends Model
         'stock_product_id' => 'integer',
         'stock_quantity' => 'integer',
         'show_on_menu' => 'boolean',
+        'image_is_stock' => 'boolean',
         'sort_order' => 'integer',
     ];
 
@@ -49,5 +55,10 @@ class MenuItem extends Model
     public function stockProduct()
     {
         return $this->belongsTo(Product::class, 'stock_product_id');
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return MenuImageService::url($this->image_path);
     }
 }

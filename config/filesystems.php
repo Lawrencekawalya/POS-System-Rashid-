@@ -30,6 +30,15 @@ return [
 
     'disks' => [
 
+        // Guest menu photos, served directly from public/ so no storage:link is needed.
+        'menu_images' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/menu'),
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),

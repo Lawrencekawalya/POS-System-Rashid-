@@ -10,6 +10,8 @@
 | name and that are marked "show on guest menu". Bar sections (source
 | "products") list active products whose `menu_section` matches.
 |
+| Each group's `nav` is the short label on the section buttons at the top.
+|
 | Menu items in a category not listed here still appear, under "More".
 |
 */
@@ -21,6 +23,7 @@ return [
     'groups' => [
         [
             'name' => 'Breakfast',
+            'nav' => 'Breakfast',
             'sections' => [
                 'Breakfast Specials' => null,
                 'Hot Beverages' => 'All teas are served with biscuits or a cookie. Breakfast room service is charged 4,000/= extra.',
@@ -32,6 +35,7 @@ return [
         ],
         [
             'name' => 'Salads & Starters',
+            'nav' => 'Starters',
             'sections' => [
                 'Salads' => 'Salads may be personalised, please ask.',
                 'Starters' => 'All soups are served with a bread roll. Please specify cream or clear.',
@@ -39,6 +43,7 @@ return [
         ],
         [
             'name' => 'Main Courses',
+            'nav' => 'Mains',
             'note' => 'All main dishes may be served with one accompaniment: chips, sautéed, mashed or boiled potatoes (parsley or rosemary), rice, chapati, roasted Irish, jacket potatoes or mashed matooke. Children under 5 years are half price. Any extra accompaniment is charged 5,000/=.',
             'sections' => [
                 'Goat' => null,
@@ -51,6 +56,7 @@ return [
         ],
         [
             'name' => 'Pasta, Pizza & Sandwiches',
+            'nav' => 'Pasta & Pizza',
             'sections' => [
                 'Pasta & Spaghetti' => null,
                 'Pizza' => 'All our pizzas are home-made. Create your own with mushrooms, tomatoes, onions, green peppers, chicken, chillies, olives or pineapple, spiced hot or mild.',
@@ -59,6 +65,7 @@ return [
         ],
         [
             'name' => 'Snacks & Desserts',
+            'nav' => 'Snacks',
             'sections' => [
                 'Snacks' => null,
                 'Desserts' => null,
@@ -67,12 +74,14 @@ return [
         ],
         [
             'name' => 'Local Dishes',
+            'nav' => 'Local',
             'sections' => [
                 'African & Ugandan Dishes' => 'Please allow extra time or let us know in advance, as these dishes take longer to prepare. Served with matooke, posho, rice, cassava, sweet potatoes, Irish potatoes or chapati. Any dish with two accompaniments is served with seasonal vegetables.',
             ],
         ],
         [
             'name' => 'Bar',
+            'nav' => 'Bar',
             'source' => 'products',
             'note' => 'For other drinks, just ask. We can provide.',
             'sections' => [
