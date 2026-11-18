@@ -17,13 +17,15 @@ class MenuItemController extends Controller
         $query = MenuItem::with('stockProduct')->orderBy('name');
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%'.$request->search.'%')
-                ->orWhere('category', 'like', '%'.$request->search.'%');
+            $search = '%'.trim($request->search).'%';
+            $query->where(fn ($q) => $q->where('name', 'like', $search)->orWhere('category', 'like', $search));
         }
 
-        $menuItems = $query->paginate(15);
+        $menuItems = $query->paginate(15)->withQueryString();
 
-        return view('menu-items.index', compact('menuItems'));
+        // Search-as-you-type asks for just the results table.
+        return view('menu-items.index', compact('menuItems'))
+            ->fragmentIf($request->ajax(), 'results');
     }
 
     /**

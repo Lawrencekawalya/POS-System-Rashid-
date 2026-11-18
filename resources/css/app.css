@@ -122,3 +122,8 @@ select:focus[data-flux-control] {
 [x-cloak] {
     display: none !important;
 }
+
+/* Search boxes use their own clear button. */
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
