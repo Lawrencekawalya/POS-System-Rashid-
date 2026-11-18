@@ -88,7 +88,7 @@ class BillController extends Controller
             $input = $data['barcode'];
 
             // 1. Try finding by Barcode (Product)
-            $product = Product::whereBarcode($input)->first();
+            $product = Product::stockItems()->whereBarcode($input)->first();
 
             if ($product) {
                 // Check existing item

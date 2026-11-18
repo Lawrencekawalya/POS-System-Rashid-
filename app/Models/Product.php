@@ -10,11 +10,15 @@ class Product extends Model
 {
     use SoftDeletes;
 
+    /** Unit type of fresh cuts (meat bought by the kg and sold as portions). */
+    public const PORTION = 'portion';
+
     protected $fillable = [
         'name',
         'brand',
         'barcode',
         'unit_type',
+        'portions_per_kg',
         'cost_price',
         'selling_price',
         'is_active',
@@ -29,8 +33,43 @@ class Product extends Model
         'cost_price' => 'decimal:2',
         'selling_price' => 'decimal:2',
         'is_active' => 'boolean',
+        'portions_per_kg' => 'decimal:2',
         'image_is_stock' => 'boolean',
     ];
+
+    /**
+     * Fresh cuts, managed on the Fresh Cuts page.
+     */
+    public function scopeFreshCuts($query)
+    {
+        return $query->where('unit_type', self::PORTION);
+    }
+
+    /**
+     * Everything except fresh cuts: the items sold and bought as they are.
+     */
+    public function scopeStockItems($query)
+    {
+        return $query->where('unit_type', '!=', self::PORTION);
+    }
+
+    public function isFreshCut(): bool
+    {
+        return $this->unit_type === self::PORTION;
+    }
+
+    public function freshCutBatches()
+    {
+        return $this->hasMany(FreshCutBatch::class);
+    }
+
+    /**
+     * Menu items whose sales use this fresh cut.
+     */
+    public function portionMenuItems()
+    {
+        return $this->hasMany(MenuItem::class, 'stock_product_id');
+    }
 
     /**
      * A product has many stock movements.

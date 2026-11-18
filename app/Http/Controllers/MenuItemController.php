@@ -127,8 +127,8 @@ class MenuItemController extends Controller
 
     private function portionProducts()
     {
-        return Product::where('is_active', true)
-            ->where('unit_type', 'portion')
+        return Product::freshCuts()
+            ->where('is_active', true)
             ->orderBy('name')
             ->get();
     }

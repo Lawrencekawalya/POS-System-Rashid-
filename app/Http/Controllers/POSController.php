@@ -38,7 +38,7 @@ class POSController extends Controller
         /**
          * Products & MenuItems
          */
-        $products = Product::where('is_active', true)
+        $products = Product::stockItems()->where('is_active', true)
             ->orderBy('name')
             ->get();
 
@@ -132,7 +132,7 @@ class POSController extends Controller
             $input = $request->barcode;
 
             // Try Product
-            $product = Product::where('barcode', $input)->first();
+            $product = Product::stockItems()->where('barcode', $input)->first();
             if ($product) {
                 $key = 'product_'.$product->id;
                 if (isset($cart[$key])) {

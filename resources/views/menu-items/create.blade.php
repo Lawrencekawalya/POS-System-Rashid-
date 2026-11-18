@@ -92,7 +92,7 @@
                                     @endforeach
                                 </select>
                                 @if ($portionProducts->isEmpty())
-                                    <p class="mt-2 text-xs text-amber-800 dark:text-amber-300">No fresh-cut portion products are available. <a href="{{ route('products.create') }}" class="font-bold underline" wire:navigate>Create one first.</a></p>
+                                    <p class="mt-2 text-xs text-amber-800 dark:text-amber-300">No fresh-cut portion products are available. <a href="{{ route('fresh-cuts.index') }}" class="font-bold underline" wire:navigate>Add one under Fresh Cuts.</a></p>
                                 @endif
                                 @error('stock_product_id') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                             </div>

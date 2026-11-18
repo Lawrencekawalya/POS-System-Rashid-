@@ -4,6 +4,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\CashReconciliationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FreshCutController;
 use App\Http\Controllers\GuestMenuController;
 use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\MenuItemController;
@@ -117,6 +118,10 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     // Printable QR code that opens the guest menu
     Route::get('/menu-qr-code', [GuestMenuController::class, 'qrCode'])->name('menu.qr');
     Route::get('/menu-qr-code.svg', [GuestMenuController::class, 'qrCodeSvg'])->name('menu.qr.svg');
+
+    // Fresh cuts: anyone at the till can see portions left; the admin manages them.
+    Route::get('/fresh-cuts', [FreshCutController::class, 'index'])->name('fresh-cuts.index');
+    Route::get('/fresh-cuts/{freshCut}', [FreshCutController::class, 'show'])->name('fresh-cuts.show');
 });
 
 /*
@@ -127,6 +132,17 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
 */
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fresh Cuts (portions bought by the kg)
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/fresh-cuts', [FreshCutController::class, 'store'])->name('fresh-cuts.store');
+    Route::put('/fresh-cuts/{freshCut}', [FreshCutController::class, 'update'])->name('fresh-cuts.update');
+    Route::post('/fresh-cuts/{freshCut}/purchases', [FreshCutController::class, 'storePurchase'])->name('fresh-cuts.purchases.store');
+    Route::delete('/fresh-cuts/{freshCut}/purchases/{batch}', [FreshCutController::class, 'destroyPurchase'])->name('fresh-cuts.purchases.destroy');
+    Route::post('/fresh-cuts/{freshCut}/write-offs', [FreshCutController::class, 'storeWriteOff'])->name('fresh-cuts.write-offs.store');
 
     /*
     |--------------------------------------------------------------------------

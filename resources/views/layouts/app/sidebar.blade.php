@@ -49,6 +49,11 @@
                         {{ __('Kitchen Menu') }}
                     </flux:sidebar.item>
 
+                    <flux:sidebar.item icon="scale" :href="route('fresh-cuts.index')"
+                        :current="request()->routeIs('fresh-cuts.*')" wire:navigate>
+                        {{ __('Fresh Cuts') }}
+                    </flux:sidebar.item>
+
                     <flux:sidebar.item icon="qr-code" :href="route('menu.qr')"
                         :current="request()->routeIs('menu.qr')" wire:navigate>
                         {{ __('Menu QR Code') }}
@@ -61,7 +66,7 @@
                         $activeAdminGroup = match (true) {
                             request()->routeIs('products.*', 'menu-items.*', 'menu.qr') => 'catalog',
                             request()->routeIs('rooms.*', 'sales.*') => 'front-desk',
-                            request()->routeIs('purchases.*', 'reports.inventory', 'reports.turnover') => 'inventory',
+                            request()->routeIs('purchases.*', 'fresh-cuts.*', 'reports.inventory', 'reports.turnover') => 'inventory',
                             request()->routeIs('expenses.*', 'cash.reconcile.*', 'reports.profitability', 'reports.z') => 'finance',
                             request()->routeIs('users.*') => 'administration',
                             default => '',
@@ -104,6 +109,7 @@
                             </button>
                             <div x-show="open === 'inventory'" x-transition class="ml-3 space-y-1 border-l border-zinc-200 pl-2 dark:border-zinc-700">
                                 <flux:sidebar.item icon="truck" :href="route('purchases.index')" :current="request()->routeIs('purchases.*')" wire:navigate>{{ __('Purchase History') }}</flux:sidebar.item>
+                                <flux:sidebar.item icon="scale" :href="route('fresh-cuts.index')" :current="request()->routeIs('fresh-cuts.*')" wire:navigate>{{ __('Fresh Cuts') }}</flux:sidebar.item>
                                 <flux:sidebar.item icon="cloud" :href="route('reports.inventory')" :current="request()->routeIs('reports.inventory')" wire:navigate>{{ __('Inventory Valuation') }}</flux:sidebar.item>
                                 <flux:sidebar.item icon="refresh-ccw" :href="route('reports.turnover')" :current="request()->routeIs('reports.turnover')" wire:navigate>{{ __('Stock Turnover') }}</flux:sidebar.item>
                             </div>

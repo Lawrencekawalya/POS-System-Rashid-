@@ -11,6 +11,9 @@ class StockMovement extends Model
      */
     const UPDATED_AT = null;
 
+    /** reference_type for portions added by a fresh-cut purchase. */
+    public const FRESH_CUT_BATCH = 'fresh_cut_batch';
+
     protected $fillable = [
         'product_id',
         'quantity',

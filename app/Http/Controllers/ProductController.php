@@ -22,7 +22,8 @@ class ProductController extends Controller
     // }
     public function index(Request $request)
     {
-        $query = Product::with('stockMovements')
+        $query = Product::stockItems()
+            ->with('stockMovements')
             ->orderBy('name');
 
         if ($request->filled('search')) {
@@ -39,7 +40,8 @@ class ProductController extends Controller
      */
     public function lowStock()
     {
-        $products = Product::where('is_active', true)
+        $products = Product::stockItems()
+            ->where('is_active', true)
             ->with('stockMovements')
             ->get()
             ->filter(fn (Product $product) => $product->isLowStock(5))
@@ -54,7 +56,8 @@ class ProductController extends Controller
      */
     public function currentStock()
     {
-        $products = Product::where('is_active', true)
+        $products = Product::stockItems()
+            ->where('is_active', true)
             ->with('stockMovements')
             ->orderBy('name')
             ->get();
@@ -79,7 +82,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'brand' => 'nullable|string|max:255',
             'barcode' => 'required|string|max:255|unique:products,barcode',
-            'unit_type' => 'required|string|max:50',
+            'unit_type' => 'required|string|max:50|not_in:portion',
             'cost_price' => 'required|numeric|min:0.01',
             'selling_price' => 'required|numeric|min:0.01',
             'menu_section' => ['nullable', 'string', Rule::in($this->barSections())],

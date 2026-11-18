@@ -53,7 +53,7 @@ class PurchaseController extends Controller
 
     public function create()
     {
-        $products = Product::orderBy('name')->get();
+        $products = Product::stockItems()->orderBy('name')->get();
 
         return view('purchases.create', compact('products'));
     }
@@ -84,7 +84,10 @@ class PurchaseController extends Controller
     public function edit(Purchase $purchase)
     {
         $purchase->load('items');
-        $products = Product::orderBy('name')->get();
+        // Keep fresh cuts already on an older purchase so it can still be edited.
+        $products = Product::where(fn ($query) => $query->stockItems()->orWhereIn('id', $purchase->items->pluck('product_id')))
+            ->orderBy('name')
+            ->get();
 
         // Map the items to a simple array structure for the frontend
         $existingItems = old('items') ?? $purchase->items->map(fn ($item) => [

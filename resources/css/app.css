@@ -117,3 +117,8 @@ select:focus[data-flux-control] {
     background: transparent;
     color: var(--color-zinc-400);
 }
+
+/* Hide Alpine content until it starts. */
+[x-cloak] {
+    display: none !important;
+}
