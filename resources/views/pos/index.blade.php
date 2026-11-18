@@ -95,7 +95,7 @@
 
                     <div class="flex flex-col md:flex-row gap-2">
                         <div class="relative grow">
-                            <input list="product-list" name="barcode" autofocus placeholder="Search product or scan barcode..."
+                            <input list="product-list" name="barcode" autofocus placeholder="Search product or menu item, or scan barcode..."
                                 class="border-2 px-4 py-3 w-full rounded-lg text-lg">
 
                             <datalist id="product-list">
@@ -105,52 +105,46 @@
                                     </option>
                                 @endforeach
 
-                                @if($mode === 'room')
-                                    @foreach($menuItems as $mItem)
-                                        <option value="{{ $mItem->name }}">
-                                            {{ $mItem->name }} (Menu)
-                                        </option>
-                                    @endforeach
-                                @endif
+                                @foreach($menuItems as $mItem)
+                                    <option value="{{ $mItem->name }}">
+                                        {{ $mItem->name }} · {{ number_format($mItem->price) }} (Menu)
+                                    </option>
+                                @endforeach
                             </datalist>
 
                         </div>
 
-                        @if($mode == 'room')
-                            <button type="button" @click="showCustom = !showCustom"
-                                class="bg-gray-800 dark:bg-white text-white dark:text-zinc-900 px-6 py-3 rounded-lg font-bold hover:bg-black dark:hover:bg-zinc-200 transition">
-                                OTHER
-                            </button>
-                        @endif
+                        <button type="button" @click="showCustom = !showCustom"
+                            class="bg-gray-800 dark:bg-white text-white dark:text-zinc-900 px-6 py-3 rounded-lg font-bold hover:bg-black dark:hover:bg-zinc-200 transition">
+                            OTHER
+                        </button>
                     </div>
 
                     <!-- CUSTOM ITEM PANEL (Alpine.js) -->
-                    @if($mode == 'room')
-                        <div x-show="showCustom" x-transition class="mt-4 p-4 border-2 border-dashed border-gray-300 dark:border-zinc-600 rounded-lg bg-gray-50 dark:bg-zinc-800">
-                            <h3 class="text-sm font-bold text-gray-700 dark:text-zinc-200 mb-3 uppercase tracking-wider">Custom Order / Not on Menu</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">ITEM NAME</label>
-                                    <input type="text" name="custom_name" placeholder="e.g. Special Grilled Fish"
-                                        class="w-full border rounded-lg px-3 py-2">
+                    <div x-show="showCustom" x-transition class="mt-4 p-4 border-2 border-dashed border-gray-300 dark:border-zinc-600 rounded-lg bg-gray-50 dark:bg-zinc-800">
+                        <h3 class="text-sm font-bold text-gray-700 dark:text-zinc-200 mb-3 uppercase tracking-wider">Custom Order / Not on Menu</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">ITEM NAME</label>
+                                <input type="text" name="custom_name" placeholder="e.g. Special Grilled Fish"
+                                    class="w-full border rounded-lg px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">PRICE</label>
+                                <input type="number" name="custom_price" step="0.01" placeholder="0.00"
+                                    class="w-full border rounded-lg px-3 py-2">
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <div class="flex items-center h-10 px-3 border rounded-lg bg-white dark:bg-zinc-900">
+                                    <input type="checkbox" name="save_to_menu" value="1" id="save_menu" class="mr-2">
+                                    <label for="save_menu" class="text-xs font-medium text-gray-600 dark:text-zinc-300 cursor-pointer">Add to Menu?</label>
                                 </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">PRICE</label>
-                                    <input type="number" name="custom_price" step="0.01" placeholder="0.00"
-                                        class="w-full border rounded-lg px-3 py-2">
-                                </div>
-                                <div class="flex items-end gap-2">
-                                    <div class="flex items-center h-10 px-3 border rounded-lg bg-white dark:bg-zinc-900">
-                                        <input type="checkbox" name="save_to_menu" value="1" id="save_menu" class="mr-2">
-                                        <label for="save_menu" class="text-xs font-medium text-gray-600 dark:text-zinc-300 cursor-pointer">Add to Menu?</label>
-                                    </div>
-                                    <button type="submit" class="bg-blue-600 text-white px-4 h-10 rounded-lg font-bold hover:bg-blue-700 grow">
-                                        ADD
-                                    </button>
-                                </div>
+                                <button type="submit" class="bg-blue-600 text-white px-4 h-10 rounded-lg font-bold hover:bg-blue-700 grow">
+                                    ADD
+                                </button>
                             </div>
                         </div>
-                    @endif
+                    </div>
                 </form>
             </div>
 
@@ -230,53 +224,49 @@
                 </table>
             </div>
 
-            <!-- TOTAL + ACTION -->
-            <div class="flex flex-col md:flex-row gap-4 items-start mb-10">
+            <!-- TOTAL + ACTION: one row on wider screens -->
+            <form method="POST" action="{{ route('pos.checkout') }}" x-data="{ method: 'cash' }"
+                class="mb-10 flex flex-col gap-3 md:flex-row md:items-end">
+                @csrf
 
-                <div class="text-3xl font-bold">
-                    Total:
-                    <span class="text-blue-600 dark:text-blue-400">
+                <div class="md:mr-auto">
+                    <div class="mb-1 text-xs font-bold uppercase text-gray-500 dark:text-zinc-400">Total</div>
+                    <div class="flex h-13 items-center text-3xl font-bold text-blue-600 dark:text-blue-400">
                         {{ number_format($total, 2) }}
-                    </span>
+                    </div>
                 </div>
 
-                <div class="w-full md:w-80">
-                    <form method="POST" action="{{ route('pos.checkout') }}" x-data="{ method: 'cash' }">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1 uppercase">Payment Method</label>
-                            <select name="payment_method" x-model="method" class="border-2 px-4 py-3 w-full rounded-lg bg-white dark:bg-zinc-900">
-                                <option value="cash">Cash</option>
-                                <option value="bank">Bank/Transfer</option>
-                                <option value="card">Credit Card</option>
-                                @if($mode == 'room' && request('room_id'))
-                                    <option value="room">Charge to Room</option>
-                                @endif
-                            </select>
-                        </div>
-
-                        <div x-show="method !== 'room'" x-transition>
-                            <label class="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1 uppercase">Amount Received</label>
-                            <input type="number" name="paid_amount" step="0.01" value="0"
-                                class="border-2 px-4 py-3 w-full rounded-lg mb-4">
-                        </div>
-                        
-                        {{-- Dummy input for validation if method is room --}}
-                        <template x-if="method === 'room'">
-                            <input type="hidden" name="paid_amount" value="0">
-                        </template>
-
-                        @if($mode == 'room')
-                            <input type="hidden" name="room_id" value="{{ request('room_id') }}">
+                <div class="md:w-48">
+                    <label for="payment_method" class="mb-1 block text-xs font-bold uppercase text-gray-500 dark:text-zinc-400">Payment Method</label>
+                    <select name="payment_method" id="payment_method" x-model="method" class="w-full rounded-lg border-2 bg-white px-4 py-3 dark:bg-zinc-900">
+                        <option value="cash">Cash</option>
+                        <option value="bank">Bank/Transfer</option>
+                        <option value="card">Credit Card</option>
+                        @if($mode == 'room' && request('room_id'))
+                            <option value="room">Charge to Room</option>
                         @endif
-
-                        <button class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-4 w-full rounded-lg uppercase shadow-lg transition-transform active:scale-95">
-                            Complete Sale {{ $mode == 'room' && request('room_id') ? '(Room '.(\App\Models\Room::find(request('room_id'))?->name).')' : '' }}
-                        </button>
-                    </form>
+                    </select>
                 </div>
-            </div>
+
+                <div x-show="method !== 'room'" class="md:w-48">
+                    <label for="paid_amount" class="mb-1 block text-xs font-bold uppercase text-gray-500 dark:text-zinc-400">Amount Received</label>
+                    <input type="number" name="paid_amount" id="paid_amount" step="0.01" value="0"
+                        class="w-full rounded-lg border-2 px-4 py-3">
+                </div>
+
+                {{-- Dummy input for validation if method is room --}}
+                <template x-if="method === 'room'">
+                    <input type="hidden" name="paid_amount" value="0">
+                </template>
+
+                @if($mode == 'room')
+                    <input type="hidden" name="room_id" value="{{ request('room_id') }}">
+                @endif
+
+                <button class="whitespace-nowrap rounded-lg bg-green-600 px-6 py-4 font-bold uppercase text-white shadow-lg transition-transform hover:bg-green-700 active:scale-95 md:h-13 md:py-0">
+                    Complete Sale {{ $mode == 'room' && request('room_id') ? '(Room '.(\App\Models\Room::find(request('room_id'))?->name).')' : '' }}
+                </button>
+            </form>
 
             <hr class="my-10 border-gray-300 dark:border-zinc-600">
             <h2 class="text-lg font-semibold mb-4">Sales Performance</h2>
