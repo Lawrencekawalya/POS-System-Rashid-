@@ -2,6 +2,7 @@
 
 use App\Models\MenuItem;
 use App\Models\User;
+use App\Services\MenuImageService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -139,4 +140,17 @@ test('rate-limited downloads are retried before giving up', function () {
 
     Http::assertSentCount(2);
     expect(MenuItem::where('name', 'Goat curry')->value('image_is_stock'))->toBeTrue();
+});
+
+test('an indexed-colour PNG can be uploaded as a menu photo', function () {
+    $image = imagecreate(300, 200);
+    imagecolorallocate($image, 120, 40, 20);
+    $png = tempnam(sys_get_temp_dir(), 'palette').'.png';
+    imagepng($image, $png);
+
+    $path = app(MenuImageService::class)->store(new UploadedFile($png, 'logo.png', 'image/png', null, true));
+
+    Storage::disk('menu_images')->assertExists($path);
+    expect(getimagesizefromstring(Storage::disk('menu_images')->get($path))['mime'])->toBe('image/webp');
+    @unlink($png);
 });

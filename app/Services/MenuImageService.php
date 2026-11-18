@@ -68,6 +68,13 @@ class MenuImageService
             throw ValidationException::withMessages(['image' => 'This photo could not be read. Please upload a JPG, PNG or WebP image.']);
         }
 
+        // WebP needs full colour; indexed-colour PNGs and GIFs are converted first.
+        if (! imageistruecolor($image)) {
+            imagepalettetotruecolor($image);
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+        }
+
         $image = $this->upright($image, $file);
         $image = $this->shrink($image);
 
