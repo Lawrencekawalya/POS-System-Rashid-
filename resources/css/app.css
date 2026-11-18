@@ -127,3 +127,9 @@ select:focus[data-flux-control] {
 input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;
 }
+
+/* A form button while its form is being sent (resources/js/idempotency.js). */
+[data-submitting] {
+    cursor: progress !important;
+    opacity: 0.6;
+}

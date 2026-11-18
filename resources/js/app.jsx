@@ -25,7 +25,8 @@
 //     );
 // }
 
-import './bootstrap'; 
+import './bootstrap';
+import './idempotency';
 // import Alpine from 'alpinejs';
 import React from "react";
 import { createRoot } from "react-dom/client";

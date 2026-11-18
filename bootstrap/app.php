@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\PreventDuplicateSubmissions;
 use App\Http\Middleware\RoleMiddleware;
 use App\Providers\ViewServiceProvider;
 use Illuminate\Foundation\Application;
@@ -27,6 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
                     Request::HEADER_X_FORWARDED_PORT |
                     Request::HEADER_X_FORWARDED_PROTO
         );
+        // Runs before the session starts so a duplicate submission waits for the first one to finish.
+        $middleware->web(prepend: PreventDuplicateSubmissions::class);
+
         $middleware->alias([
             'role' => RoleMiddleware::class,
         ]);
